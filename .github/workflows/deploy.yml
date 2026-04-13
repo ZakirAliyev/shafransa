@@ -1,4 +1,4 @@
-name: Deploy React App to Linux Server
+name: Deploy React App
 
 on:
   push:
@@ -10,40 +10,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SERVER_SSH_KEY_BASE64 }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to server
+      - name: Deploy
         run: |
-          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          ssh root@${{ secrets.SERVER_HOST }} << 'EOF'
 
-          # Folder yarat
-          mkdir -p /var/www/react-app
-          cd /var/www/react-app
+          apt update
+          apt install -y nginx git nodejs npm
 
-          # Əgər repo yoxdursa clone et
+          mkdir -p /var/www/shafransa
+          cd /var/www/shafransa
+
           if [ ! -d ".git" ]; then
-            git clone https://github.com/USERNAME/REPO.git .
+            git clone git@github.com:ZakirAliyev/shafransa.git .
           else
             git pull origin main
           fi
 
-          # Install & build
           npm install
           npm run build
 
-          # Nginx setup
-          sudo rm -rf /var/www/html/*
-          sudo cp -r build/* /var/www/html/
+          rm -rf /var/www/html/*
+          cp -r build/* /var/www/html/ || cp -r dist/* /var/www/html/
 
-          # Nginx restart
-          sudo systemctl restart nginx
+          systemctl restart nginx
 
           EOF
