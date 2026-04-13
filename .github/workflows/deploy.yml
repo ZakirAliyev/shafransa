@@ -30,15 +30,13 @@ jobs:
           curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
           apt install -y nodejs
 
-          echo "=== CLONE PROJECT ==="
+          echo "=== CLEAN OLD APP ==="
+          rm -rf /var/www/shafransa
           mkdir -p /var/www/shafransa
           cd /var/www/shafransa
 
-          if [ ! -d ".git" ]; then
-            git clone git@github.com:ZakirAliyev/shafransa.git .
-          else
-            git pull origin main
-          fi
+          echo "=== CLONE PROJECT ==="
+          git clone git@github.com:ZakirAliyev/shafransa.git .
 
           echo "=== INSTALL & BUILD ==="
           npm install
