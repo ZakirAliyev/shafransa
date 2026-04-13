@@ -13,32 +13,57 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY_BASE64 }}" | base64 -d > ~/.ssh/id_rsa
+          printf "%s" "${{ secrets.SERVER_SSH_KEY_BASE64 }}" | base64 -d > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy
+      - name: Debug SSH Key (ilk dəfə üçün saxla)
         run: |
-          ssh root@${{ secrets.SERVER_HOST }} << 'EOF'
+          echo "=== CHECK SSH KEY ==="
+          ls -la ~/.ssh
+          head -n 3 ~/.ssh/id_rsa || echo "KEY ERROR"
 
+      - name: Connect & Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+
+          echo "=== SERVER CONNECTED ==="
+
+          # Install lazımdırsa
           apt update
           apt install -y nginx git nodejs npm
 
+          # App folder
           mkdir -p /var/www/shafransa
           cd /var/www/shafransa
 
+          # Clone və ya pull
           if [ ! -d ".git" ]; then
             git clone git@github.com:ZakirAliyev/shafransa.git .
           else
             git pull origin main
           fi
 
+          # Install & Build
           npm install
           npm run build
 
+          # Nginx folder temizle
           rm -rf /var/www/html/*
-          cp -r build/* /var/www/html/ || cp -r dist/* /var/www/html/
 
+          # Build type detect
+          if [ -d "build" ]; then
+            cp -r build/* /var/www/html/
+          elif [ -d "dist" ]; then
+            cp -r dist/* /var/www/html/
+          else
+            echo "Build folder tapılmadı!"
+            exit 1
+          fi
+
+          # Restart nginx
           systemctl restart nginx
+
+          echo "=== DEPLOY DONE ==="
 
           EOF
