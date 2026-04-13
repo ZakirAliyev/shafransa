@@ -1,0 +1,697 @@
+import React, { useState, useEffect } from "react"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useTranslation } from "react-i18next"
+import api from "../../services/api"
+import { getProducts } from "../../services/product.service"
+import { getPlants, createPlant, deletePlant } from "../../services/plant.service"
+import { getCategories, createCategory, deleteCategory } from "../../services/category.service"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card"
+import { Badge } from "../../components/ui/Badge"
+import { Button } from "../../components/ui/Button"
+import { Input } from "../../components/ui/Input"
+import { Link } from "react-router-dom"
+import {
+  Users, Package, Leaf, LayoutGrid, Activity, Zap, Loader2,
+  ShieldCheck, Trash2, Plus, Globe, Server, CheckCircle2, ArrowRight
+} from "lucide-react"
+import TranslationTabs from "../../components/shared/TranslationTabs"
+import { toast } from "../../store/useToastStore"
+
+const TABS = [
+  { id: "overview",   label: "Overview",   icon: Activity },
+  { id: "users",      label: "Users",      icon: Users },
+  { id: "products",   label: "Products",   icon: Package },
+  { id: "plants",     label: "Encyclopedia", icon: Leaf },
+  { id: "categories", label: "Categories", icon: LayoutGrid },
+]
+
+export default function AdminPanel({ tab = "overview" }) {
+  const { t } = useTranslation()
+  const queryClient = useQueryClient()
+  const [activeTab, setActiveTab] = useState(tab)
+  const [activeLang, setActiveLang] = useState('az')
+
+  // Sync route-provided tab prop
+  useEffect(() => setActiveTab(tab), [tab])
+
+  const { data: healthData } = useQuery({
+    queryKey: ["health"],
+    queryFn: () => api.get("/health"),
+  })
+
+  const { data: usersData, isLoading: loadingUsers } = useQuery({
+    queryKey: ["admin", "users"],
+    queryFn: async () => {
+      const res = await api.get("/users")
+      return res.data
+    },
+    enabled: activeTab === "users" || activeTab === "overview",
+  })
+
+  const { data: productsData, isLoading: loadingProducts } = useQuery({
+    queryKey: ["products", {}],
+    queryFn: () => getProducts({ limit: 100 }),
+    enabled: activeTab === "products" || activeTab === "overview",
+  })
+
+  const { data: plantsData, isLoading: loadingPlants } = useQuery({
+    queryKey: ["plants", {}],
+    queryFn: () => getPlants(),
+    enabled: activeTab === "plants" || activeTab === "overview",
+  })
+
+  const { data: categoriesData, isLoading: loadingCategories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getCategories,
+    enabled: activeTab === "categories" || activeTab === "overview",
+  })
+
+  const users       = Array.isArray(usersData) ? usersData : (usersData?.data || [])
+  const products    = Array.isArray(productsData) ? productsData : (productsData?.data || [])
+  const plants      = Array.isArray(plantsData) ? plantsData : []
+  const categories  = Array.isArray(categoriesData) ? categoriesData : []
+  const isOnline    = healthData?.status === "ok"
+
+  // ── Mutations ──
+  const { mutate: deleteProductMutation } = useMutation({
+    mutationFn: (id) => api.delete(`/products/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"])
+      toast.success(t('admin.products.deleted', 'Product removed.'))
+    },
+  })
+
+  const { mutate: deletePlantMutation } = useMutation({
+    mutationFn: (id) => deletePlant(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["plants", {}])
+      toast.success(t('admin.plants.deleted', 'Plant removed.'))
+    },
+  })
+
+  const { mutate: deleteCategoryMutation } = useMutation({
+    mutationFn: (id) => deleteCategory(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["categories"])
+      toast.success(t('admin.categories.deleted', 'Category removed.'))
+    },
+  })
+
+  // Category Form
+  const initialCategoryTranslations = {
+    az: { name: "", description: "" },
+    en: { name: "", description: "" },
+    ru: { name: "", description: "" },
+    tr: { name: "", description: "" }
+  }
+  const [catTranslations, setCatTranslations] = useState(initialCategoryTranslations)
+  const [catSlug, setCatSlug] = useState("")
+  const [editingCategoryId, setEditingCategoryId] = useState(null)
+
+  const handleEditCategory = (cat) => {
+    setEditingCategoryId(cat.id)
+    setCatSlug(cat.slug || "")
+    
+    const newTrans = { ...initialCategoryTranslations }
+    cat.translations?.forEach(t => {
+      if (newTrans[t.language]) {
+        newTrans[t.language] = { ...t }
+      }
+    })
+    setCatTranslations(newTrans)
+    window.scrollTo({ top: 300, behavior: 'smooth' })
+  }
+
+  const { mutate: createCategoryMutation, isPending: creatingCat } = useMutation({
+    mutationFn: () => {
+      const transArray = Object.entries(catTranslations).map(([lang, fields]) => ({
+        language: lang,
+        ...fields
+      })).filter(t => t.name.trim())
+
+      return api.post("/categories", { 
+        slug: catSlug || catTranslations.az.name.toLowerCase().replace(/\s+/g, "-"), 
+        translations: transArray 
+      })
+    },
+    onSuccess: () => { 
+      queryClient.invalidateQueries(["categories"])
+      setCatTranslations(initialCategoryTranslations)
+      setCatSlug("")
+      toast.success(t('admin.categories.created', 'Category created!'))
+    },
+  })
+
+  const { mutate: updateCategoryMutation, isPending: updatingCat } = useMutation({
+    mutationFn: () => {
+      const transArray = Object.entries(catTranslations).map(([lang, fields]) => ({
+        language: lang,
+        ...fields
+      })).filter(t => t.name.trim())
+
+      return api.put(`/categories/${editingCategoryId}`, { 
+        slug: catSlug, 
+        translations: transArray 
+      })
+    },
+    onSuccess: () => { 
+      queryClient.invalidateQueries(["categories"])
+      setCatTranslations(initialCategoryTranslations)
+      setCatSlug("")
+      setEditingCategoryId(null)
+      toast.success(t('admin.categories.updated', 'Category updated!'))
+    },
+  })
+
+  // Plant Form
+  const initialPlantTranslations = {
+    az: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" },
+    en: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" },
+    ru: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" },
+    tr: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" }
+  }
+  const [plantTranslations, setPlantTranslations] = useState(initialPlantTranslations)
+  const [plantMisc, setPlantMisc] = useState({ scientificName: "", imageUrl: "" })
+  const [editingPlantId, setEditingPlantId] = useState(null)
+
+  const handleEditPlant = (plant) => {
+    setEditingPlantId(plant.id)
+    setPlantMisc({
+      scientificName: plant.scientificName || "",
+      imageUrl: plant.image || ""
+    })
+    
+    // Create new translations object from existing data
+    const newTrans = { ...initialPlantTranslations }
+    plant.translations?.forEach(t => {
+      if (newTrans[t.language]) {
+        newTrans[t.language] = { ...t }
+      }
+    })
+    setPlantTranslations(newTrans)
+    
+    // Scroll to form
+    window.scrollTo({ top: 300, behavior: 'smooth' })
+  }
+
+  const { mutate: createPlantMutation, isPending: creatingPlant } = useMutation({
+    mutationFn: () => {
+      const transArray = Object.entries(plantTranslations).map(([lang, fields]) => ({
+        language: lang,
+        ...fields
+      })).filter(t => t.name.trim())
+
+      return api.post("/plants", { 
+        ...plantMisc,
+        translations: transArray 
+      })
+    },
+    onSuccess: () => { 
+      queryClient.invalidateQueries(["plants", {}])
+      setPlantTranslations(initialPlantTranslations)
+      setPlantMisc({ scientificName: "", imageUrl: "" })
+      toast.success(t('admin.plants.created', 'Plant entry created!'))
+    },
+  })
+
+  const { mutate: updatePlantMutation, isPending: updatingPlant } = useMutation({
+    mutationFn: () => {
+      const transArray = Object.entries(plantTranslations).map(([lang, fields]) => ({
+        language: lang,
+        ...fields
+      })).filter(t => t.name.trim())
+
+      return api.put(`/plants/${editingPlantId}`, { 
+        ...plantMisc,
+        translations: transArray 
+      })
+    },
+    onSuccess: () => { 
+      queryClient.invalidateQueries(["plants", {}])
+      setPlantTranslations(initialPlantTranslations)
+      setPlantMisc({ scientificName: "", imageUrl: "" })
+      setEditingPlantId(null)
+      toast.success(t('admin.plants.updated', 'Plant entry updated!'))
+    },
+  })
+
+  return (
+    <div className="max-w-7xl mx-auto p-6 md:p-10 space-y-10">
+      <header className="border-b border-white/5 pb-8">
+        <Badge className="bg-rose-500/10 text-rose-500 border-rose-500/20 font-bold uppercase tracking-widest text-[10px] px-3 mb-3">
+          {t('admin.badge', 'Admin — Root Access')}
+        </Badge>
+        <h1 className="text-4xl md:text-5xl font-display font-bold tracking-tight text-white">
+          {t('admin.title', 'Command Center')}
+        </h1>
+        <p className="text-white/40 font-medium mt-1">
+          {t('admin.subtitle', 'Manage users, products, encyclopedia, and categories.')}
+        </p>
+      </header>
+
+      <div className="flex gap-1 overflow-x-auto border-b border-white/5 pb-0">
+        {TABS.map((t_item) => (
+          <button
+            key={t_item.id}
+            onClick={() => setActiveTab(t_item.id)}
+            className={`flex items-center gap-2 px-5 py-3 text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${
+              activeTab === t_item.id ? "border-rose-500 text-white" : "border-transparent text-white/40 hover:text-white"
+            }`}
+          >
+            <t_item.icon className="w-4 h-4" />
+            {t(activeTab === t_item.id ? `admin.tabs.${t_item.id}` : `admin.tabs.${t_item.id}`, t_item.label)}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === "overview" && (
+        <div className="space-y-8 text-white">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {[
+              { label: t('admin.overview.users', "Total Users"),    value: users.length, icon: Users,   color: "text-blue-400" },
+              { label: t('admin.overview.products', "Products"),       value: products.length, icon: Package, color: "text-emerald-400" },
+              { label: t('admin.overview.plants', "Encyclopedia"),   value: plants.length, icon: Leaf,    color: "text-teal-400" },
+              { label: t('admin.overview.status', "System"),         value: isOnline ? t('admin.status.online', "Online") : t('admin.status.offline', "Offline"), icon: Server, color: isOnline ? "text-emerald-400" : "text-rose-400" },
+            ].map((s) => (
+              <Card key={s.label} className="bg-white/5 border-white/5 p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">{s.label}</span>
+                  <s.icon className={`w-5 h-5 ${s.color}`} />
+                </div>
+                <div className="text-4xl font-display font-bold text-white">{s.value}</div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === "users" && (
+        <Card className="bg-[#09090b] border-white/5">
+          <CardHeader className="p-8 border-b border-white/5">
+            <CardTitle className="text-xl font-display font-bold text-white">{t('admin.users.list', 'Global User Directory')}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-8">
+            {loadingUsers ? (
+              <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left border-collapse">
+                  <thead className="text-[10px] font-bold uppercase tracking-widest text-white/30 border-b border-white/5">
+                    <tr>
+                      <th className="px-6 py-4">{t('admin.users.name', 'Full Name')}</th>
+                      <th className="px-6 py-4">{t('admin.users.email', 'Email')}</th>
+                      <th className="px-6 py-4">{t('admin.users.role', 'Role')}</th>
+                      <th className="px-6 py-4 text-right">{t('admin.users.actions', 'Actions')}</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/[0.02]">
+                    {users.map((u) => (
+                      <tr key={u.id} className="hover:bg-white/[0.02] transition-colors group">
+                        <td className="px-6 py-5 font-bold text-white whitespace-nowrap">{u.fullName}</td>
+                        <td className="px-6 py-5 text-white/40">{u.email}</td>
+                        <td className="px-6 py-5">
+                          <Badge className={`${u.role === 'ADMIN' ? 'bg-rose-500/10 text-rose-500' : u.role === 'SELLER' ? 'bg-blue-500/10 text-blue-500' : 'bg-white/5 text-white/60'} border-none font-bold text-[9px] px-2 py-0`}>
+                            {u.role}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-5 text-right">
+                          <button className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-400 opacity-20 group-hover:opacity-100 transition-opacity">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {activeTab === "products" && (
+        <Card className="bg-[#09090b] border-white/5">
+          <CardHeader className="p-8 border-b border-white/5">
+            <CardTitle className="text-xl font-display font-bold text-white">{t('admin.products.list', 'Global Inventory Ledger')}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-8">
+            {loadingProducts ? (
+              <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
+            ) : (
+              <div className="grid gap-4">
+                {products.map((p) => (
+                  <div key={p.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-emerald-500/20 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden flex-shrink-0">
+                        {p.image && <img src={p.image} className="w-full h-full object-cover" alt="" />}
+                      </div>
+                      <div>
+                        <div className="font-bold text-white">{p.title}</div>
+                        <div className="text-xs text-white/30 mt-0.5">{p.seller?.fullName} • ${p.price}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Link to={`/product/${p.id}`} target="_blank" className="p-2 rounded-lg hover:bg-white/10 text-white/40">
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                      <button onClick={() => deleteProductMutation(p.id)} className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-400">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {activeTab === "plants" && (
+        <div className="space-y-8">
+          <Card className="bg-[#09090b] border-white/5">
+            <CardHeader className="p-6 border-b border-white/5">
+              <CardTitle className="text-lg font-display font-bold text-white flex items-center gap-2">
+                <Plus className="w-5 h-5 text-teal-400" /> {t('admin.plants.add', 'Add Encyclopedia Entry')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <TranslationTabs activeLang={activeLang} onLangChange={setActiveLang}>
+                <div className="grid md:grid-cols-2 gap-4 pt-2">
+                  <Input
+                    placeholder={t('admin.plants.placeholder_name', "Common Name")}
+                    value={plantTranslations[activeLang].name}
+                    onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], name: e.target.value } })}
+                    className="bg-white/5 border-white/10 text-white"
+                  />
+                  <Input
+                    placeholder={t('admin.plants.placeholder_local', "Local Name")}
+                    value={plantTranslations[activeLang].localName}
+                    onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], localName: e.target.value } })}
+                    className="bg-white/5 border-white/10 text-white"
+                  />
+                  <Input
+                    placeholder={t('admin.plants.placeholder_summary', "Short Summary")}
+                    value={plantTranslations[activeLang].shortSummary}
+                    onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], shortSummary: e.target.value } })}
+                    className="bg-white/5 border-white/10 text-white md:col-span-2"
+                  />
+                  <textarea
+                    placeholder={t('admin.plants.placeholder_description', "Detailed Description")}
+                    value={plantTranslations[activeLang].description}
+                    onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], description: e.target.value } })}
+                    className="w-full min-h-[120px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none md:col-span-2"
+                  />
+
+                  {/* Medical & Safety */}
+                  <div className="md:col-span-2 grid md:grid-cols-2 gap-4 mt-4 border-t border-white/5 pt-6">
+                    <h3 className="md:col-span-2 text-xs font-bold uppercase tracking-widest text-teal-400 mb-2">{t('admin.plants.sections.medical', 'Medical & Safety')}</h3>
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_benefits', "Benefits")}
+                      value={plantTranslations[activeLang].benefits}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], benefits: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_usage', "Usage Instructions")}
+                      value={plantTranslations[activeLang].usage}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], usage: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <Input
+                      placeholder={t('admin.plants.placeholder_dosage', "Recommended Dosage")}
+                      value={plantTranslations[activeLang].dosage}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], dosage: e.target.value } })}
+                      className="bg-white/5 border-white/10 text-white h-11"
+                    />
+                    <Input
+                      placeholder={t('admin.plants.placeholder_side_effects', "Side Effects")}
+                      value={plantTranslations[activeLang].sideEffects}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], sideEffects: e.target.value } })}
+                      className="bg-white/5 border-white/10 text-white h-11"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_contraindications', "Contraindications")}
+                      value={plantTranslations[activeLang].contraindications}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], contraindications: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_drug_interactions', "Drug Interactions")}
+                      value={plantTranslations[activeLang].drugInteractions}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], drugInteractions: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                  </div>
+
+                  {/* Habitat & Scientific */}
+                  <div className="md:col-span-2 grid md:grid-cols-2 gap-4 mt-4 border-t border-white/5 pt-6">
+                    <h3 className="md:col-span-2 text-xs font-bold uppercase tracking-widest text-teal-400 mb-2">{t('admin.plants.sections.habitat', 'Habitat & Scientific')}</h3>
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input
+                        placeholder={t('admin.plants.placeholder_country', "Country")}
+                        value={plantTranslations[activeLang].country}
+                        onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], country: e.target.value } })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                      <Input
+                        placeholder={t('admin.plants.placeholder_region', "Region")}
+                        value={plantTranslations[activeLang].region}
+                        onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], region: e.target.value } })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                    </div>
+                    <Input
+                      placeholder={t('admin.plants.placeholder_climate', "Climate")}
+                      value={plantTranslations[activeLang].climate}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], climate: e.target.value } })}
+                      className="bg-white/5 border-white/10 text-white h-11"
+                    />
+                    <Input
+                      placeholder={t('admin.plants.placeholder_active_compounds', "Active Compounds")}
+                      value={plantTranslations[activeLang].activeCompounds}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], activeCompounds: e.target.value } })}
+                      className="bg-white/5 border-white/10 text-white h-11"
+                    />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Input
+                        placeholder={t('admin.plants.placeholder_continent', "Continent")}
+                        value={plantTranslations[activeLang].continent}
+                        onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], continent: e.target.value } })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                      <Input
+                        placeholder={t('admin.plants.placeholder_evidence', "Evidence Grade")}
+                        value={plantTranslations[activeLang].evidenceGrade}
+                        onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], evidenceGrade: e.target.value } })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <Input
+                        placeholder={t('admin.plants.placeholder_terroir', "Terroir")}
+                        value={plantTranslations[activeLang].terroir}
+                        onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], terroir: e.target.value } })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                      <Input
+                        placeholder={t('admin.plants.placeholder_cultivation', "Cultivation")}
+                        value={plantTranslations[activeLang].wildCultivated}
+                        onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], wildCultivated: e.target.value } })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                      <Input
+                        placeholder={t('admin.plants.placeholder_chemotype', "Chemotype")}
+                        value={plantTranslations[activeLang].chemotype}
+                        onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], chemotype: e.target.value } })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </TranslationTabs>
+              
+              <div className="grid md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/5">
+                <Input
+                  placeholder={t('admin.plants.scientific', "Scientific Name")}
+                  value={plantMisc.scientificName}
+                  onChange={(e) => setPlantMisc({ ...plantMisc, scientificName: e.target.value })}
+                  className="bg-white/5 border-white/10 text-white h-11"
+                />
+                <Input
+                  placeholder={t('admin.plants.image', "Image URL")}
+                  value={plantMisc.imageUrl}
+                  onChange={(e) => setPlantMisc({ ...plantMisc, imageUrl: e.target.value })}
+                  className="bg-white/5 border-white/10 text-white h-11"
+                />
+                <div className="flex gap-2">
+                  {editingPlantId && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setEditingPlantId(null)
+                        setPlantTranslations(initialPlantTranslations)
+                        setPlantMisc({ scientificName: "", imageUrl: "" })
+                      }}
+                      className="flex-1 border-white/10 text-white hover:bg-white/5 h-11"
+                    >
+                      {t('common.cancel', 'Cancel')}
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => editingPlantId ? updatePlantMutation() : createPlantMutation()}
+                    disabled={!plantTranslations.az.name || creatingPlant || updatingPlant}
+                    className="flex-[2] bg-teal-500 text-white font-bold hover:bg-teal-600 h-11"
+                  >
+                    {creatingPlant || updatingPlant ? <Loader2 className="w-4 h-4 animate-spin" /> : (editingPlantId ? t('common.save', 'Save Changes') : t('common.add', 'Add'))}
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-[#09090b] border-white/5">
+            <CardHeader className="p-8 border-b border-white/5">
+              <CardTitle className="text-xl font-display font-bold text-white">{t('admin.plants.list', 'Encyclopedia Entries')}</CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              {loadingPlants ? (
+                <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
+              ) : plants.length === 0 ? (
+                <p className="text-center text-white/30 py-16 font-bold">{t('admin.plants.empty', 'No entries found.')}</p>
+              ) : (
+                <div className="grid gap-3">
+                  {plants.map((p) => (
+                    <div key={p.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-teal-500/20 transition-colors">
+                      <div>
+                        <div className="font-bold text-white">{p.name}</div>
+                        {p.scientificName && <div className="text-xs italic text-white/40 mt-0.5">{p.scientificName}</div>}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Link to={`/herb/${p.id}`} className="p-2 rounded-lg hover:bg-teal-500/10 text-teal-400">
+                          <CheckCircle2 className="w-4 h-4" />
+                        </Link>
+                        <button onClick={() => handleEditPlant(p)} className="p-2 rounded-lg hover:bg-white/10 text-white/50">
+                          <Globe className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => deletePlantMutation(p.id)} className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-400">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {activeTab === "categories" && (
+        <div className="space-y-8">
+          <Card className="bg-[#09090b] border-white/5">
+            <CardHeader className="p-6 border-b border-white/5">
+              <CardTitle className="text-lg font-display font-bold text-white flex items-center gap-2">
+                <Plus className="w-5 h-5 text-blue-400" /> {t('admin.categories.create', 'Create Category')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <TranslationTabs activeLang={activeLang} onLangChange={setActiveLang}>
+                <div className="pt-2">
+                  <Input
+                    placeholder={t('admin.categories.placeholder_name', "Category Name")}
+                    value={catTranslations[activeLang].name}
+                    onChange={(e) => setCatTranslations({ ...catTranslations, [activeLang]: { ...catTranslations[activeLang], name: e.target.value } })}
+                    className="bg-white/5 border-white/10 text-white h-11"
+                  />
+                </div>
+              </TranslationTabs>
+              
+              <div className="flex gap-4 mt-6 pt-6 border-t border-white/5">
+                <Input
+                  placeholder="Slug (optional)"
+                  value={catSlug}
+                  onChange={(e) => setCatSlug(e.target.value)}
+                  className="bg-white/5 border-white/10 text-white max-w-xs"
+                />
+                <div className="flex gap-2 w-full">
+                  {editingCategoryId && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setEditingCategoryId(null)
+                        setCatTranslations(initialCategoryTranslations)
+                        setCatSlug("")
+                      }}
+                      className="flex-1 border-white/10 text-white hover:bg-white/5 h-11"
+                    >
+                      {t('common.cancel', 'Cancel')}
+                    </Button>
+                  )}
+                  <Button
+                    onClick={() => editingCategoryId ? updateCategoryMutation() : createCategoryMutation()}
+                    disabled={!catTranslations.az.name || creatingCat || updatingCat}
+                    className="flex-[2] bg-blue-500 text-white font-bold hover:bg-blue-600 h-11 px-8"
+                  >
+                    {creatingCat || updatingCat ? <Loader2 className="w-4 h-4 animate-spin" /> : (editingCategoryId ? t('common.save', 'Save Changes') : t('common.create', 'Create'))}
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-[#09090b] border-white/5">
+            <CardHeader className="p-8 border-b border-white/5">
+              <CardTitle className="text-xl font-display font-bold text-white">{t('admin.categories.list', 'Category Bank')}</CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              {loadingCategories ? (
+                <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
+              ) : categories.length === 0 ? (
+                <p className="text-center text-white/30 py-16 font-bold">{t('admin.categories.empty', 'No categories found.')}</p>
+              ) : (
+                <div className="grid gap-3">
+                  {categories.map((c) => (
+                    <div key={c.id} className="space-y-3">
+                      <div className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-blue-500/20 transition-colors">
+                        <div>
+                          <div className="font-bold text-white uppercase tracking-wider text-sm">{c.name}</div>
+                          <div className="text-[10px] text-white/30 mt-1 font-mono">{c.slug}</div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <button onClick={() => handleEditCategory(c)} className="p-2 rounded-lg hover:bg-white/10 text-white/50">
+                            <Globe className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => deleteCategoryMutation(c.id)} className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-400">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                      {/* Children */}
+                      {c.children && c.children.length > 0 && (
+                        <div className="pl-6 grid gap-2 border-l border-white/5 ml-5">
+                          {c.children.map(child => (
+                            <div key={child.id} className="flex items-center justify-between p-4 rounded-xl bg-white/[0.01] border border-white/5">
+                              <div className="text-sm text-white/60">{child.name}</div>
+                              <div className="flex items-center gap-2">
+                                <button onClick={() => handleEditCategory(child)} className="p-1.5 rounded-md hover:bg-white/10 text-white/30">
+                                  <Globe className="w-3 h-3" />
+                                </button>
+                                <button onClick={() => deleteCategoryMutation(child.id)} className="p-1.5 rounded-md hover:bg-rose-500/10 text-rose-400">
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </div>
+  )
+}

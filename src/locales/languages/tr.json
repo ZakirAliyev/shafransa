@@ -1,0 +1,580 @@
+{
+  "welcome": "Hoş geldiniz",
+  "login": "Giriş yap",
+  "nav_marketplace": "Pazaryeri",
+  "nav_encyclopedia": "Ansiklopedi",
+  "nav_ai_consultant": "Yapay Zeka Danışmanı",
+  "nav_about": "Hakkımızda",
+  "nav_how_it_works": "Nasıl Çalışır",
+  "nav_help_center": "Yardım Merkezi",
+  "my_profile": "Profilim",
+  "my_orders": "Siparişlerim",
+  "my_wishlist": "İstək Listem",
+  "search_herbs": "Bitki ara...",
+  "sign_in": "Giriş yap",
+  "get_started": "Başla",
+  "sign_out": "Çıkış yap",
+  "seller_dashboard": "Satıcı Paneli",
+  "admin_panel": "Admin Paneli",
+  "more": "Daha fazla",
+  "platform": "Platform",
+  "company": "Şirket",
+  "home": "Ana Sayfa",
+  "rights_reserved": "Tüm hakları saklıdır",
+  "common": {
+    "reset_filters": "Filtreleri Sıfırla",
+    "reset": "Sıfırla",
+    "retry": "Tekrar Dene",
+    "min": "Min",
+    "max": "Maks",
+    "see_packaging": "Ambalaja bakınız",
+    "raw": "Hammadde",
+    "pending": "Bilgi bekleniyor",
+    "link_copied": "Bağlantı kopyalandı!",
+    "add": "Ekle",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "back": "Geri",
+    "botanical": "BOTANİK",
+    "remove": "Kaldır"
+  },
+  "landing": {
+    "version": "Shafransa: Hassas Botanik Zekası",
+    "hero": {
+      "title_part1": "Botanik Tıp",
+      "title_part2": "Yeniden",
+      "title_part3": "Yapay Zeka ile.",
+      "subtitle": "Dünyanın ilk klinik sınıf botanik ekosistemi. Gerçek zamanlı güvenlik analizi ve laboratuvar onaylı şeffaflık."
+    },
+    "cta": {
+      "protocol": "Protokolümü Başlat",
+      "marketplace": "Pazaryerini Keşfet",
+      "explore_inventory": "Onaylı Ürünleri Keşfet"
+    },
+    "social": {
+      "trusted": "Küresel klinik araştırmacılar tarafından güveniliyor",
+      "title": "Sağlık yeni servettir. Hassasiyete yatırım yapın."
+    },
+    "value": {
+      "title": "Hassasiyet için tasarlandı, bilimle yönetiliyor.",
+      "subtitle": "Genel bitkisel tavsiyeler tehlikelidir. Shafransa, modern sağlık yönetimi için gereken klinik titizliği sağlar."
+    },
+    "links": {
+      "whitepaper": "Bilimsel raporu görüntüleyin"
+    },
+    "ai": {
+      "title": "Shafransa AI Core™",
+      "text": "Sinir ağımız genetiğinizi, mevcut reçetelerinizi ve semptomlarınızı analiz ederek güvenli ve etkili bir protokol oluşturur."
+    },
+    "verify": {
+      "title": "Doğrulama Motoru",
+      "text": "Üretilen her parti için blokzincir destekli analiz sertifikaları.",
+      "batch": "Parti #SH-{{id}} GEÇTİ"
+    },
+    "marketplace": {
+      "badge": "Klinik Pazaryeri",
+      "title": "Topraktan şişeye şeffaf tedarik zinciri."
+    },
+    "features": {
+      "global": {
+        "title": "Küresel Tedarik",
+        "text": "Akdeniz, Amazon ve Kafkas dağlarındaki organik üreticilerle doğrudan ilişkiler."
+      },
+      "escrow": {
+        "title": "Escrow Saflık Garantisi",
+        "text": "Ödemeniz, partinin saflığı 3. taraf bir laboratuvar tarafından onaylanana kadar akıllı sözleşmede kilitli kalır."
+      },
+      "extraction": {
+        "title": "Standartlaştırılmış Ekstraksiyon",
+        "text": "Maksimum biyoyararlanım için CO2-kritik ekstraksiyon yöntemlerini şart koşuyoruz."
+      }
+    },
+    "card": {
+      "verified": "Doğrulanmış Menşei",
+      "location": "Kafkas Dağları",
+      "product": "Yabani Safran Özütü",
+      "rating_info": "4.9 Puan • Klinik Parti #AF-201"
+    },
+    "floating": {
+      "ai": "AI Protokolu Oluşturuldu",
+      "dose": "Kişiselleştirilmiş Doz: 500mg"
+    },
+    "testimonials": {
+      "1": {
+        "text": "Reçetelerim ile Ashwagandha arasındaki etkileşim kontrolü bir devrimdi. Diğer tüm platformların kaçırdığını Shafransa yakaladı.",
+        "role": "Klinik İmmünolog"
+      },
+      "2": {
+        "text": "Onaylı COA'lar bizim gibi satıcılar için oyunun kurallarını değiştiriyor. Saflığımızı pahalı pazarlama olmadan kanıtlayabiliyoruz.",
+        "role": "Sertifikalı Organik Satıcı"
+      }
+    },
+    "cta_final": {
+      "title": "İyileşmeniz sıfır tahminle başlar.",
+      "subtitle": "Botanik biliminin geleceğine katılın. Kişiselleştirilmiş protokolünüzü dakikalar içinde devreye alın.",
+      "user": "Bekleme Listesine Katıl",
+      "seller": "İş Ortağımız Ol"
+    }
+  },
+  "footer": {
+    "bio": "Yapay zeka ve Kafkas botanik biliminin kesişiminde öncü.",
+    "links": {
+      "about": "Hakkımızda",
+      "help": "Yardım Merkezi"
+    },
+    "legal": {
+      "privacy": "Gizlilik Politikası",
+      "terms": "Kullanım Şartları"
+    }
+  },
+  "encyclopedia": {
+    "badge": "Botanik Ansiklopedisi",
+    "title_p1": "Bitkisel",
+    "title_p2": "Bilgi Bankası",
+    "subtitle": "Klinik sınıf botanik zekası. Araştırmalar, kanıt dereceleri ve güvenlik profilleri.",
+    "search_placeholder": "Bitki, bileşik, fayda ara...",
+    "stats": {
+      "herbs": "Katalogdaki Bitkiler",
+      "research": "Araştırma Makaleleri",
+      "compounds": "Takip Edilen Bileşikler"
+    },
+    "filters": {
+      "grade": "Kanıt Derecesi",
+      "continent": "Kıta"
+    },
+    "continents": {
+      "africa": "Afrika",
+      "asia": "Asiya",
+      "europe": "Avrupa",
+      "north_america": "Kuzey Amerika",
+      "south_america": "Güney Amerika",
+      "oceania": "Okyanusya"
+    },
+    "loading": "Botanik veritabanı yükleniyor...",
+    "no_results": "Kayıt bulunamadı",
+    "no_results_sub": "Aramayı ayarlamayı veya filtreleri temizlemeyi deneyin.",
+    "clear_all": "Tüm filtreleri temizle",
+    "entry_count_single": "kayıt",
+    "entry_count_plural": "kayıt",
+    "found": "bulundu",
+    "grade": "Derece",
+    "monograph": "Tam Monograf"
+  },
+  "herb": {
+    "tabs": {
+      "monograph": "Monograf",
+      "clinical": "Klinik Veriler",
+      "safety": "Etkileşim ve Güvenlik",
+      "marketplace": "Mağaza"
+    },
+    "not_found": "Botanik kayıt bulunamadı",
+    "back": "Bitki Bankasına Dön",
+    "badge": {
+      "default": "Klinik Monograf"
+    },
+    "local_name": "Yerel ad",
+    "meta": {
+      "terroir": "Teruar",
+      "cultivation": "Yetiştirme",
+      "chemotype": "Kemotip",
+      "climate": "Endemik İqlim"
+    },
+    "image_pending": "Görüntü Bekleniyor",
+    "sections": {
+      "description": "Botanik Açıklama",
+      "benefits": "Terapötik Faydalar",
+      "usage": "Geleneksel Kullanım",
+      "compounds": "Aktif Bileşikler",
+      "dosage": "Klinik Dozaj",
+      "contraindications": "Kontrendikasyonlar",
+      "side_effects": "Yan Etkiler",
+      "drug_interactions": "İlaç Etkileşimleri",
+      "pregnancy_warnings": "Hamilelik ve Emzirme Uyarıları",
+      "formulations": "Onaylı Formülasyonlar"
+    },
+    "products_found": "{{count}} Ürün Bulundu",
+    "no_products": "Ticari Ürün Yok",
+    "no_products_sub": "Şu anda bu botanik kaydına dayalı herhangi bir ürün bulunmamaktadır.",
+    "climate_default": "Küresel adaptasyon. Genellikle ılıman ve subtropikal bölgelerde bulunur.",
+    "compounds_pending": "Hassas spektrofotometri analizi bekleniyor."
+  },
+  "marketplace": {
+    "badge": "Onaylı Envanter",
+    "title_p1": "Küresel Botanik",
+    "title_p2": "Borsası",
+    "subtitle": "Doğrudan onaylı organik üreticilerden. Her parti test edilmiş ve sertifikalandırılmıştır.",
+    "stats": {
+      "total": "Mevcut Ürünler"
+    },
+    "search_placeholder": "Bitki, ekstrakt, bileşik ara...",
+    "sort": {
+      "newest": "En Yeniler",
+      "price_asc": "Fiyat: Düşükten Yükseğe",
+      "price_desc": "Fiyat: Yüksekten Düşüğe"
+    },
+    "filters": {
+      "categories": "Kategoriler",
+      "all": "Tüm Ürünler",
+      "price": "Fiyat Aralığı",
+      "form": "Ürün Formu",
+      "verified_only": "Sadece Laboratuvar Onaylı"
+    },
+    "error": "Ürünler yüklenemedi. Lütfen tekrar deneyin.",
+    "empty": {
+      "title": "Ürün bulunamadı",
+      "subtitle": "Filtreleri veya arama terimini ayarlamayı deneyin"
+    }
+  },
+  "product": {
+    "tabs": {
+      "description": "Açıklama",
+      "compounds": "Bileşikler",
+      "quality": "Kalite",
+      "reviews": "Yorumlar"
+    },
+    "cart": {
+      "added": "{{title}} sepete eklendi!",
+      "added_simple": "Koleksiyonunuza eklendi!",
+      "error": "Sepete eklenemedi"
+    },
+    "reviews": {
+      "success": "Yorumunuz gönderildi! Teşekkürler.",
+      "error": "Yorum gönderilemedi",
+      "empty": "Henüz yorum yok. İlk siz olun!",
+      "write": "Yorum Yaz",
+      "label_rating": "Puanınız",
+      "label_experience": "Deneyiminiz",
+      "placeholder": "Bu ürünle ilgili deneyiminizi paylaşın...",
+      "submit": "Yorumu Gönder"
+    },
+    "wishlist": {
+      "added": "İstek listenize kaydedildi",
+      "removed": "İstek listenizden çıkarıldı"
+    },
+    "not_found": "Ürün bulunamadı",
+    "back": "Pazaryerine Dön",
+    "verified_badge": "LABORATUVAR ONAYLI",
+    "verified_short": "ONAYLI",
+    "reviews_count": "yorum",
+    "discount": "%{{percent}} Tasarruf Edin",
+    "seller_badge": "Onaylı Satıcı → Mağazayı Görüntüle",
+    "stock_status": "Stokda {{count}} adet",
+    "stock_left": "{{count}} adet kaldı",
+    "out_of_stock": "Stokta yok",
+    "buy_now": "Hemen Al",
+    "add_to_cart": "Sepete Ekle",
+    "trust": {
+      "shipping": "Ücretsiz Kargo",
+      "shipping_sub": "50$ üzeri siparişlerde",
+      "returns": "Kolay İade",
+      "returns_sub": "30 günlük politika",
+      "lab": "Laboratuvar Testli",
+      "lab_sub": "3. taraf onaylı"
+    },
+    "meta": {
+      "region": "Menşei Bölgesi",
+      "batch": "Parti Numarası",
+      "form": "Form",
+      "status": "Doğrulama Durumu",
+      "origin": "Menşei"
+    },
+    "verified_yes": "Laboratuvar onaylı ✓",
+    "verified_no": "Standart",
+    "related_title": "Benzer Ürünler",
+    "forms": {
+      "tea": "Çay",
+      "extract": "Ekstrakt",
+      "capsule": "Kapsül",
+      "oil": "Yağ",
+      "powder": "Toz",
+      "tinctür": "Tinktür"
+    },
+    "compounds_pending": "Bileşik verileri laboratuvar analizi bekliyor"
+  },
+  "auth": {
+    "login_required": "Lütfen önce giriş yapın",
+    "login_required_cart": "Sepete eklemek için lütfen giriş yapın",
+    "login_required_save": "Kaydetmek için lütfen giriş yapın",
+    "login_success": "Hoş geldiniz! Yönlendiriliyorsunuz...",
+    "login_error": "Geçersiz kimlik bilgileri. Lütfen tekrar deneyin.",
+    "login_title": "Hoş geldiniz.",
+    "login_subtitle": "Kişiselleştirilmiş botanik zeka kasanıza erişin.",
+    "sign_in": "Giriş Yap",
+    "sign_in_desc": "Lütfen yetkili kimlik bilgilerinizi girin.",
+    "label_email": "Kimlik (E-posta)",
+    "placeholder_email": "ad@kurum.com",
+    "label_password": "Güvenlik Anahtarı (Şifre)",
+    "forgot_password": "Anahtarı kurtar?",
+    "secure_session": "Güvenli uçtan uca şifreli oturum aktif.",
+    "authenticating": "Düğüm kimliği doğrulanıyor...",
+    "access_portal": "Portala Eriş",
+    "fast_access": "Hızlı Erişim",
+    "global_node": "Küresel Düğüm",
+    "new_user": "Ekosistemde yeni misiniz?",
+    "apply_membership": "Üyelik için başvur",
+    "register_title": "Kayıt Defterine Katılın.",
+    "register_subtitle": "Küresel botanik ekosistemine erişim için başvurun.",
+    "new_membership": "Yeni Üyelik",
+    "new_membership_desc": "Select your portal and provide your identification.",
+    "role_user": "Tüketici",
+    "role_seller": "Kurum",
+    "label_fullname": "Tam Yasal Ad",
+    "placeholder_fullname": "Dr. John Smith",
+    "label_institutional_email": "Kurumsal E-posta",
+    "placeholder_institutional_email": "jsmith@helix.org",
+    "label_security_key": "Güvenlik Anahtarı",
+    "agreement": "Başvurarak, Klinik Doğrulama Protokollerimizi kabul etmiş olursunuz.",
+    "provisioning": "Erişim sağlanıyor...",
+    "submit_application": "Başvuruyu Gönder",
+    "already_registered": "Zaten kayıtlı mısınız?",
+    "sign_in_vault": "Kasaya Giriş Yap",
+    "verify_email": "E-postayı Doğrula",
+    "otp_sent": "E-postanıza 5 haneli bir kod gönderdik.",
+    "verifying": "Doğrulanıyor...",
+    "verify_code": "Kodu Doğrula",
+    "resend_in": "Kodu tekrar gönder",
+    "resend_code": "Kodu tekrar gönder",
+    "invalid_otp": "Geçersiz OTP"
+  },
+  "user": {
+    "member_badge": "Üye",
+    "my_account": "Hesabım",
+    "welcome_back": "Hoş geldiniz",
+    "tab_profile": "Profil",
+    "tab_orders": "Siparişler",
+    "tab_wishlist": "İstek Listesi",
+    "tab_settings": "Ayarlar",
+    "personal_details": "Kişisel Bilgiler",
+    "personal_details_desc": "Adınızı ve e-posta adresinizi güncelleyin.",
+    "label_fullname": "Tam Ad",
+    "label_email": "E-posta",
+    "profile_updated": "Profil güncellendi!",
+    "save_changes": "Değişiklikleri Kaydet",
+    "privacy_guard": "Gizlilik Koruması",
+    "privacy_desc": "Verileriniz AES-256 standartlarıyla şifrelenir.",
+    "order_history": "Sipariş Geçmişi",
+    "order_history_desc": "Tüm satın alımlarınızı takip edin.",
+    "no_orders": "Henüz sipariş yok",
+    "browse_marketplace": "Pazaryerine Göz At",
+    "label_order": "Sipariş",
+    "order_confirmed": "Onaylandı",
+    "saved_items": "Kaydedilen Ürünler",
+    "no_wishlist": "Kaydedilen ürün yok",
+    "account_settings": "Hesap Ayarları",
+    "account_settings_desc": "Şifrenizi ve hesap tercihlerinizi yönetin.",
+    "new_password": "Yeni Şifrə",
+    "confirm_password": "Şifreyi Onayla",
+    "update_password": "Şifreyi Güncelle"
+  },
+  "cart": {
+    "title": "Alışveriş Sepeti",
+    "empty": "Sepetiniz boş.",
+    "continue_shopping": "Alışverişe Devam Et",
+    "qty": "Adet",
+    "remove": "Kaldır",
+    "order_summary": "Sipariş Özeti",
+    "subtotal": "Ara Toplam",
+    "shipping": "Kargo",
+    "shipping_desc": "Ödeme sayfasında hesaplanır",
+    "total": "Toplam",
+    "checkout": "Ödemeye Geç",
+    "items_label": "Ürün",
+    "empty_title": "Sepetiniz boş",
+    "empty_desc": "Protokolünüz için mükemmel örnekleri bulmak için botanik rehberimizi keşfedin.",
+    "start_browsing": "Göz Atmaya Başla",
+    "proceed_to_checkout": "Ödemeye Geç",
+    "tax": "Tahmini Vergi",
+    "shipping_free": "ÜCRETSİZ",
+    "guarantee_purity": "%100 Botanik Saflık",
+    "guarantee_lab": "Laboratuvar Onaylı Örnekler"
+  },
+  "checkout": {
+    "title": "Ödeme",
+    "success_title": "Sipariş Onaylandı!",
+    "success_desc": "Bitkisel protokolünüz hazırlanıyor. Durumu panelinizden takip edebilirsiniz.",
+    "view_orders": "Siparişlerimi Görüntüle",
+    "label_fullname": "Tam Ad",
+    "label_phone": "Telefon Numarası",
+    "label_address": "Teslimat Adresi",
+    "label_note": "Teslimat Notu (Opsiyonel)",
+    "place_order": "Siparişi Onayla",
+    "error": "Ödeme hatası: ",
+    "back_cart": "Alışveriş Çantasına Dön",
+    "header_info": "Teslimat Alan Kişi",
+    "header_payment": "Finansal Uzlaşma",
+    "placeholder_address": "Sokak, bina, daire...",
+    "placeholder_note": "örn. Özel taşıma gerektirir",
+    "payment_cod": "Kapıda Ödeme",
+    "payment_cod_desc": "Kapınızda güvenli bir şekilde ödeyin",
+    "payment_card": "Dijital Varlıklar",
+    "payment_card_coming": "Yakında aktif edilecek",
+    "summary_title": "Final Özeti",
+    "finalize_order": "Siparişi Tamamla",
+    "secure_label": "Şifreli İşlem Güvenliği",
+    "need_help": "Destek",
+    "support_text": "Botanik uzmanlarımız yayında.",
+    "order_id": "Sipariş Kimliği",
+    "track_order": "Sipariş Durumunu Takip Et",
+    "back_marketplace": "Pazaryerine Dön"
+  },
+  "about": {
+    "badge": "Botanik Mirasımız",
+    "hero_title": "Botanik Bilimi Yeniden Tanımlandı.",
+    "hero_subtitle": "Shafransa, antik Kafkas bilgeliğini gelişmiş sinirsel analitiklerle birleştiren dünyanın ilk klinik sınıf botanik ekosistemidir.",
+    "story_title": "Hikayemiz",
+    "story_p1": "Kafkasya'nın kalbinde kurulan Shafransa, basit bir gözlemden doğdu: bitkisel tıp dünyasında şeffaflık ve modern eczacılığın bilimsel titizliği eksikti.",
+    "story_p2": "Sadece bitki satan değil, aynı zamanda sağlığa giden doğrulanmış, verilere dayalı bir yol sunan bir platform kurarak bunu değiştirmek için yola çıktık.",
+    "mission_title": "Misyonumuz",
+    "mission_desc": "Yapay zeka aracılığıyla laboratuvar onaylı botanik tıbba erişimi demokratikleştirmek.",
+    "vision_title": "Vizyonumuz",
+    "vision_desc": "Her botanik müdahalenin moleküler tıp kadar kesin ve güvenli olduğu bir dünya.",
+    "pillars_title": "Shafransa'nın Üç Sütunu",
+    "pillars_subtitle": "Metodolojimiz güven, bilim ve mutlak şeffaflık temeli üzerine kuruludur.",
+    "pillar1_title": "Önce Saflık",
+    "pillar1_desc": "Pazaryerimizdeki her bitki partisi, ağır metaller, pestisitler ve mikrobiyal kontaminasyon için 3. taraf laboratuvar testlerinden geçer.",
+    "pillar2_title": "Nöral Analitik",
+    "pillar2_desc": "Tescilli Shafransa AI Core™ yazılımımız, kanıta dayalı etkileşim kontrolleri ve dozajlar sağlamak için binlerce klinik deneyi analiz eder.",
+    "pillar3_title": "Etik Tedarik",
+    "pillar3_desc": "Doğrudan geleneksel Kafkas toplayıcılarıyla çalışarak adil ücretler ve sürdürülebilir toplama uygulamaları sağlıyoruz.",
+    "cta_title": "Klinik Botanik Zekasını Deneyimleyin.",
+    "view_research": "Araştırmamızı Görüntüleyin"
+  },
+  "contact": {
+    "badge": "Küresel Destek",
+    "hero_title": "Uzmanlarımızla Bağlantı Kurun.",
+    "hero_subtitle": "Botanik protokol veya sipariş hakkında bir sorunuz mu var? Uzman ekibimiz klinik düzeyde destek sağlamak için burada.",
+    "label_name": "Tam Ad",
+    "label_email": "Kurumsal E-posta",
+    "label_message": "Mesaj",
+    "placeholder_message": "Size nasıl yardımcı olabiliriz?",
+    "submit": "Mesajı Gönder",
+    "form_success": "Mesaj gönderildi! Yakında sizinle iletişime geçeceğiz.",
+    "wa_title": "Anında Destek",
+    "wa_desc": "Gerçek zamanlı rehberlik için doğrudan WhatsApp üzerinden botanik uzmanlarımızla sohbet edin.",
+    "wa_btn": "WhatsApp'ta Aç",
+    "address_title": "Botanik Merkez",
+    "address": "123 Safran Cad, Bakü, Azerbaycan",
+    "email_title": "E-posta",
+    "phone_title": "Telefon"
+  },
+  "how_it_works": {
+    "badge": "Onaylanmış Süreç",
+    "hero_title": "Kişiselleştirilmiş Sağlığa Giden Basit Yol.",
+    "hero_subtitle": "Bitkisel tıpta tahmin yürütmeyi ortadan kaldırdık. Dört adımlı sürecimiz, aldığınız her botanik ürünün güvenli, etkili ve vücudunuza tam olarak uygun olmasını sağlar.",
+    "step1_title": "Hikayenizi Paylaşın",
+    "step1_desc": "Bize sağlık hedefleriniz, mevcut takviyeleriniz ve geçmişiniz hakkında bilgi verin. Sizin için önemli olan her ayrıntıyı dinliyoruz.",
+    "step2_title": "Akıllı Eşleştirme",
+    "step2_desc": "Sistemimiz, en güvenli ve etkili botanik eşleşmeleri bulmak için profilinizi klinik araştırmalarla karşılaştırır.",
+    "step3_title": "Güvenli Tedarik",
+    "step3_desc": "Doğrudan onaylı yetiştiricilerimizden sipariş verin. Her ürün size ulaşmadan önce laboratuvarda test edilir ve sertifikalandırılır.",
+    "step4_title": "Kişisel Protokol",
+    "step4_desc": "Net dozajlar ve zamanlama talimatları alın. Yolculuğunuz izlenir ve sağlığınız geliştikçe ayarlanır.",
+    "safety_title": "Klinik Düzeyde Güvenlik",
+    "safety_desc": "Sadece bitkileri semptomlarla eşleştirmiyoruz. Tüm sağlık profilinizi bilinen ilaç-bitki etkileşimlerine göre kontrol ediyoruz.",
+    "logistics_title": "Şeffaf Tedarik Zinciri",
+    "logistics_desc": "Bitkilerinizi Kafkasya'daki çiftlikten kapınıza kadar takip edin. Kurutma ve ekstraksiyon yöntemleri konusunda tam şeffaflık sağlanır.",
+    "human_title": "Bilim Odaklı, İnsan Merkezli",
+    "human_p1": "Genel sağlık tavsiyeleri riskli olabilir. Botanik tıbbın bir klinikte bulabileceğiniz her şey kadar titiz, ancak evinizden erişilebilir olması gerektiğine inanıyoruz.",
+    "human_p2": "Araştırmacılarımız ve eczacılarımız, en güncel, bilim destekli rehberliği almanızı sağlamak için veritabanımızı sürekli güncelliyor.",
+    "cta_title": "Onaylanmış yolculuğunuza başlamaya hazır mısınız?"
+  },
+  "ai": {
+    "badge": "Yapay Zeka Botanik Danışmanı",
+    "title_p1": "Kişisel",
+    "title_p2": "Bitki Protokolünüz",
+    "subtitle": "4 soruya cevap verin. Eşsiz sağlık profilinize uygun kişiselleştirilmiş, kanıta dayalı bir botanik tavsiye alın.",
+    "step_info": "Adım {{current}} / {{total}}",
+    "progress_info": "tamamlandı",
+    "next": "Devam et",
+    "back": "Geri",
+    "analyzing": "Analiz ediliyor...",
+    "generate": "Protokol Oluştur",
+    "ready_toast": "Kişiselleştirilmiş protokolünüz hazır!",
+    "error_toast": "Danışmanlık başarısız oldu.",
+    "warn_answer": "Devam etmeden önce lütfen soruyu yanıtlayın",
+    "result_badge": "Protokol Oluşturuldu",
+    "result_title": "Kişiselleştirilmiş Bitki Protokolünüz",
+    "risk_label": "Risk Seviyesi",
+    "risk_desc": "Herhangi bir bitkisel protokole başlamadan önce mutlaka uzman bir sağlık kuruluşuna danışın.",
+    "rec_title": "Önerilen Botanikler",
+    "risk_low": "düşük",
+    "risk_med": "orta",
+    "risk_high": "yüksek",
+    "risk_suffix": "risk",
+    "learn_more": "Daha Fazla Bilgi",
+    "shop_now": "Bu Bitkiyi Satın Al",
+    "warnings_title": "Önemli Sağlık Uyarıları",
+    "start_over": "Baştan Başla",
+    "browse_marketplace": "İlgili Ürünlere Göz At",
+    "save_vault_title": "Protokolünüzü sağlık kasanıza kaydedin",
+    "save_vault_desc": "Önerileri kaydetmek, ilerlemenizi takip etmek ve kişiselleştirilmiş bilgiler almak için ücretsiz bir hesap oluşturun.",
+    "create_account": "Ücretsiz Hesap Oluştur",
+    "steps": {
+      "symptoms": {
+        "q": "Hangi semptomları veya sağlık sorunlarını yaşıyorsunuz?",
+        "p": "örn. yorgunluk, sindirim güçlüğü, stres, uykusuzluk..."
+      },
+      "goal": {
+        "q": "Temel sağlık hedefiniz nedir?"
+      },
+      "conditions": {
+        "q": "Herhangi bir kronik hastalığınız var mı veya ilaç kullanıyor musunuz?",
+        "p": "Hastalıkları veya ilaçları listeleyin veya 'Yok' yazın"
+      },
+      "lifestyle": {
+        "q": "Yaşam tarzınızı nasıl tanımlarsınız?"
+      }
+    },
+    "goals": {
+      "energy": "Enerji ve canlılığı artırın",
+      "sleep": "Daha iyi uyku ve stres azaltma",
+      "immune": "Bağışıklık sistemi desteği",
+      "digestive": "Sindirim sağlığı",
+      "cardio": "Kardiyovasküler destek",
+      "hormonal": "Hormonal denge",
+      "weight": "Kilo yönetimi",
+      "wellness": "Genel sağlık"
+    },
+    "lifestyle": {
+      "very_active": "Çok aktif (günlük egzersiz)",
+      "moderately_active": "Orta derecede aktif",
+      "sedentary": "Çoğunlukla hareketsiz",
+      "high_stress": "Yüksek stresli profesyonel",
+      "caregiver": "Yeni ebeveyn / bakıcı",
+      "senior": "Yaşlı (60+)"
+    },
+    "mock": {
+      "ashwagandha_benefit": "Stres azaltma ve kortizol düzenlemesi için güçlü adaptojen",
+      "ashwagandha_safety": "Genellikle güvenlidir. Hamilelik sırasında kaçının.",
+      "rhodiola_benefit": "Zihinsel performansı artırır ve yorgunluğu azaltır",
+      "rhodiola_safety": "İyi tolere edilir. SSRI'larla etkileşime girebilir.",
+      "summary": "Girdiğiniz bilgilere dayanarak, vücudunuzun stres tepkisini ve enerji sistemlerini destekleyen adaptojenik bitkilerle başlamanızı öneririz."
+    }
+  },
+  "store": {
+    "loading_profile": "Kurum profili yükleniyor...",
+    "not_found": "Kurum bulunamadı",
+    "return_marketplace": "Pazaryerine Dön",
+    "back": "Geri",
+    "verified_badge": "ONAYLI KURUM",
+    "global_node": "Küresel Düğüm",
+    "joined": "Katıldı",
+    "formulations_title": "Klinik Formülasyonlar",
+    "formulations_subtitle": "Bu kurumdan temin edilebilen örnekler",
+    "products_count": "{{count}} Ürün",
+    "no_stock_title": "Mevcut Stok Yok",
+    "no_stock_desc": "Bu kurumun şu anda tedarik için uygun klinik ürünü bulunmamaktadır."
+  },
+  "product_extra": {
+    "new": "YENİ",
+    "uncategorized": "Kategorisiz"
+  },
+  "translations": {
+    "az": "Azerbaycan Türkçesi",
+    "en": "İngilizce",
+    "ru": "Rusça",
+    "tr": "Türkçe"
+  }
+}

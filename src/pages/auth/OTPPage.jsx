@@ -1,0 +1,105 @@
+import React, { useState, useEffect } from "react"
+import { useNavigate, useLocation } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { Button } from "../../components/ui/Button"
+import { Input } from "../../components/ui/Input"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../components/ui/Card"
+import { ShieldCheck } from "lucide-react"
+import { useAuthStore } from "../../store/useAuthStore"
+import { toast } from "../../store/useToastStore"
+
+export default function OTPPage() {
+  const { t } = useTranslation()
+  const [isLoading, setIsLoading] = useState(false)
+  const [timeLeft, setTimeLeft] = useState(600) // 10 minutes
+  const [otp, setOtp] = useState("")
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { verifyOTP } = useAuthStore()
+  
+  const email = location.state?.email
+
+  useEffect(() => {
+    if (!email) {
+      toast.error(t('auth.email_required', "Email is required for verification."))
+      navigate("/register")
+    }
+  }, [email, navigate, t])
+
+  useEffect(() => {
+    if (timeLeft <= 0) return
+    const timerId = setInterval(() => setTimeLeft((t) => t - 1), 1000)
+    return () => clearInterval(timerId)
+  }, [timeLeft])
+
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    setIsLoading(true)
+    try {
+      await verifyOTP(email, otp)
+      toast.success(t('auth.verify_success', "Verification successful!"))
+      
+      const user = useAuthStore.getState().user
+      const role = user?.role?.toUpperCase() || "MEMBER"
+      
+      if (role === "ADMIN") navigate("/admin")
+      else if (role === "SELLER") navigate("/seller")
+      else navigate("/user")
+    } catch (err) {
+      toast.error(err?.message || err?.response?.data?.message || t('auth.invalid_otp', "Invalid verification code"))
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="flex min-h-screen items-center justify-center border-t bg-muted/40 px-4 py-12">
+      <Card className="w-full max-w-sm text-center">
+        <CardHeader className="space-y-2">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <ShieldCheck className="h-6 w-6 text-primary" />
+          </div>
+          <CardTitle className="text-2xl font-bold tracking-tight">{t('auth.verify_email', 'Verify Email')}</CardTitle>
+          <CardDescription>
+            {t('auth.otp_sent_to', 'We sent a verification code to')} <br/>
+            <span className="font-bold text-foreground">{email}</span>
+          </CardDescription>
+        </CardHeader>
+        <form onSubmit={onSubmit}>
+          <CardContent className="space-y-4">
+            <Input 
+              id="otp" 
+              type="text" 
+              placeholder="0 0 0 0 0" 
+              className="text-center text-2xl tracking-[0.5em]" 
+              maxLength={5} 
+              required 
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+            />
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-4">
+            <Button className="w-full" type="submit" disabled={isLoading}>
+              {isLoading ? t('auth.verifying', "Verifying...") : t('auth.verify_code', "Verify Code")}
+            </Button>
+            <div className="text-sm text-muted-foreground w-full">
+              {timeLeft > 0 ? (
+                <span className="tabular-nums">
+                  {t('auth.expires_in', 'Code expires in')} {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+                </span>
+              ) : (
+                <button 
+                  type="button" 
+                  onClick={() => navigate("/register")} 
+                  className="font-medium text-primary hover:underline focus:outline-none"
+                >
+                  {t('auth.request_new_code', 'Request a new code')}
+                </button>
+              )}
+            </div>
+          </CardFooter>
+        </form>
+      </Card>
+    </div>
+  )
+}

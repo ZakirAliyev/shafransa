@@ -1,0 +1,580 @@
+{
+  "welcome": "Welcome",
+  "login": "Login",
+  "nav_marketplace": "Market",
+  "nav_encyclopedia": "Encyclopedia",
+  "nav_ai_consultant": "AI Consultant",
+  "nav_about": "About Us",
+  "nav_how_it_works": "How It Works",
+  "nav_help_center": "Help Center",
+  "my_profile": "My Profile",
+  "my_orders": "My Orders",
+  "my_wishlist": "My Wishlist",
+  "search_herbs": "Search plants...",
+  "sign_in": "Sign in",
+  "get_started": "Get Started",
+  "sign_out": "Sign out",
+  "seller_dashboard": "Seller Dashboard",
+  "admin_panel": "Admin Panel",
+  "more": "More",
+  "platform": "Platform",
+  "company": "Company",
+  "home": "Home",
+  "rights_reserved": "All rights reserved",
+  "common": {
+    "reset_filters": "Reset Filters",
+    "reset": "Reset",
+    "retry": "Retry",
+    "min": "Min",
+    "max": "Max",
+    "see_packaging": "See packaging",
+    "raw": "Raw",
+    "pending": "Information pending",
+    "link_copied": "Link copied to clipboard!",
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "back": "Back",
+    "botanical": "BOTANICAL",
+    "remove": "Remove"
+  },
+  "landing": {
+    "version": "Shafransa: Precision Botanical Intelligence",
+    "hero": {
+      "title_part1": "Botanical Medicine",
+      "title_part2": "Better,",
+      "title_part3": "Together.",
+      "subtitle": "Your trusted partner in botanical wellness. We combine ancient wisdom with modern verification to provide you with safe, professional-grade herbal guidance."
+    },
+    "cta": {
+      "protocol": "Start My Protocol",
+      "marketplace": "Explore The Marketplace",
+      "explore_inventory": "Explore Verified Inventory"
+    },
+    "social": {
+      "trusted": "Trusted by clinical researchers globally",
+      "title": "Health is the new wealth. Invest in precision."
+    },
+    "value": {
+      "title": "Built for precision, driven by science.",
+      "subtitle": "Generic herbal advice is dangerous. Shafransa provides the clinical rigorousness required for modern health management."
+    },
+    "links": {
+      "whitepaper": "View the scientific whitepaper"
+    },
+    "ai": {
+      "title": "A Smart System that Thinks with You",
+      "text": "Our system carefully reviews your health history, symptoms, and any current medications. We don't just give you a template—we build botanical protocols that are safe and specifically suited for you."
+    },
+    "verify": {
+      "title": "Complete Transparency at Every Step",
+      "text": "The contents of every product you buy are confirmed with laboratory certificates. For us, purity isn't just a word—it's an official proof for every batch.",
+      "batch": "Batch #SH-{{id}} - VERIFIED"
+    },
+    "marketplace": {
+      "badge": "Clinical Marketplace",
+      "title": "Transparent supply chains from soil to bottle."
+    },
+    "features": {
+      "global": {
+        "title": "Global Sourcing",
+        "text": "Direct relationships with organic growers in the Mediterranean, Amazon, and Caucasus mountains."
+      },
+      "escrow": {
+        "title": "Escrow Purity Guarantee",
+        "text": "Your payment is locked in our smart contract until a 3rd party lab verifies the batch's purity."
+      },
+      "extraction": {
+        "title": "Standardized Extraction",
+        "text": "We require CO2-critical extraction methods for maximum bioavailability and genomic absorption."
+      }
+    },
+    "card": {
+      "verified": "Verified Origin",
+      "location": "Caucasian Mountains",
+      "product": "Wildcrafted Saffron Extract",
+      "rating_info": "4.9 Rating • Clinical Batch #AF-201"
+    },
+    "floating": {
+      "ai": "AI Protocol Generated",
+      "dose": "Personalized Dose: 500mg"
+    },
+    "testimonials": {
+      "1": {
+        "text": "The interaction check between my prescriptions and Ashwagandha was a revelation. Every other platform missed what Shafransa caught.",
+        "role": "Clinical Immunologist"
+      },
+      "2": {
+        "text": "Verified COAs change the game for sellers like us. We can finally prove our purity without expensive middlemen marketing.",
+        "role": "Certified Organic Seller"
+      }
+    },
+    "cta_final": {
+      "title": "Your healing starts with zero guesswork.",
+      "subtitle": "Join the future of botanical science. Deploy your personalized protocol in minutes.",
+      "user": "Join the Waitlist",
+      "seller": "Become a Partner"
+    }
+  },
+  "footer": {
+    "bio": "Pioneering the intersection of artificial intelligence and Caucasian botanical science.",
+    "links": {
+      "about": "About Us",
+      "help": "Help Center"
+    },
+    "legal": {
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service"
+    }
+  },
+  "encyclopedia": {
+    "badge": "Botanical Encyclopedia",
+    "title_p1": "Herbal",
+    "title_p2": "Knowledge Base",
+    "subtitle": "Clinical-grade botanical intelligence. Research, evidence grades, active compounds, and safety profiles.",
+    "search_placeholder": "Search herbs, compounds, benefits...",
+    "stats": {
+      "herbs": "Herbs Catalogued",
+      "research": "Research Articles",
+      "compounds": "Compounds Tracked"
+    },
+    "filters": {
+      "grade": "Evidence Grade",
+      "continent": "Continent"
+    },
+    "continents": {
+      "africa": "Africa",
+      "asia": "Asia",
+      "europe": "Europe",
+      "north_america": "North America",
+      "south_america": "South America",
+      "oceania": "Oceania"
+    },
+    "loading": "Loading botanical database...",
+    "no_results": "No entries found",
+    "no_results_sub": "Try adjusting your search or clearing filters.",
+    "clear_all": "Clear all filters",
+    "entry_count_single": "entry",
+    "entry_count_plural": "entries",
+    "found": "found",
+    "grade": "Grade",
+    "monograph": "Full Monograph"
+  },
+  "herb": {
+    "tabs": {
+      "monograph": "Monograph",
+      "clinical": "Clinical Data",
+      "safety": "Interactions & Safety",
+      "marketplace": "Marketplace"
+    },
+    "not_found": "Botanical entry not found",
+    "back": "Back to Herb Bank",
+    "badge": {
+      "default": "Clinical Monograph"
+    },
+    "local_name": "Local",
+    "meta": {
+      "terroir": "Terroir",
+      "cultivation": "Cultivation",
+      "chemotype": "Chemotype",
+      "climate": "Endemic Climate"
+    },
+    "image_pending": "Imaging Pending",
+    "sections": {
+      "description": "Botanical Description",
+      "benefits": "Therapeutic Benefits",
+      "usage": "Traditional Usage",
+      "compounds": "Active Compounds",
+      "dosage": "Clinical Dosage",
+      "contraindications": "Contraindications",
+      "side_effects": "Side Effects",
+      "drug_interactions": "Drug Interactions",
+      "pregnancy_warnings": "Pregnancy & Nursing Warnings",
+      "formulations": "Verified Formulations"
+    },
+    "products_found": "{{count}} Products Found",
+    "no_products": "No Commercial Products",
+    "no_products_sub": "There are currently no seller-listed products sourced precisely from this botanical record.",
+    "climate_default": "Global adaptivity. Often found in temperate to subtropical zones.",
+    "compounds_pending": "Pending precise spectrophotometry analytics."
+  },
+  "marketplace": {
+    "badge": "Verified Inventory",
+    "title_p1": "Global Botanical",
+    "title_p2": "Exchange",
+    "subtitle": "Sourced directly from verified organic growers. Every batch tested and certified.",
+    "stats": {
+      "total": "Products Available"
+    },
+    "search_placeholder": "Search plants, extracts, compounds...",
+    "sort": {
+      "newest": "Newest First",
+      "price_asc": "Price: Low to High",
+      "price_desc": "Price: High to Low"
+    },
+    "filters": {
+      "categories": "Categories",
+      "all": "All Products",
+      "price": "Price Range",
+      "form": "Product Form",
+      "verified_only": "Lab Verified Only"
+    },
+    "error": "Failed to load products. Please try again.",
+    "empty": {
+      "title": "No products found",
+      "subtitle": "Try adjusting your filters or search term"
+    }
+  },
+  "product": {
+    "tabs": {
+      "description": "Description",
+      "compounds": "Compounds",
+      "quality": "Quality",
+      "reviews": "Reviews"
+    },
+    "cart": {
+      "added": "{{title}} added to cart!",
+      "added_simple": "Added to your collection!",
+      "error": "Failed to add to cart"
+    },
+    "reviews": {
+      "success": "Review submitted! Thank you.",
+      "error": "Failed to submit review",
+      "empty": "No reviews yet. Be the first!",
+      "write": "Write a Review",
+      "label_rating": "Your Rating",
+      "label_experience": "Your Experience",
+      "placeholder": "Share your experience with this product...",
+      "submit": "Submit Review"
+    },
+    "wishlist": {
+      "added": "Saved to your wishlist",
+      "removed": "Removed from wishlist"
+    },
+    "not_found": "Product not found",
+    "back": "Back to Marketplace",
+    "verified_badge": "LAB VERIFIED",
+    "verified_short": "VERIFIED",
+    "reviews_count": "reviews",
+    "discount": "Save {{percent}}%",
+    "seller_badge": "Verified Seller → View Storefront",
+    "stock_status": "{{count}} units in stock",
+    "stock_left": "{{count}} left",
+    "out_of_stock": "Out of stock",
+    "buy_now": "Buy Now",
+    "add_to_cart": "Add to Cart",
+    "trust": {
+      "shipping": "Free Shipping",
+      "shipping_sub": "Orders over $50",
+      "returns": "Easy Returns",
+      "returns_sub": "30-day policy",
+      "lab": "Lab Tested",
+      "lab_sub": "3rd party verified"
+    },
+    "meta": {
+      "region": "Origin Region",
+      "batch": "Batch Number",
+      "form": "Form",
+      "status": "Verification Status",
+      "origin": "Region of Origin"
+    },
+    "verified_yes": "Lab Verified ✓",
+    "verified_no": "Standard",
+    "related_title": "Related Products",
+    "forms": {
+      "tea": "Tea",
+      "extract": "Extract",
+      "capsule": "Capsule",
+      "oil": "Oil",
+      "powder": "Powder",
+      "tincture": "Tincture"
+    },
+    "compounds_pending": "Compound data pending lab analysis"
+  },
+  "auth": {
+    "login_required": "Please sign in first",
+    "login_required_cart": "Please sign in to add items to cart",
+    "login_required_save": "Please sign in to save items",
+    "login_success": "Welcome back! Redirecting...",
+    "login_error": "Invalid credentials. Please try again.",
+    "login_title": "Welcome back.",
+    "login_subtitle": "Access your personalized botanical intelligence vault.",
+    "sign_in": "Sign In",
+    "sign_in_desc": "Please enter your authorized credentials.",
+    "label_email": "Identification (Email)",
+    "placeholder_email": "name@institution.com",
+    "label_password": "Security Key (Password)",
+    "forgot_password": "Recover Key?",
+    "secure_session": "Secure end-to-end encrypted session active.",
+    "authenticating": "Authenticating node...",
+    "access_portal": "Access Portal",
+    "fast_access": "Fast Access",
+    "global_node": "Global Node",
+    "new_user": "New to the ecosystem?",
+    "apply_membership": "Apply for Membership",
+    "register_title": "Join the Registry.",
+    "register_subtitle": "Apply for access to the global botanical ecosystem.",
+    "new_membership": "New Membership",
+    "new_membership_desc": "Select your portal and provide your identification.",
+    "role_user": "Consumer",
+    "role_seller": "Institution",
+    "label_fullname": "Full Legal Name",
+    "placeholder_fullname": "Dr. John Smith",
+    "label_institutional_email": "Institutional Email",
+    "placeholder_institutional_email": "jsmith@helix.org",
+    "label_security_key": "Security Key",
+    "agreement": "By applying, you agree to our Clinical Verification Protocols.",
+    "provisioning": "Provisioning access...",
+    "submit_application": "Submit Application",
+    "already_registered": "Already registered?",
+    "sign_in_vault": "Sign in to Vault",
+    "verify_email": "Verify Email",
+    "otp_sent": "We sent a 5-digit code to your email.",
+    "verifying": "Verifying...",
+    "verify_code": "Verify Code",
+    "resend_in": "Resend code in",
+    "resend_code": "Resend code",
+    "invalid_otp": "Invalid OTP"
+  },
+  "user": {
+    "member_badge": "Member",
+    "my_account": "My Account",
+    "welcome_back": "Welcome back",
+    "tab_profile": "Profile",
+    "tab_orders": "Orders",
+    "tab_wishlist": "Wishlist",
+    "tab_settings": "Settings",
+    "personal_details": "Personal Details",
+    "personal_details_desc": "Update your name and email address.",
+    "label_fullname": "Full Name",
+    "label_email": "Email",
+    "profile_updated": "Profile updated!",
+    "save_changes": "Save Changes",
+    "privacy_guard": "Privacy Guard",
+    "privacy_desc": "Your data is encrypted with AES-256 standards.",
+    "order_history": "Order History",
+    "order_history_desc": "Track all your purchases.",
+    "no_orders": "No orders yet",
+    "browse_marketplace": "Browse Marketplace",
+    "label_order": "Order",
+    "order_confirmed": "Confirmed",
+    "saved_items": "Saved Items",
+    "no_wishlist": "No saved items",
+    "account_settings": "Account Settings",
+    "account_settings_desc": "Manage your password and account preferences.",
+    "new_password": "New Password",
+    "confirm_password": "Confirm Password",
+    "update_password": "Update Password"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty.",
+    "continue_shopping": "Continue Shopping",
+    "qty": "Qty",
+    "remove": "Remove",
+    "order_summary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "shipping_desc": "Calculated at checkout",
+    "total": "Total",
+    "checkout": "Proceed to Checkout",
+    "items_label": "Items",
+    "empty_title": "Your cart is empty",
+    "empty_desc": "Explore our botanical repository to find the perfect specimens for your protocol.",
+    "start_browsing": "Start Browsing",
+    "proceed_to_checkout": "Proceed to Checkout",
+    "tax": "Estimated Tax",
+    "shipping_free": "FREE",
+    "guarantee_purity": "100% Botanical Purity",
+    "guarantee_lab": "Lab Verified Specimens"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "success_title": "Order Confirmed!",
+    "success_desc": "Your herbal protocol is being prepared. You can track its status in your dashboard.",
+    "view_orders": "View My Orders",
+    "label_fullname": "Full Name",
+    "label_phone": "Phone Number",
+    "label_address": "Delivery Address",
+    "label_note": "Delivery Note (Optional)",
+    "place_order": "Place Order",
+    "error": "Checkout failed: ",
+    "back_cart": "Back to Shopping Bag",
+    "header_info": "Delivery Recipient",
+    "header_payment": "Financial Settlement",
+    "placeholder_address": "Street, building, apartment...",
+    "placeholder_note": "e.g. Specialist handling required",
+    "payment_cod": "Cash on Delivery",
+    "payment_cod_desc": "Pay securely at your doorstep",
+    "payment_card": "Digital Assets",
+    "payment_card_coming": "Activation scheduled soon",
+    "summary_title": "Final Summary",
+    "finalize_order": "Finalize Acquisition",
+    "secure_label": "Encrypted Transaction Security",
+    "need_help": "Support",
+    "support_text": "Our botanical specialists are online.",
+    "order_id": "Order Identification",
+    "track_order": "Track Order Status",
+    "back_marketplace": "Return to Marketplace"
+  },
+  "about": {
+    "badge": "Our Botanical Legacy",
+    "hero_title": "Botanical Science Reimagined.",
+    "hero_subtitle": "Shafransa is the world’s first clinical-grade botanical ecosystem, merging ancient Caucasian wisdom with advanced neural analytics.",
+    "story_title": "Our Story",
+    "story_p1": "Founded in the heart of the Caucasus, Shafransa was born from a simple observation: the world of herbal medicine lacked the transparency and scientific rigor of modern pharmaceuticals.",
+    "story_p2": "We set out to change that by building a platform that doesn’t just sell herbs, but provides a verified, data-driven path to wellness.",
+    "mission_title": "Our Mission",
+    "mission_desc": "To democratize access to lab-verified botanical medicine through artificial intelligence.",
+    "vision_title": "Our Vision",
+    "vision_desc": "A world where every botanical intervention is as precise and safe as molecular medicine.",
+    "pillars_title": "The Three Pillars of Shafransa",
+    "pillars_subtitle": "Our methodology is built on a foundation of trust, science, and absolute transparency.",
+    "pillar1_title": "Purity First",
+    "pillar1_desc": "Every batch of herbs on our marketplace undergoes 3rd party lab testing for heavy metals, pesticides, and microbial contamination.",
+    "pillar2_title": "Neural Analytics",
+    "pillar2_desc": "Our proprietary Shafransa AI Core™ analyzes thousands of clinical trials to provide evidence-based interaction checks and dosages.",
+    "pillar3_title": "Ethical Sourcing",
+    "pillar3_desc": "We work directly with traditional Caucasian harvesters, ensuring fair wages and sustainable wild-crafting practices.",
+    "cta_title": "Experience Clinical Botanical Intelligence.",
+    "view_research": "View Our Research"
+  },
+  "contact": {
+    "badge": "Global Support",
+    "hero_title": "Connect with our Specialists.",
+    "hero_subtitle": "Have a question about a botanical protocol or an order? Our team of specialists is here to provide clinical-grade support.",
+    "label_name": "Full Name",
+    "label_email": "Institutional Email",
+    "label_message": "Message",
+    "placeholder_message": "How can we assist you?",
+    "submit": "Dispatch Message",
+    "form_success": "Message sent! We will contact you soon.",
+    "wa_title": "Instant Support",
+    "wa_desc": "Chat directly with our botanical specialists via WhatsApp for real-time guidance.",
+    "wa_btn": "Open WhatsApp",
+    "address_title": "Botanical Hub",
+    "address": "123 Saffron Ave, Baku, Azerbaijan",
+    "email_title": "Email",
+    "phone_title": "Phone"
+  },
+  "how_it_works": {
+    "badge": "Verified Process",
+    "hero_title": "A Simple Path to Personalized Wellness.",
+    "hero_subtitle": "We’ve removed the guesswork from herbal medicine. Our four-step process ensures every botanical you take is safe, effective, and tailored exactly to your body.",
+    "step1_title": "Share Your Story",
+    "step1_desc": "Tell us about your health goals, current supplements, and wellness history. We listen to the details that matter.",
+    "step2_title": "Smart Matching",
+    "step2_desc": "Our system cross-references your profile with clinical research to find the safest, most effective botanical matches.",
+    "step3_title": "Secure Sourcing",
+    "step3_desc": "Order directly from our verified growers. Every product is lab-tested and certified before it ever reaches you.",
+    "step4_title": "Personal Protocol",
+    "step4_desc": "Receive clear dosages and timing instructions. Your journey is monitored and adjusted as your health evolves.",
+    "safety_title": "Clinical-Grade Safety",
+    "safety_desc": "We don’t just match herbs to symptoms. We cross-reference your entire health profile against known drug-herb interactions.",
+    "logistics_title": "Transparent Supply Chain",
+    "logistics_desc": "Track your herbs from the exact farm in the Caucasus to your doorstep. Full transparency on drying and extraction methods.",
+    "human_title": "Science Driven, Human Centered",
+    "human_p1": "Generic wellness advice can be risky. We believe that botanical medicine should be as rigorous as anything you’d find in a clinic, but accessible from your home.",
+    "human_p2": "Our team of researchers and pharmacists constantly update our database to ensure you are receiving the most current, science-backed guidance available.",
+    "cta_title": "Ready to start your verified journey?"
+  },
+  "ai": {
+    "badge": "AI Botanical Consultant",
+    "title_p1": "Your Personal",
+    "title_p2": "Herb Protocol",
+    "subtitle": "Answer 4 questions. Get a personalized, evidence-based botanical recommendation matched to your unique health profile.",
+    "step_info": "Step {{current}} of {{total}}",
+    "progress_info": "complete",
+    "next": "Continue",
+    "back": "Back",
+    "analyzing": "Analyzing...",
+    "generate": "Generate Protocol",
+    "ready_toast": "Your personalized protocol is ready!",
+    "error_toast": "Consultation failed.",
+    "warn_answer": "Please answer the question before proceeding",
+    "result_badge": "Protocol Generated",
+    "result_title": "Your Personalized Herb Protocol",
+    "risk_label": "Risk Level",
+    "risk_desc": "Always consult a qualified healthcare provider before beginning any herbal protocol.",
+    "rec_title": "Recommended Botanicals",
+    "risk_low": "low",
+    "risk_med": "medium",
+    "risk_high": "high",
+    "risk_suffix": "risk",
+    "learn_more": "Learn More",
+    "shop_now": "Shop This Herb",
+    "warnings_title": "Important Health Warnings",
+    "start_over": "Start Over",
+    "browse_marketplace": "Browse Related Products",
+    "save_vault_title": "Save your protocol to your health vault",
+    "save_vault_desc": "Create a free account to save recommendations, track your progress, and receive personalized insights.",
+    "create_account": "Create Free Account",
+    "steps": {
+      "symptoms": {
+        "q": "What symptoms or health concerns are you experiencing?",
+        "p": "e.g. fatigue, poor digestion, stress, insomnia..."
+      },
+      "goal": {
+        "q": "What is your primary health goal?"
+      },
+      "conditions": {
+        "q": "Do you have any pre-existing conditions or take medications?",
+        "p": "List any conditions or medications, or type 'None'"
+      },
+      "lifestyle": {
+        "q": "How would you describe your lifestyle?"
+      }
+    },
+    "goals": {
+      "energy": "Improve energy & vitality",
+      "sleep": "Better sleep & stress reduction",
+      "immune": "Immune system support",
+      "digestive": "Digestive health",
+      "cardio": "Cardiovascular support",
+      "hormonal": "Hormonal balance",
+      "weight": "Weight management",
+      "wellness": "General wellness"
+    },
+    "lifestyle": {
+      "very_active": "Very active (daily exercise)",
+      "moderately_active": "Moderately active",
+      "sedentary": "Mostly sedentary",
+      "high_stress": "High-stress professional",
+      "caregiver": "New parent / caregiver",
+      "senior": "Senior (60+)"
+    },
+    "mock": {
+      "ashwagandha_benefit": "Powerful adaptogen for stress reduction and cortisol regulation",
+      "ashwagandha_safety": "Generally safe. Avoid during pregnancy.",
+      "rhodiola_benefit": "Enhances mental performance and reduces fatigue",
+      "rhodiola_safety": "Well-tolerated. May interact with SSRIs.",
+      "summary": "Based on your inputs, we recommend starting with adaptogenic herbs that support your body's stress response and energy systems."
+    }
+  },
+  "store": {
+    "loading_profile": "Loading institutional profile...",
+    "not_found": "Institution Not Found",
+    "return_marketplace": "Return to Marketplace",
+    "back": "Back",
+    "verified_badge": "VERIFIED INSTITUTION",
+    "global_node": "Global Node",
+    "joined": "Joined",
+    "formulations_title": "Clinical Formulations",
+    "formulations_subtitle": "Available specimens from this institution",
+    "products_count": "{{count}} Products",
+    "no_stock_title": "No Available Stock",
+    "no_stock_desc": "This institution currently has no clinical products available for procurement."
+  },
+  "product_extra": {
+    "new": "NEW",
+    "uncategorized": "Uncategorized"
+  },
+  "translations": {
+    "az": "Azerbaijani",
+    "en": "English",
+    "ru": "Russian",
+    "tr": "Turkish"
+  }
+}

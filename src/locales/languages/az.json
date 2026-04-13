@@ -1,0 +1,580 @@
+{
+  "welcome": "Xoş gəlmisiz",
+  "login": "Daxil ol",
+  "nav_marketplace": "Market",
+  "nav_encyclopedia": "Ensiklopediya",
+  "nav_ai_consultant": "Süni İntellekt Məsləhətçisi",
+  "nav_about": "Haqqımızda",
+  "nav_how_it_works": "Necə İşləyir",
+  "nav_help_center": "Yardım Mərkəzi",
+  "my_profile": "Profilim",
+  "my_orders": "Sifarişlərim",
+  "my_wishlist": "İstək siyahım",
+  "search_herbs": "Bitki axtar...",
+  "sign_in": "Daxil ol",
+  "get_started": "Başla",
+  "sign_out": "Çıxış",
+  "seller_dashboard": "Satıcı Paneli",
+  "admin_panel": "Admin Paneli",
+  "more": "Daha çox",
+  "platform": "Platforma",
+  "company": "Şirkət",
+  "home": "Ana Səhifə",
+  "rights_reserved": "Bütün hüquqlar qorunur",
+  "common": {
+    "reset_filters": "Filtrləri sıfırla",
+    "reset": "Sıfırla",
+    "retry": "Yenidən cəhd et",
+    "min": "Min",
+    "max": "Maks",
+    "see_packaging": "Qablaşdırmaya baxın",
+    "raw": "Xammal",
+    "pending": "Məlumat gözlənilir",
+    "link_copied": "Link kopyalandı!",
+    "add": "Əlavə et",
+    "save": "Yadda saxla",
+    "cancel": "Ləğv et",
+    "edit": "Redaktə et",
+    "delete": "Sil",
+    "back": "Geri",
+    "botanical": "BOTANİKA",
+    "remove": "Sil"
+  },
+  "landing": {
+    "version": "Shafransa: Dəqiq Botanika İntellekti",
+    "hero": {
+      "title_part1": "Botanika Tibbində",
+      "title_part2": "Unikal",
+      "title_part3": "Həll.",
+      "subtitle": "Botanik sağlamlıq yolunda Sizin ən etibarlı tərəfdaşınız. Biz qədim bilikləri müasir elmlə birləşdirərək sədəcə təhlükəsiz və peşəkar bitki rəhbərliyi təqdim edirik."
+    },
+    "cta": {
+      "protocol": "Protokoluma başla",
+      "marketplace": "Marketi kəşf et",
+      "explore_inventory": "Təsdiqlənmiş məhsulları kəşf et"
+    },
+    "social": {
+      "trusted": "Qlobal klinik tədqiqatçılar tərəfindən etibar edilir",
+      "title": "Sağlamlıq yeni sərvətdir. Dəqiqliyə investisiya edin."
+    },
+    "value": {
+      "title": "Dəqiqlik üçün qurulub, elm tərəfindən idarə olunur.",
+      "subtitle": "Ümumi bitki mənşəli tövsiyələr təhlükəlidir. Shafransa müasir sağlamlıq idarəetməsi üçün lazım olan klinik ciddiliyi təmin edir."
+    },
+    "links": {
+      "whitepaper": "Elmi sənədi nəzərdən keçirin"
+    },
+    "ai": {
+      "title": "Sizin üçün Düşünən Ağıllı Sistem",
+      "text": "Bizim sistemimiz sağlamlıq keçmişinizi, simptomlarınızı və hazırda qəbul etdiyiniz dərmanları diqqətlə nəzərdən keçirir. Beləliklə, sizə şablon yox, məhz sizin üçün təhlükəsiz olan fərdi bitki tövsiyələri hazırlayırıq."
+    },
+    "verify": {
+      "title": "Hər Addımda Tam Şəffaflıq",
+      "text": "Aldığınız hər bir məhsulun tərkibi laboratoriya sertifikatları ilə təsdiqlənir. Bizim üçün saflıq sadəcə söz deyil, hər partiya üçün rəsmi sübutdur.",
+      "batch": "Partiya #SH-{{id}} - YOXLANILDI"
+    },
+    "marketplace": {
+      "badge": "Klinik Market",
+      "title": "Torpaqdan butulkaya qədər şəffaf tədarük zənciri."
+    },
+    "features": {
+      "global": {
+        "title": "Qlobal Təminat",
+        "text": "Aralıq dənizi, Amazon və Qafqaz dağlarında üzvi yetişdiricilələ birbaşa əlaqələr."
+      },
+      "escrow": {
+        "title": "Escrow Saflıq Zəmanəti",
+        "text": "Ödənişiniz partiyanın saflığı 3-cü tərəf laboratoriyası tərəfindən təsdiqlənənə qədər smart-kontraktda qalır."
+      },
+      "extraction": {
+        "title": "Standartlaşdırılmış Ekstraksiya",
+        "text": "Maksimum biomənimsənilmə üçün CO2-kritik ekstraksiya üsullarını tələb edirik."
+      }
+    },
+    "card": {
+      "verified": "Təsdiqlənmiş Mənşə",
+      "location": "Qafqaz Dağları",
+      "product": "Yabanı Zəfəran Ekstraktı",
+      "rating_info": "4.9 Reytinq • Klinik Partiya #AF-201"
+    },
+    "floating": {
+      "ai": "AI Protokolu Yaradıldı",
+      "dose": "Fərdi Doza: 500mq"
+    },
+    "testimonials": {
+      "1": {
+        "text": "Dərmanlarım və Aşvaqanda arasındakı qarşılıqlı təsir yoxlanışı bir kəşf idi. Digər platformaların gözündən qaçan hər şeyi Shafransa tutdu.",
+        "role": "Klinik İmmunoloq"
+      },
+      "2": {
+        "text": "Təsdiqlənmiş COA-lar bizim kimi satıcılar üçün oyunu dəyişir. Nəhayət bahalı marketinq olmadan saflığımızı sübut edə bilərik.",
+        "role": "Sertifikatlı Üzvi Satıcı"
+      }
+    },
+    "cta_final": {
+      "title": "Sağalmanız sıfır təxminlə başlayır.",
+      "subtitle": "Botanika elminin gələcəyinə qoşulun. Fərdi protokolunuzu dəqiqələr ərzində qurun.",
+      "user": "Gözləmə siyahısına qoşul",
+      "seller": "Tərəfdaş ol"
+    }
+  },
+  "footer": {
+    "bio": "Süni intellekt və Qafqaz botanika elminin kəsişməsində qabaqcıl.",
+    "links": {
+      "about": "Haqqımızda",
+      "help": "Yardım Mərkəzi"
+    },
+    "legal": {
+      "privacy": "Məxfilik Siyasəti",
+      "terms": "İstifadə Şərtləri"
+    }
+  },
+  "encyclopedia": {
+    "badge": "Botanika Ensiklopediyası",
+    "title_p1": "Bitki mənşəli",
+    "title_p2": "Bilik Bazası",
+    "subtitle": "Klinik dərəcəli botanika intellekti. Tədqiqatlar, sübut dərəcələri və təhlükəsizlik profilləri.",
+    "search_placeholder": "Bitki, birləşmə, fayda axtarın...",
+    "stats": {
+      "herbs": "Kataloqda olan bitkilər",
+      "research": "Tədqiqat məqalələri",
+      "compounds": "İzlənilən birləşmələr"
+    },
+    "filters": {
+      "grade": "Sübut Dərəcəsi",
+      "continent": "Kontinent"
+    },
+    "continents": {
+      "africa": "Afrika",
+      "asia": "Asiya",
+      "europe": "Avropa",
+      "north_america": "Şimali Amerika",
+      "south_america": "Cənubi Amerika",
+      "oceania": "Okeaniya"
+    },
+    "loading": "Botanika verilənlər bazası yüklənir...",
+    "no_results": "Heç bir nəticə tapılmadı",
+    "no_results_sub": "Axtarışınızı tənzimləməyə və ya filtrləri təmizləməyə çalışın.",
+    "clear_all": "Bütün filtrləri təmizlə",
+    "entry_count_single": "nəticə",
+    "entry_count_plural": "nəticə",
+    "found": "tapıldı",
+    "grade": "Dərəcə",
+    "monograph": "Tam Monoqrafiya"
+  },
+  "herb": {
+    "tabs": {
+      "monograph": "Monoqrafiya",
+      "clinical": "Klinik Məlumatlar",
+      "safety": "Qarşılıqlı Təsir və Təhlükəsizlik",
+      "marketplace": "Mağaza"
+    },
+    "not_found": "Botanika qeydi tapılmadı",
+    "back": "Bitki Bankına qayıt",
+    "badge": {
+      "default": "Klinik Monoqrafiya"
+    },
+    "local_name": "Yerli ad",
+    "meta": {
+      "terroir": "Teruar",
+      "cultivation": "Becərilmə",
+      "chemotype": "Ximotip",
+      "climate": "Endemik İqlim"
+    },
+    "image_pending": "Şəkil gözlənilir",
+    "sections": {
+      "description": "Botanika Təsviri",
+      "benefits": "Terapevtik Faydaları",
+      "usage": "Ənənəvi İstifadə",
+      "compounds": "Aktiv Birləşmələr",
+      "dosage": "Klinik Doza",
+      "contraindications": "Əks göstərişlər",
+      "side_effects": "Yan Təsirlər",
+      "drug_interactions": "Dərman Qarşılıqlı Təsirləri",
+      "pregnancy_warnings": "Hamiləlik və Əmizdirmə Xəbərdarlıqları",
+      "formulations": "Təsdiqlənmiş Formalar"
+    },
+    "products_found": "{{count}} Məhsul tapıldı",
+    "no_products": "Kommersiya məhsulu yoxdur",
+    "no_products_sub": "Hazırda bu botanika qeydinə əsaslanan heç bir məhsul tapılmadı.",
+    "climate_default": "Qlobal adaptivlik. Adətən mülayim və subtropik zonalarda rast gəlinir.",
+    "compounds_pending": "Dəqiq spektrofotometriya analizi gözlənilir."
+  },
+  "marketplace": {
+    "badge": "Təsdiqlənmiş İnventar",
+    "title_p1": "Qlobal Botanika",
+    "title_p2": "Mübadiləsi",
+    "subtitle": "Birbaşa təsdiqlənmiş üzvi yetiştiricilərdən. Hər bir partiya sınaqdan keçirilmiş və sertifikatlaşdırılmışdır.",
+    "stats": {
+      "total": "Mövcud Məhsullar"
+    },
+    "search_placeholder": "Bitki, ekstrakt və birləşmələri axtarın...",
+    "sort": {
+      "newest": "Ən yenilər",
+      "price_asc": "Qiymət: Ucuzdan bahaya",
+      "price_desc": "Qiymət: Bahadan ucuza"
+    },
+    "filters": {
+      "categories": "Kateqoriyalar",
+      "all": "Bütün Məhsullar",
+      "price": "Qiymət Aralığı",
+      "form": "Məhsul Forması",
+      "verified_only": "Yalnız laboratoriya təsdiqli"
+    },
+    "error": "Məhsulları yükləmək mümkün olmadı. Yenidən cəhd edin.",
+    "empty": {
+      "title": "Məhsul tapılmadı",
+      "subtitle": "Filtrləri və ya axtarış sözünü dəyişməyə çalışın."
+    }
+  },
+  "product": {
+    "tabs": {
+      "description": "Təsviri",
+      "compounds": "Birləşmələr",
+      "quality": "Keyfiyyət",
+      "reviews": "Rəylər"
+    },
+    "cart": {
+      "added": "{{title}} səbətə əlavə edildi!",
+      "added_simple": "Kolleksiyanıza əlavə edildi!",
+      "error": "Səbətə əlavə etmək mümkün olmadı"
+    },
+    "reviews": {
+      "success": "Rəyiniz göndərildi! Təşəkkür edirik.",
+      "error": "Rəyi göndərmək mümkün olmadı",
+      "empty": "Hələ rəy yoxdur. İlk siz olun!",
+      "write": "Rəy yaz",
+      "label_rating": "Reytinqiniz",
+      "label_experience": "Təcrübəniz",
+      "placeholder": "Məhsul haqqında təcrübənizi bölüşün...",
+      "submit": "Rəyi göndər"
+    },
+    "wishlist": {
+      "added": "İstək siyahınıza yadda saxlanıldı",
+      "removed": "İstək siyahısından silindi"
+    },
+    "not_found": "Məhsul tapılmadı",
+    "back": "Marketə qayıt",
+    "verified_badge": "LABORATORİYA TƏSDİQLİ",
+    "verified_short": "TƏSDİQLƏNİB",
+    "reviews_count": "rəy",
+    "discount": "{{percent}}% Qənaət edin",
+    "seller_badge": "Təsdiqlənmiş Satıcı → Mağazaya bax",
+    "stock_status": "Stokda {{count}} ədəd",
+    "stock_left": "{{count}} ədəd qalıb",
+    "out_of_stock": "Stokda yoxdur",
+    "buy_now": "İndi al",
+    "add_to_cart": "Səbətə at",
+    "trust": {
+      "shipping": "Pulsuz Çatdırılma",
+      "shipping_sub": "50$-dan yuxarı sifarişlər",
+      "returns": "Rahat Qaytarılma",
+      "returns_sub": "30 günlük şərt",
+      "lab": "Laboratoriya Sınağı",
+      "lab_sub": "3-cü tərəf təsdiqli"
+    },
+    "meta": {
+      "region": "Mənşə Regionu",
+      "batch": "Partiya nömrəsi",
+      "form": "Forma",
+      "status": "Yoxlama Statusu",
+      "origin": "Mənşə Regionu"
+    },
+    "verified_yes": "Laboratoriya təsdiqli ✓",
+    "verified_no": "Standart",
+    "related_title": "Oxşar Məhsullar",
+    "forms": {
+      "tea": "Çay",
+      "extract": "Ekstrakt",
+      "capsule": "Kapsul",
+      "oil": "Yağ",
+      "powder": "Toz",
+      "tincture": "Tinktura"
+    },
+    "compounds_pending": "Birləşmə məlumatları laboratoriya analizini gözləyir"
+  },
+  "auth": {
+    "login_required": "Zəhmət olmasa əvvəlcə daxil olun",
+    "login_required_cart": "Səbətə əlavə etmək üçün daxil olun",
+    "login_required_save": "Yadda saxlamaq üçün daxil olun",
+    "login_success": "Xoş gəldiniz! Yönləndirilirsiniz...",
+    "login_error": "Yanlış məlumatlar. Yenidən cəhd edin.",
+    "login_title": "Xoş gəldiniz.",
+    "login_subtitle": "Fərdi botanika intellekt anbarınıza daxil olun.",
+    "sign_in": "Daxil ol",
+    "sign_in_desc": "Zəhmət olmasa səlahiyyətli məlumatlarınızı daxil edin.",
+    "label_email": "Identifikasiya (Email)",
+    "placeholder_email": "ad@muessise.com",
+    "label_password": "Təhlükəsizlik Açarı (Şifrə)",
+    "forgot_password": "Açarı bərpa etmək?",
+    "secure_session": "Təhlükəsiz uçdan-uca şifrələnmiş sessiya aktivdir.",
+    "authenticating": "Node autentifikasiya edilir...",
+    "access_portal": "Portala giriş",
+    "fast_access": "Sürətli Giriş",
+    "global_node": "Qlobal Node",
+    "new_user": "Ekosistemdə yenisiniz?",
+    "apply_membership": "Üzvlük üçün müraciət edin",
+    "register_title": "Reyestrə qoşulun.",
+    "register_subtitle": "Qlobal botanika ekosisteminə giriş üçün müraciət edin.",
+    "new_membership": "Yeni Üzvlük",
+    "new_membership_desc": "Portalınızı seçin və identifikasiyanızı təqdim edin.",
+    "role_user": "İstehlakçı",
+    "role_seller": "Müəssisə",
+    "label_fullname": "Tam Hüquqi Ad",
+    "placeholder_fullname": "Dr. John Smith",
+    "label_institutional_email": "Müəssisə Emaili",
+    "placeholder_institutional_email": "jsmith@helix.org",
+    "label_security_key": "Təhlükəsizlik Açarı",
+    "agreement": "Müraciət edərək, Klinik Yoxlama Protokollarımızla razılaşırsınız.",
+    "provisioning": "Giriş təmin edilir...",
+    "submit_application": "Müraciəti göndər",
+    "already_registered": "Artıq qeydiyyatdan keçmisiniz?",
+    "sign_in_vault": "Anbara daxil olun",
+    "verify_email": "Emaili Təsdiqlə",
+    "otp_sent": "Emailinizə 5 rəqəmli kod göndərdik.",
+    "verifying": "Təsdiqlənir...",
+    "verify_code": "Kodu Təsdiqlə",
+    "resend_in": "Kodu yenidən göndər",
+    "resend_code": "Kodu yenidən göndər",
+    "invalid_otp": "Yanlış OTP"
+  },
+  "user": {
+    "member_badge": "Üzv",
+    "my_account": "Hesabım",
+    "welcome_back": "Xoş gəldiniz",
+    "tab_profile": "Profil",
+    "tab_orders": "Sifarişlər",
+    "tab_wishlist": "İstək siyahısı",
+    "tab_settings": "Tənzimləmələr",
+    "personal_details": "Şəxsi Məlumatlar",
+    "personal_details_desc": "Adınızı və email ünvanınızı yeniləyin.",
+    "label_fullname": "Tam Ad",
+    "label_email": "Email",
+    "profile_updated": "Profil yeniləndi!",
+    "save_changes": "Dəyişiklikləri yadda saxla",
+    "privacy_guard": "Məxfilik Qoruyucusu",
+    "privacy_desc": "Məlumatlarınız AES-256 standartları ilə şifrələnir.",
+    "order_history": "Sifariş Tarixçəsi",
+    "order_history_desc": "Bütün alış-verişlərinizi izləyin.",
+    "no_orders": "Hələ sifariş yoxdur",
+    "browse_marketplace": "Marketə bax",
+    "label_order": "Sifariş",
+    "order_confirmed": "Təsdiqləndi",
+    "saved_items": "Yadda saxlanılanlar",
+    "no_wishlist": "Yadda saxlanılan məhsul yoxdur",
+    "account_settings": "Hesab Tənzimləmələri",
+    "account_settings_desc": "Şifrənizi və hesab seçimlərinizi idarə edin.",
+    "new_password": "Yeni Şifrə",
+    "confirm_password": "Şifrəni təsdiqlə",
+    "update_password": "Şifrəni yenilə"
+  },
+  "cart": {
+    "title": "Səbət",
+    "empty": "Səbətiniz boşdur.",
+    "continue_shopping": "Alış-verişə davam et",
+    "qty": "Say",
+    "remove": "Sil",
+    "order_summary": "Sifariş Xülasəsi",
+    "subtotal": "Cəmi",
+    "shipping": "Çatdırılma",
+    "shipping_desc": "Ödəniş zamanı hesablanır",
+    "total": "Yekun",
+    "checkout": "Ödənişə keç",
+    "items_label": "Məhsul",
+    "empty_title": "Səbətiniz boşdur",
+    "empty_desc": "Protokolunuz üçün uyğun nümunələri tapmaq üçün botanika anbarımızı araşdırın.",
+    "start_browsing": "Axtarışa başla",
+    "proceed_to_checkout": "Ödənişə keç",
+    "tax": "Təxmini Vergi",
+    "shipping_free": "PULSUZ",
+    "guarantee_purity": "100% Botanika Saflığı",
+    "guarantee_lab": "Laboratoriya Təsdiqli Nümunələr"
+  },
+  "checkout": {
+    "title": "Ödəniş",
+    "success_title": "Sifariş Təsdiqləndi!",
+    "success_desc": "Məhsulunuz hazırlanır. Statusu panelinizdən izləyə bilərsiniz.",
+    "view_orders": "Sifarişlərimə bax",
+    "label_fullname": "Tam Ad",
+    "label_phone": "Telefon Nömrəsi",
+    "label_address": "Çatdırılma Ünvanı",
+    "label_note": "Qeyd (İstəyə bağlı)",
+    "place_order": "Sifarişi tamamla",
+    "error": "Xəta baş verdi: ",
+    "back_cart": "Səbətə qayıt",
+    "header_info": "Çatdırılma Alan Şəxs",
+    "header_payment": "Maliyyə Hesablaşması",
+    "placeholder_address": "Küçə, bina, mənzil...",
+    "placeholder_note": "məs. Xüsusi daşıma tələb olunur",
+    "payment_cod": "Qapıda ödəniş",
+    "payment_cod_desc": "Qapınızda təhlükəsiz şəkildə ödəyin",
+    "payment_card": "Rəqəmsal Aktivlər",
+    "payment_card_coming": "Tezliklə aktivləşəcək",
+    "summary_title": "Yekun Xülasə",
+    "finalize_order": "Sifarişi Tamamla",
+    "secure_label": "Şifrələnmiş Əməliyyat Təhlükəsizliyi",
+    "need_help": "Dəstək",
+    "support_text": "Botanika mütəxəssislərimiz onlayndır.",
+    "order_id": "Sifariş İdentifikasiyası",
+    "track_order": "Sifarişin Statusunu İzlə",
+    "back_marketplace": "Marketə Qayıt"
+  },
+  "about": {
+    "badge": "Bizim Botanik Mirasımız",
+    "hero_title": "Botanik Elm Yenidən Təsvir Edildi.",
+    "hero_subtitle": "Shafransa, qədim Qafqaz müdrikliyini qabaqcıl neyron analitikası ilə birləşdirən dünyanın ilk klinik səviyyəli botanika ekosistemidir.",
+    "story_title": "Bizim Hekayəmiz",
+    "story_p1": "Qafqazın qəlbində qurulan Shafransa sadə bir müşahidədən yarandı: bitki təbabəti dünyasında şəffaflıq və müasir əczaçılığın elmi ciddiliyi çatışmırdı.",
+    "story_p2": "Biz bunu dəyişmək üçün sadəcə bitki satan deyil, həm də sağlamlığa aparan yoxlanılmış, məlumatlara əsaslanan bir yol təqdim edən platforma qurduq.",
+    "mission_title": "Missiyamız",
+    "mission_desc": "Süni intellekt vasitəsilə laboratoriya tərəfindən yoxlanılmış botanika təbabətinə çıxışı hər kəs üçün əlçatan etmək.",
+    "vision_title": "Vizyonumuz",
+    "vision_desc": "Hər bir botanika müdaxiləsinin molekulyar tibb qədər dəqiq və təhlükəsiz olduğu bir dünya.",
+    "pillars_title": "Shafransa-nın Üç Sütunu",
+    "pillars_subtitle": "Metodologiyamız etimad, elm və mütləq şəffaflıq təməli üzərində qurulmuşdur.",
+    "pillar1_title": "Öncə Saflıq",
+    "pillar1_desc": "Marketimizdəki hər bir bitki partiyası ağır metallar, pestisidlər və mikrobial çirklənmə üçün 3-cü tərəf laboratoriya sınağından keçir.",
+    "pillar2_title": "Neyron Analitika",
+    "pillar2_desc": "Bizim məxsusi Shafransa AI Core™ sübutlara əsaslanan qarşılıqlı təsir yoxlamaları və dozaları təmin etmək üçün minlərlə klinik sınaqları analiz edir.",
+    "pillar3_title": "Etik Tədarük",
+    "pillar3_desc": "Biz birbaşa ənənəvi Qafqaz yığıcıları ilə işləyirik, ədalətli əmək haqqı və davamlı yığım təcrübələrini təmin edirik.",
+    "cta_title": "Klinik Botanika İntellektini Təcrübə Edin.",
+    "view_research": "Tədqiqatımıza Baxın"
+  },
+  "contact": {
+    "badge": "Qlobal Dəstək",
+    "hero_title": "Mütəxəssislərimizlə Əlaqə Saxlayın.",
+    "hero_subtitle": "Botanik protokol və ya sifariş haqqında sualınız var? Mütəxəssislərimiz sizə klinik səviyyəli dəstək göstərməyə hazırdır.",
+    "label_name": "Tam Ad",
+    "label_email": "Korporativ E-poçt",
+    "label_message": "Mesajınız",
+    "placeholder_message": "Sizə necə kömək edə bilərik?",
+    "submit": "Mesajı Göndər",
+    "form_success": "Mesaj göndərildi! Sizinlə tezliklə əlaqə saxlayacağıq.",
+    "wa_title": "Anında Dəstək",
+    "wa_desc": "Real vaxt rejimində rəhbərlik üçün birbaşa WhatsApp vasitəsilə mütəxəssislərimizlə söhbət edin.",
+    "wa_btn": "WhatsApp-da Aç",
+    "address_title": "Botanik Mərkəz",
+    "address": "123 Zəfəran Prospekti, Bakı, Azərbaycan",
+    "email_title": "E-poçt",
+    "phone_title": "Telefon"
+  },
+  "how_it_works": {
+    "badge": "Yoxlanılmış Proses",
+    "hero_title": "Fərdi Sağlamlığa Gedən Sadə Yol.",
+    "hero_subtitle": "Bitki mənşəli müalicədə təxminləri aradan qaldırdıq. Dörd mərhələli prosesimiz qəbul etdiyiniz hər bir bitkinin təhlükəsiz, effektiv və məhz sizin bədəninizə uyğun olmasını təmin edir.",
+    "step1_title": "Hekayənizi Bölüşün",
+    "step1_desc": "Sağlamlıq məqsədləriniz, hazırda istifadə etdiyiniz əlavələr və keçmişiniz barədə bizə məlumat verin. Biz sizin üçün vacib olan hər bir detalı dinləyirik.",
+    "step2_title": "Ağıllı Uyğunlaşdırma",
+    "step2_desc": "Sistemimiz sizin profilinizi klinik araşdırmalarla müqayisə edərək ən təhlükəsiz və effektiv botanika uyğunluqlarını tapır.",
+    "step3_title": "Təhlükəsiz Təminat",
+    "step3_desc": "Təsdiqlənmiş yetişdiricilərimizdən birbaşa sifariş edin. Hər bir məhsul sizə çatmazdan əvvəl laboratoriya testindən keçir və sertifikatlaşdırılır.",
+    "step4_title": "Fərdi Protokol",
+    "step4_desc": "Dəqiq dozalar və qəbul vaxtları barədə təlimatlar əldə edin. Sizin sağlamlıq yolunuz daim izlənilir və ehtiyaca görə tənzimlənir.",
+    "safety_title": "Klinik Səviyyəli Təhlükəsizlik",
+    "safety_desc": "Biz sadəcə bitkiləri simptomlarla uyğunlaşdırmırıq. Sizin bütün sağlamlıq profilinizi məlum dərman-bitki qarşılıqlı təsirləri ilə yoxlayırıq.",
+    "logistics_title": "Şəffaf Tədarük Zənciri",
+    "logistics_desc": "Bitkilərinizi Qafqazdakı fermadan qapınıza qədər izləyin. Qurutma və ekstraksiya üsulları barədə tam şəffaflıq təmin edilir.",
+    "human_title": "Elmə Söykənən, İnsana Yönələn",
+    "human_p1": "Ümumi sağlamlıq tövsiyələri riskli ola bilər. İnanırıq ki, botanika təbabəti klinikada tapacağınız hər şey qədər ciddi, lakin evinizdən əlçatan olmalıdır.",
+    "human_p2": "Tədqiqatçılarımız və əczaçılarımız bazamızı daim yeniləyərək ən son, elm tərəfindən sübut edilmiş rəhbərliyi almanızı təmin edirlər.",
+    "cta_title": "Yoxlanılmış yolunuza başlamağa hazırsınız?"
+  },
+  "ai": {
+    "badge": "Süni İntellekt Botanika Məsləhətçisi",
+    "title_p1": "Sizin Fərdi",
+    "title_p2": "Bitki Protokolunuz",
+    "subtitle": "4 suala cavab verin. Unikal sağlamlıq profilinizə uyğun fərdiləşdirilmiş, sübuta əsaslanan botanika tövsiyəsi alın.",
+    "step_info": "Addım {{current}} / {{total}}",
+    "progress_info": "tamamlandı",
+    "next": "Davam et",
+    "back": "Geri",
+    "analyzing": "Təhlil edilir...",
+    "generate": "Protokol Yaradın",
+    "ready_toast": "Fərdi protokolunuz hazırdır!",
+    "error_toast": "Məsləhətləşmə uğursuz oldu.",
+    "warn_answer": "Davam etməzdən əvvəl suala cavab verin",
+    "result_badge": "Protokol Yaradıldı",
+    "result_title": "Sizin Fərdi Bitki Protokolunuz",
+    "risk_label": "Risk Səviyyəsi",
+    "risk_desc": "Hər hansı bir bitki protokoluna başlamazdan əvvəl həmişə ixtisaslı səhiyyə işçisi ilə məsləhətləşin.",
+    "rec_title": "Tövsiyə olunan botanikalar",
+    "risk_low": "aşağı",
+    "risk_med": "orta",
+    "risk_high": "yüksək",
+    "risk_suffix": "risk",
+    "learn_more": "Daha ətraflı",
+    "shop_now": "Bu bitkini al",
+    "warnings_title": "Vacib Sağlamlıq Xəbərdarlıqları",
+    "start_over": "Yenidən başla",
+    "browse_marketplace": "Əlaqədar məhsullara bax",
+    "save_vault_title": "Protokolunuzu sağlamlıq anbarınıza yadda saxlayın",
+    "save_vault_desc": "Tövsiyələri yadda saxlamaq, tərəqqinizi izləmək və fərdiləşdirilmiş fikirlər almaq üçün pulsuz hesab yaradın.",
+    "create_account": "Pulsuz Hesab Yaradın",
+    "steps": {
+      "symptoms": {
+        "q": "Hansı simptomlar və ya sağlamlıq problemləri yaşayırsınız?",
+        "p": "məs. yorğunluq, həzm pozğunluğu, stres, yuxusuzluq..."
+      },
+      "goal": {
+        "q": "Əsas sağlamlıq məqsədiniz nədir?"
+      },
+      "conditions": {
+        "q": "Hər hansı bir xəstəliyiniz varmı və ya dərman qəbul edirsinizmi?",
+        "p": "Xəstəlikləri və ya dərmanları siyahıya alın və ya 'Heç biri' yazın"
+      },
+      "lifestyle": {
+        "q": "Həyat tərzinizi necə təsvir edərdiniz?"
+      }
+    },
+    "goals": {
+      "energy": "Enerji və canlılığı artırın",
+      "sleep": "Daha yaxşı yuxu və stresin azaldılması",
+      "immune": "İmmunitet sisteminə dəstək",
+      "digestive": "Həzm sağlamlığı",
+      "cardio": "Ürək-damar dəstəyi",
+      "hormonal": "Hormonal balans",
+      "weight": "Çəki idarəetməsi",
+      "wellness": "Ümumi sağlamlıq"
+    },
+    "lifestyle": {
+      "very_active": "Çox aktiv (gündəlik məşq)",
+      "moderately_active": "Mülayim aktiv",
+      "sedentary": "Əsasən oturaq",
+      "high_stress": "Yüksək stresli peşəkar",
+      "caregiver": "Yeni valideyn / baxıcı",
+      "senior": "Yaşlı (60+)"
+    },
+    "mock": {
+      "ashwagandha_benefit": "Stresin azaldılması və kortizol tənzimlənməsi üçün güclü adaptogen",
+      "ashwagandha_safety": "Ümumiyyətlə təhlükəsizdir. Hamiləlik dövründə çəkinin.",
+      "rhodiola_benefit": "Zehni performansı artırır və yorğunluğu azaldır",
+      "rhodiola_safety": "Yaxşı dözülür. SSRİ-lərlə qarşılıqlı təsir göstərə bilər.",
+      "summary": "Daxil etdiyiniz məlumatlara əsasən, bədəninizin stres reaksiyasını və enerji sistemlərini dəstəkləyən adaptogen bitkilərdən başlamağı tövsiyə edirik."
+    }
+  },
+  "store": {
+    "loading_profile": "Müəssisə profili yüklənir...",
+    "not_found": "Müəssisə tapılmadı",
+    "return_marketplace": "Marketə qayıt",
+    "back": "Geri",
+    "verified_badge": "TƏSDİQLƏNMİŞ MÜƏSSİSƏ",
+    "global_node": "Qlobal Node",
+    "joined": "Qoşuldu",
+    "formulations_title": "Klinik Formulyasiyalar",
+    "formulations_subtitle": "Bu müəssisədən əldə edilə bilən nümunələr",
+    "products_count": "{{count}} Məhsul",
+    "no_stock_title": "Mövcud Stok Yoxdur",
+    "no_stock_desc": "Bu müəssisənin hazırda tədarük üçün heç bir klinik məhsulu yoxdur."
+  },
+  "product_extra": {
+    "new": "YENİ",
+    "uncategorized": "Kateqoriyasız"
+  },
+  "translations": {
+    "az": "Azərbaycanca",
+    "en": "İngiliscə",
+    "ru": "Rusca",
+    "tr": "Türkcə"
+  }
+}
