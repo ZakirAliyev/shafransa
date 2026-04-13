@@ -17,53 +17,47 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Debug SSH Key (ilk dəfə üçün saxla)
-        run: |
-          echo "=== CHECK SSH KEY ==="
-          ls -la ~/.ssh
-          head -n 3 ~/.ssh/id_rsa || echo "KEY ERROR"
-
-      - name: Connect & Deploy
+      - name: Deploy
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
 
-          echo "=== SERVER CONNECTED ==="
+          echo "=== FIX GITHUB SSH ==="
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 
-          # Install lazımdırsa
+          echo "=== INSTALL NODE ==="
           apt update
-          apt install -y nginx git nodejs npm
+          apt install -y curl git nginx
+          curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+          apt install -y nodejs
 
-          # App folder
+          echo "=== CLONE PROJECT ==="
           mkdir -p /var/www/shafransa
           cd /var/www/shafransa
 
-          # Clone və ya pull
           if [ ! -d ".git" ]; then
             git clone git@github.com:ZakirAliyev/shafransa.git .
           else
             git pull origin main
           fi
 
-          # Install & Build
+          echo "=== INSTALL & BUILD ==="
           npm install
           npm run build
 
-          # Nginx folder temizle
+          echo "=== DEPLOY TO NGINX ==="
           rm -rf /var/www/html/*
 
-          # Build type detect
-          if [ -d "build" ]; then
-            cp -r build/* /var/www/html/
-          elif [ -d "dist" ]; then
+          if [ -d "dist" ]; then
             cp -r dist/* /var/www/html/
+          elif [ -d "build" ]; then
+            cp -r build/* /var/www/html/
           else
-            echo "Build folder tapılmadı!"
+            echo "Build folder yoxdur!"
             exit 1
           fi
 
-          # Restart nginx
           systemctl restart nginx
 
-          echo "=== DEPLOY DONE ==="
+          echo "=== DONE ==="
 
           EOF
