@@ -1,4 +1,4 @@
-name: Deploy React App
+name: Build & Deploy React App
 
 on:
   push:
@@ -6,10 +6,28 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # Repo çek
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node setup
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # Install & build
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      # SSH setup
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -17,45 +35,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy
+      # Deploy (DIST GÖNDƏRİLİR)
+      - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-
-          echo "=== FIX GITHUB SSH ==="
-          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-
-          echo "=== INSTALL NODE ==="
-          apt update
-          apt install -y curl git nginx
-          curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-          apt install -y nodejs
-
-          echo "=== CLEAN OLD APP ==="
-          rm -rf /var/www/shafransa
-          mkdir -p /var/www/shafransa
-          cd /var/www/shafransa
-
-          echo "=== CLONE PROJECT ==="
-          git clone git@github.com:ZakirAliyev/shafransa.git .
-
-          echo "=== INSTALL & BUILD ==="
-          npm install
-          npm run build
-
-          echo "=== DEPLOY TO NGINX ==="
-          rm -rf /var/www/html/*
-
-          if [ -d "dist" ]; then
-            cp -r dist/* /var/www/html/
-          elif [ -d "build" ]; then
-            cp -r build/* /var/www/html/
-          else
-            echo "Build folder yoxdur!"
-            exit 1
-          fi
-
-          systemctl restart nginx
-
-          echo "=== DONE ==="
-
-          EOF
+          scp -r dist/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/var/www/html/
