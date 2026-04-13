@@ -7,7 +7,6 @@ import {store} from "./services/store.jsx";
 import {ThemeProvider} from "./context/ThemeContext/index.jsx";
 import {LanguageProvider} from "./context/LanguageContext/index.jsx";
 
-
 createRoot(document.getElementById('root')).render(
     <ThemeProvider>
         <LanguageProvider>
