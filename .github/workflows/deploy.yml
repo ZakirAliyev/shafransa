@@ -1,0 +1,49 @@
+name: Deploy React App to Linux Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+
+          # Folder yarat
+          mkdir -p /var/www/react-app
+          cd /var/www/react-app
+
+          # Əgər repo yoxdursa clone et
+          if [ ! -d ".git" ]; then
+            git clone https://github.com/USERNAME/REPO.git .
+          else
+            git pull origin main
+          fi
+
+          # Install & build
+          npm install
+          npm run build
+
+          # Nginx setup
+          sudo rm -rf /var/www/html/*
+          sudo cp -r build/* /var/www/html/
+
+          # Nginx restart
+          sudo systemctl restart nginx
+
+          EOF
