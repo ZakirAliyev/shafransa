@@ -3,6 +3,7 @@
   "login": "Daxil ol",
   "nav_marketplace": "Market",
   "nav_encyclopedia": "Ensiklopediya",
+  "nav_therapists": "Fizioterapevtlər",
   "nav_ai_consultant": "Süni İntellekt Məsləhətçisi",
   "nav_about": "Haqqımızda",
   "nav_how_it_works": "Necə İşləyir",
@@ -345,6 +346,7 @@
     "tab_profile": "Profil",
     "tab_orders": "Sifarişlər",
     "tab_wishlist": "İstək siyahısı",
+    "tab_sessions": "Seanslarım",
     "tab_settings": "Tənzimləmələr",
     "personal_details": "Şəxsi Məlumatlar",
     "personal_details_desc": "Adınızı və email ünvanınızı yeniləyin.",
@@ -366,7 +368,11 @@
     "account_settings_desc": "Şifrənizi və hesab seçimlərinizi idarə edin.",
     "new_password": "Yeni Şifrə",
     "confirm_password": "Şifrəni təsdiqlə",
-    "update_password": "Şifrəni yenilə"
+    "update_password": "Şifrəni yenilə",
+    "my_sessions": "Mənim Seanslarım",
+    "sessions_desc": "Mütəxəssislərlə olan görüşlərinizi izləyin və idarə edin.",
+    "no_sessions": "Hələ heç bir seans sifariş edilməyib",
+    "find_specialist": "Mütəxəssis tap"
   },
   "cart": {
     "title": "Səbət",
@@ -576,5 +582,63 @@
     "en": "İngiliscə",
     "ru": "Rusca",
     "tr": "Türkcə"
+  },
+  "therapists": {
+    "badge": "Təsdiqlənmiş Mütəxəssislər",
+    "title_p1": "Sizin",
+    "title_p2": "Fizioterapevtiniz",
+    "subtitle": "Bərpa və fiziki sağlamlığınız üçün klinik olaraq təsdiqlənmiş mütəxəssislərlə əlaqə qurun.",
+    "search_placeholder": "Ad, ixtisas və ya xəstəliyə görə axtarın...",
+    "count_label": "Mütəxəssis Tapıldı",
+    "error": "Mütəxəssisləri yükləmək mümkün olmadı",
+    "no_results": "Mütəxəssis tapılmadı",
+    "no_results_sub": "Axtarış sözünü dəyişməyə və ya filtrləri təmizləməyə çalışın.",
+    "default_specialty": "Fizioterapevt",
+    "no_description": "Sağlamlığınız və bərpanız üçün fədakarlıqla çalışan ixtisaslı mütəxəssis.",
+    "book_now": "Seans Sifariş Et",
+    "booking_title": "Seans Rezerv Et",
+    "certified": "Shafransa Sertifikatlı",
+    "experience": "Təcrübə",
+    "patients": "Pasiyentlər",
+    "methods": "Metodlar",
+    "about": "Klinik Abstrakt",
+    "select_time": "Klinik Saatlar",
+    "confirm_booking": "Sifarişi Təsdiqlə",
+    "booking_success": "Seans sifarişi uğurla göndərildi!",
+    "booking_error": "Seans sifariş etmək mümkün olmadı",
+    "register_title": "Shafransa Peşəkar Şəbəkəsinə Qoşulun.",
+    "register_form_title": "Peşəkar Manifest",
+    "register_form_desc": "Yoxlama üçün klinik məlumatlarınızı təqdim edin.",
+    "label_specialization": "İxtisaslaşma",
+    "label_experience": "Təcrübə İli",
+    "label_phone": "Əlaqə Telefonu",
+    "label_description": "Peşəkar Bio / Klinik Yanaşma",
+    "submit_application": "Klinik Manifesti Göndər"
+  },
+  "session": {
+    "status": {
+      "pending": "Gözlənilir",
+      "confirmed": "Təsdiqləndi",
+      "completed": "Tamamlandı",
+      "cancelled": "Ləğv edildi",
+      "rejected": "Rədd edildi"
+    }
+  },
+  "admin": {
+    "therapists": {
+      "requests": "Fizioterapevt Təsdiq Müraciətləri",
+      "list": "Təsdiqlənmiş Fizioterapevtler",
+      "no_requests": "Gözləyən müraciət yoxdur.",
+      "no_therapists": "Fizioterapevt tapılmadı."
+    },
+    "tabs": {
+      "overview": "Xülasə",
+      "users": "İstifadəçilər",
+      "products": "Məhsullar",
+      "plants": "Ensiklopediya",
+      "categories": "Kateqoriyalar",
+      "therapists": "Terapevtlər",
+      "sessions": "Seanslar"
+    }
   }
 }

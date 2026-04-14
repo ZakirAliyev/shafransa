@@ -5,12 +5,13 @@ import { useAuthStore } from "../../store/useAuthStore"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { getMyOrders } from "../../services/order.service"
 import { getWishlist } from "../../services/wishlist.service"
+import { getMySessions, cancelSession as cancelSessionService, rateSession as rateSessionService } from "../../services/therapySession.service"
 import api from "../../services/api"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card"
 import { Input } from "../../components/ui/Input"
 import { Button } from "../../components/ui/Button"
 import { Badge } from "../../components/ui/Badge"
-import { Package, ShieldCheck, Loader2, User as UserIcon, Heart, Key, Sparkles, ArrowRight, Leaf, Eye, EyeOff } from "lucide-react"
+import { Package, ShieldCheck, Loader2, User as UserIcon, Heart, Key, Sparkles, ArrowRight, Leaf, Eye, EyeOff, Camera, Trash2 } from "lucide-react"
 import { Link } from "react-router-dom"
 
 export default function UserProfile({ tab = "profile" }) {
@@ -19,7 +20,9 @@ export default function UserProfile({ tab = "profile" }) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState(tab)
-  const [formData, setFormData] = useState({ fullName: user?.fullName || "", email: user?.email || "" })
+  const [formData, setFormData] = useState({ fullName: user?.fullName || "", email: user?.email || "", description: user?.description || "" })
+  const [avatarFile, setAvatarFile] = useState(null)
+  const [avatarPreview, setAvatarPreview] = useState(user?.avatar || "")
   const [saveMessage, setSaveMessage] = useState("")
   const [showPassword, setShowPassword] = useState(false)
 
@@ -38,12 +41,29 @@ export default function UserProfile({ tab = "profile" }) {
     enabled: activeTab === "wishlist"
   })
 
+  const { data: sessionsRaw, isLoading: loadingSessions } = useQuery({
+    queryKey: ["sessions", "my"],
+    queryFn: getMySessions,
+    enabled: activeTab === "sessions"
+  })
+
   const { mutate: updateProfile, isPending: updating } = useMutation({
-    mutationFn: (data) => api.put("/users/me", data),
+    mutationFn: (data) => {
+      const fd = new FormData()
+      fd.append("fullName", data.fullName)
+      fd.append("email", data.email)
+      if (data.description) fd.append("description", data.description)
+      if (avatarFile) fd.append("avatarFile", avatarFile)
+      
+      return api.put("/user/me", fd, {
+        headers: { "Content-Type": "multipart/form-data" }
+      })
+    },
     onSuccess: () => {
       fetchMe()
       setSaveMessage(t('user.profile_updated', "Profile updated!"))
       setTimeout(() => setSaveMessage(""), 3000)
+      setAvatarFile(null)
     }
   })
 
@@ -55,11 +75,13 @@ export default function UserProfile({ tab = "profile" }) {
   // Fix data access — service returns API wrapper already resolved by interceptor
   const orders = Array.isArray(ordersRaw) ? ordersRaw : (ordersRaw?.data || [])
   const wishlist = Array.isArray(wishlistRaw) ? wishlistRaw : (wishlistRaw?.data || [])
+  const sessions = Array.isArray(sessionsRaw) ? sessionsRaw : (sessionsRaw?.data || [])
 
   const tabs = [
     { id: "profile", label: t('user.tab_profile', "Profile"), icon: UserIcon, href: "/user" },
     { id: "orders",  label: t('user.tab_orders', "Orders"),  icon: Package,  href: "/user/orders" },
     { id: "wishlist",label: t('user.tab_wishlist', "Wishlist"), icon: Heart,    href: "/user/wishlist" },
+    { id: "sessions",label: t('user.tab_sessions', "Sessions"), icon: Activity, href: "/user/sessions" },
     { id: "settings",label: t('user.tab_settings', "Settings"), icon: Key,      href: "/user/settings" },
   ]
 
@@ -105,35 +127,95 @@ export default function UserProfile({ tab = "profile" }) {
               <CardDescription>{t('user.personal_details_desc', 'Update your name and email address.')}</CardDescription>
             </CardHeader>
             <CardContent className="p-8">
-              <form onSubmit={handleSave} className="space-y-6">
-                <div className="grid sm:grid-cols-2 gap-5">
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('user.label_fullname', 'Full Name')}</label>
-                    <Input
-                      value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      className="h-12 rounded-xl bg-neutral-50/50 border-neutral-200"
-                    />
+              <div className="flex flex-col md:flex-row gap-10">
+                {/* Avatar Section */}
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="relative group">
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-neutral-100 bg-neutral-50 flex items-center justify-center relative">
+                      {avatarPreview ? (
+                        <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
+                      ) : (
+                        <UserIcon className="w-12 h-12 text-neutral-300" />
+                      )}
+                      <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <Camera className="w-6 h-6 text-white" />
+                        <input 
+                          type="file" 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files[0]
+                            if (file) {
+                              setAvatarFile(file)
+                              setAvatarPreview(URL.createObjectURL(file))
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+                    {avatarFile && (
+                      <button 
+                        onClick={() => {
+                          setAvatarFile(null)
+                          setAvatarPreview(user?.avatar || "")
+                        }}
+                        className="absolute -top-2 -right-2 bg-rose-500 text-white p-1.5 rounded-full shadow-lg hover:bg-rose-600 transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('user.label_email', 'Email')}</label>
-                    <Input
-                      type="email"
-                      value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="h-12 rounded-xl bg-neutral-50/50 border-neutral-200"
-                    />
+                  <div className="text-center">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('user.avatar_label', 'Profile Photo')}</p>
+                    <p className="text-[9px] text-muted-foreground/60 mt-1 max-w-[120px]">{t('user.avatar_hint', 'JPG, PNG or GIF. Max 2MB.')}</p>
                   </div>
                 </div>
-                {saveMessage && (
-                  <div className="p-4 bg-green-50 border border-green-100 rounded-xl flex items-center gap-3 text-green-700 text-sm font-bold">
-                    <Sparkles className="w-4 h-4" /> {saveMessage}
+
+                {/* Form Section */}
+                <form onSubmit={handleSave} className="flex-1 space-y-6">
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('user.label_fullname', 'Full Name')}</label>
+                      <Input
+                        value={formData.fullName}
+                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                        className="h-12 rounded-xl bg-neutral-50/50 border-neutral-200 shadow-sm focus:bg-white transition-all"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('user.label_email', 'Email')}</label>
+                      <Input
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        className="h-12 rounded-xl bg-neutral-50/50 border-neutral-200 shadow-sm focus:bg-white transition-all"
+                      />
+                    </div>
                   </div>
-                )}
-                <Button type="submit" disabled={updating} className="rounded-full px-8 h-12 font-bold shadow-lg shadow-primary/20">
-                  {updating ? <Loader2 className="h-4 w-4 animate-spin" /> : t('user.save_changes', "Save Changes")}
-                </Button>
-              </form>
+
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('user.label_description', 'Bio / Description')}</label>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      placeholder={t('user.bio_placeholder', 'Tell us about yourself...')}
+                      className="w-full min-h-[100px] p-4 rounded-xl bg-neutral-50/50 border border-neutral-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-sm focus:bg-white"
+                    />
+                  </div>
+
+                  {saveMessage && (
+                    <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-3 text-emerald-700 text-sm font-bold animate-in fade-in slide-in-from-top-2">
+                      <Sparkles className="w-4 h-4" /> {saveMessage}
+                    </div>
+                  )}
+                  
+                  <div className="pt-2">
+                    <Button type="submit" disabled={updating} className="rounded-full px-10 h-12 font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                      {updating ? <Loader2 className="h-4 w-4 animate-spin" /> : t('user.save_changes', "Save Changes")}
+                    </Button>
+                  </div>
+                </form>
+              </div>
             </CardContent>
           </Card>
 
@@ -243,6 +325,84 @@ export default function UserProfile({ tab = "profile" }) {
             </div>
           )}
         </div>
+      )}
+
+      {/* ── SESSIONS ── */}
+      {activeTab === "sessions" && (
+        <Card className="premium-card">
+          <CardHeader className="p-8 border-b border-neutral-100/50">
+            <CardTitle className="text-xl font-display font-bold">{t('user.my_sessions', 'Therapy Sessions')}</CardTitle>
+            <CardDescription>{t('user.sessions_desc', 'Track and manage your appointments with specialists.')}</CardDescription>
+          </CardHeader>
+          <CardContent className="p-8">
+            {loadingSessions ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary opacity-30" />
+              </div>
+            ) : sessions.length === 0 ? (
+              <div className="text-center py-24 rounded-2xl border-2 border-dashed border-neutral-200 bg-neutral-50">
+                <Activity className="mx-auto h-10 w-10 mb-3 text-muted-foreground/20" />
+                <p className="font-bold text-[#1a1c1e]">{t('user.no_sessions', 'No sessions booked yet')}</p>
+                <Link to="/therapists" className="mt-3 inline-block text-sm font-bold text-primary hover:underline">
+                  {t('user.find_specialist', 'Find a Specialist')} →
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {sessions.map((session) => (
+                  <div key={session.id} className="p-6 rounded-2xl border border-neutral-100 bg-white hover:border-emerald-200 transition-colors flex flex-col md:flex-row justify-between gap-6">
+                    <div className="flex gap-4">
+                      <div className="w-14 h-14 rounded-xl bg-[#f5f5f7] flex items-center justify-center overflow-hidden border border-neutral-100">
+                        {session.therapist?.avatar ? (
+                          <img src={session.therapist.avatar} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          <UserIcon className="w-6 h-6 text-muted-foreground/20" />
+                        )}
+                      </div>
+                      <div>
+                        <div className="font-bold text-[#1a1c1e] text-lg">{session.therapist?.fullName}</div>
+                        <div className="text-xs font-bold text-emerald-600 uppercase tracking-widest">{session.therapist?.specialization}</div>
+                        <div className="flex flex-wrap gap-4 mt-2">
+                           <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
+                              <Calendar className="w-3.5 h-3.5" /> {new Date(session.startTime).toLocaleDateString()}
+                           </div>
+                           <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
+                              <Clock className="w-3.5 h-3.5" /> {new Date(session.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                           </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-col items-end justify-between gap-4">
+                       <Badge className={`${
+                          session.status === "CONFIRMED" ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
+                          session.status === "PENDING" ? "bg-amber-50 text-amber-600 border-amber-100" :
+                          "bg-neutral-50 text-neutral-400 border-neutral-100"
+                        } font-bold text-[9px] px-3 uppercase tracking-widest`}>
+                          {t(`session.status.${session.status?.toLowerCase()}`, session.status)}
+                       </Badge>
+
+                       {session.status === "PENDING" && (
+                         <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            className="h-9 px-4 rounded-xl font-bold text-rose-500 hover:bg-rose-50"
+                            onClick={() => {
+                               if (window.confirm(t('common.confirm_cancel', 'Are you sure you want to cancel this session?'))) {
+                                  cancelSessionService(session.id).then(() => queryClient.invalidateQueries(["sessions", "my"]))
+                               }
+                            }}
+                         >
+                            {t('common.cancel', 'Cancel')}
+                         </Button>
+                       )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       )}
 
       {/* ── SETTINGS ── */}

@@ -20,6 +20,7 @@ import logo from "../../assets/logo.png"
 const PRIMARY_NAV = [
   { label: "nav_marketplace", to: "/marketplace" },
   { label: "nav_encyclopedia", to: "/herbs" },
+  { label: "nav_therapists", to: "/therapists" },
 ]
 
 // Secondary links go in the bars/more dropdown on desktop
@@ -34,6 +35,7 @@ const MORE_NAV = [
 const ALL_NAV = [
   { label: "nav_marketplace", to: "/marketplace", icon: Package },
   { label: "nav_encyclopedia", to: "/herbs", icon: Leaf },
+  { label: "nav_therapists", to: "/therapists", icon: Activity },
   { label: "nav_ai_consultant", to: "/ai-consultant", icon: BrainCircuit },
   { label: "nav_about", to: "/about", icon: Info },
   { label: "nav_how_it_works", to: "/how-it-works", icon: Activity },

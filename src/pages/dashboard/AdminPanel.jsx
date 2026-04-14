@@ -12,7 +12,7 @@ import { Input } from "../../components/ui/Input"
 import { Link } from "react-router-dom"
 import {
   Users, Package, Leaf, LayoutGrid, Activity, Zap, Loader2,
-  ShieldCheck, Trash2, Plus, Globe, Server, CheckCircle2, ArrowRight
+  ShieldCheck, Trash2, Plus, Globe, Server, CheckCircle2, ArrowRight, UploadCloud
 } from "lucide-react"
 import TranslationTabs from "../../components/shared/TranslationTabs"
 import { toast } from "../../store/useToastStore"
@@ -23,6 +23,8 @@ const TABS = [
   { id: "products",   label: "Products",   icon: Package },
   { id: "plants",     label: "Encyclopedia", icon: Leaf },
   { id: "categories", label: "Categories", icon: LayoutGrid },
+  { id: "therapists", label: "Therapists", icon: Users },
+  { id: "sessions",   label: "Sessions",   icon: Activity },
 ]
 
 export default function AdminPanel({ tab = "overview" }) {
@@ -66,6 +68,24 @@ export default function AdminPanel({ tab = "overview" }) {
     enabled: activeTab === "categories" || activeTab === "overview",
   })
 
+  const { data: therapistRequests, isLoading: loadingRequests } = useQuery({
+    queryKey: ["admin", "therapist-requests"],
+    queryFn: async () => {
+      const res = await api.get("/Therapists/requests")
+      return res.data
+    },
+    enabled: activeTab === "therapists"
+  })
+
+  const { data: allTherapists, isLoading: loadingTherapists } = useQuery({
+    queryKey: ["admin", "therapists"],
+    queryFn: async () => {
+      const res = await api.get("/Therapists")
+      return res.data
+    },
+    enabled: activeTab === "therapists"
+  })
+
   const users       = Array.isArray(usersData) ? usersData : (usersData?.data || [])
   const products    = Array.isArray(productsData) ? productsData : (productsData?.data || [])
   const plants      = Array.isArray(plantsData) ? plantsData : []
@@ -106,11 +126,14 @@ export default function AdminPanel({ tab = "overview" }) {
   }
   const [catTranslations, setCatTranslations] = useState(initialCategoryTranslations)
   const [catSlug, setCatSlug] = useState("")
+  const [catIcon, setCatIcon] = useState(null)
+  const [catIconPreview, setCatIconPreview] = useState(null)
   const [editingCategoryId, setEditingCategoryId] = useState(null)
 
   const handleEditCategory = (cat) => {
     setEditingCategoryId(cat.id)
     setCatSlug(cat.slug || "")
+    setCatIconPreview(cat.icon || "")
     
     const newTrans = { ...initialCategoryTranslations }
     cat.translations?.forEach(t => {
@@ -124,40 +147,58 @@ export default function AdminPanel({ tab = "overview" }) {
 
   const { mutate: createCategoryMutation, isPending: creatingCat } = useMutation({
     mutationFn: () => {
+      const form = new FormData()
+      form.append("slug", catSlug || catTranslations.az.name.toLowerCase().replace(/\s+/g, "-"))
+      if (catIcon) form.append("IconFile", catIcon)
+
       const transArray = Object.entries(catTranslations).map(([lang, fields]) => ({
         language: lang,
         ...fields
       })).filter(t => t.name.trim())
 
-      return api.post("/categories", { 
-        slug: catSlug || catTranslations.az.name.toLowerCase().replace(/\s+/g, "-"), 
-        translations: transArray 
+      transArray.forEach(tr => {
+        form.append("translationJson", JSON.stringify(tr))
+      })
+
+      return api.post("/categories", form, {
+        headers: { "Content-Type": "multipart/form-data" }
       })
     },
     onSuccess: () => { 
       queryClient.invalidateQueries(["categories"])
       setCatTranslations(initialCategoryTranslations)
       setCatSlug("")
+      setCatIcon(null)
+      setCatIconPreview(null)
       toast.success(t('admin.categories.created', 'Category created!'))
     },
   })
 
   const { mutate: updateCategoryMutation, isPending: updatingCat } = useMutation({
     mutationFn: () => {
+      const form = new FormData()
+      form.append("slug", catSlug)
+      if (catIcon) form.append("NewIconFile", catIcon)
+
       const transArray = Object.entries(catTranslations).map(([lang, fields]) => ({
         language: lang,
         ...fields
       })).filter(t => t.name.trim())
 
-      return api.put(`/categories/${editingCategoryId}`, { 
-        slug: catSlug, 
-        translations: transArray 
+      transArray.forEach(tr => {
+        form.append("translationJson", JSON.stringify(tr))
+      })
+
+      return api.put(`/categories/${editingCategoryId}`, form, {
+        headers: { "Content-Type": "multipart/form-data" }
       })
     },
     onSuccess: () => { 
       queryClient.invalidateQueries(["categories"])
       setCatTranslations(initialCategoryTranslations)
       setCatSlug("")
+      setCatIcon(null)
+      setCatIconPreview(null)
       setEditingCategoryId(null)
       toast.success(t('admin.categories.updated', 'Category updated!'))
     },
@@ -171,15 +212,18 @@ export default function AdminPanel({ tab = "overview" }) {
     tr: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" }
   }
   const [plantTranslations, setPlantTranslations] = useState(initialPlantTranslations)
-  const [plantMisc, setPlantMisc] = useState({ scientificName: "", imageUrl: "" })
+  const [plantMisc, setPlantMisc] = useState({ scientificName: "" })
+  const [plantImage, setPlantImage] = useState(null)
+  const [plantGallery, setPlantGallery] = useState([])
+  const [plantPreviews, setPlantPreviews] = useState({ main: null, gallery: [] })
   const [editingPlantId, setEditingPlantId] = useState(null)
 
   const handleEditPlant = (plant) => {
     setEditingPlantId(plant.id)
     setPlantMisc({
-      scientificName: plant.scientificName || "",
-      imageUrl: plant.image || ""
+      scientificName: plant.scientificName || ""
     })
+    setPlantPreviews({ main: plant.image, gallery: [] })
     
     // Create new translations object from existing data
     const newTrans = { ...initialPlantTranslations }
@@ -196,40 +240,68 @@ export default function AdminPanel({ tab = "overview" }) {
 
   const { mutate: createPlantMutation, isPending: creatingPlant } = useMutation({
     mutationFn: () => {
+      const form = new FormData()
+      form.append("scientificName", plantMisc.scientificName)
+      if (plantImage) form.append("ImageFile", plantImage)
+      
+      plantGallery.forEach(file => {
+        form.append("GalleryFiles", file)
+      })
+
       const transArray = Object.entries(plantTranslations).map(([lang, fields]) => ({
         language: lang,
         ...fields
       })).filter(t => t.name.trim())
 
-      return api.post("/plants", { 
-        ...plantMisc,
-        translations: transArray 
+      transArray.forEach(tr => {
+        form.append("translationJson", JSON.stringify(tr))
+      })
+
+      return api.post("/plants", form, {
+        headers: { "Content-Type": "multipart/form-data" }
       })
     },
     onSuccess: () => { 
       queryClient.invalidateQueries(["plants", {}])
       setPlantTranslations(initialPlantTranslations)
-      setPlantMisc({ scientificName: "", imageUrl: "" })
+      setPlantMisc({ scientificName: "" })
+      setPlantImage(null)
+      setPlantGallery([])
+      setPlantPreviews({ main: null, gallery: [] })
       toast.success(t('admin.plants.created', 'Plant entry created!'))
     },
   })
 
   const { mutate: updatePlantMutation, isPending: updatingPlant } = useMutation({
     mutationFn: () => {
+      const form = new FormData()
+      form.append("scientificName", plantMisc.scientificName)
+      if (plantImage) form.append("NewImageFile", plantImage)
+      
+      plantGallery.forEach(file => {
+        form.append("NewGalleryFiles", file)
+      })
+
       const transArray = Object.entries(plantTranslations).map(([lang, fields]) => ({
         language: lang,
         ...fields
       })).filter(t => t.name.trim())
 
-      return api.put(`/plants/${editingPlantId}`, { 
-        ...plantMisc,
-        translations: transArray 
+      transArray.forEach(tr => {
+        form.append("translationJson", JSON.stringify(tr))
+      })
+
+      return api.put(`/plants/${editingPlantId}`, form, {
+        headers: { "Content-Type": "multipart/form-data" }
       })
     },
     onSuccess: () => { 
       queryClient.invalidateQueries(["plants", {}])
       setPlantTranslations(initialPlantTranslations)
-      setPlantMisc({ scientificName: "", imageUrl: "" })
+      setPlantMisc({ scientificName: "" })
+      setPlantImage(null)
+      setPlantGallery([])
+      setPlantPreviews({ main: null, gallery: [] })
       setEditingPlantId(null)
       toast.success(t('admin.plants.updated', 'Plant entry updated!'))
     },
@@ -510,40 +582,63 @@ export default function AdminPanel({ tab = "overview" }) {
                 </div>
               </TranslationTabs>
               
-              <div className="grid md:grid-cols-3 gap-4 mt-6 pt-6 border-t border-white/5">
-                <Input
-                  placeholder={t('admin.plants.scientific', "Scientific Name")}
-                  value={plantMisc.scientificName}
-                  onChange={(e) => setPlantMisc({ ...plantMisc, scientificName: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white h-11"
-                />
-                <Input
-                  placeholder={t('admin.plants.image', "Image URL")}
-                  value={plantMisc.imageUrl}
-                  onChange={(e) => setPlantMisc({ ...plantMisc, imageUrl: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white h-11"
-                />
-                <div className="flex gap-2">
-                  {editingPlantId && (
+              <div className="grid md:grid-cols-2 gap-6 mt-8 pt-8 border-t border-white/5">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
+                      {plantPreviews.main ? <img src={plantPreviews.main} className="w-full h-full object-cover" /> : <UploadCloud className="w-8 h-8 text-white/10" />}
+                    </div>
+                    <div className="flex-1 space-y-2">
+                       <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.main_image', 'Central Specimen Media')}</label>
+                       <Input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                             const file = e.target.files?.[0];
+                             if (file) {
+                                setPlantImage(file);
+                                setPlantPreviews(prev => ({ ...prev, main: URL.createObjectURL(file) }));
+                             }
+                          }}
+                          className="bg-white/5 border-white/10 text-white h-11 cursor-pointer"
+                       />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.scientific', "Scientific Name")}</label>
+                  <Input
+                    placeholder="..."
+                    value={plantMisc.scientificName}
+                    onChange={(e) => setPlantMisc({ ...plantMisc, scientificName: e.target.value })}
+                    className="bg-white/5 border-white/10 text-white h-11"
+                  />
+                  
+                  <div className="flex gap-2">
+                    {editingPlantId && (
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setEditingPlantId(null)
+                          setPlantTranslations(initialPlantTranslations)
+                          setPlantMisc({ scientificName: "" })
+                          setPlantImage(null)
+                          setPlantPreviews({ main: null, gallery: [] })
+                        }}
+                        className="flex-1 border-white/10 text-white hover:bg-white/5 h-11"
+                      >
+                        {t('common.cancel', 'Cancel')}
+                      </Button>
+                    )}
                     <Button
-                      variant="outline"
-                      onClick={() => {
-                        setEditingPlantId(null)
-                        setPlantTranslations(initialPlantTranslations)
-                        setPlantMisc({ scientificName: "", imageUrl: "" })
-                      }}
-                      className="flex-1 border-white/10 text-white hover:bg-white/5 h-11"
+                      onClick={() => editingPlantId ? updatePlantMutation() : createPlantMutation()}
+                      disabled={!plantTranslations.az.name || creatingPlant || updatingPlant}
+                      className="flex-[2] bg-teal-500 text-white font-bold hover:bg-teal-600 h-11"
                     >
-                      {t('common.cancel', 'Cancel')}
+                      {creatingPlant || updatingPlant ? <Loader2 className="w-4 h-4 animate-spin" /> : (editingPlantId ? t('common.save', 'Save Changes') : t('common.add', 'Add'))}
                     </Button>
-                  )}
-                  <Button
-                    onClick={() => editingPlantId ? updatePlantMutation() : createPlantMutation()}
-                    disabled={!plantTranslations.az.name || creatingPlant || updatingPlant}
-                    className="flex-[2] bg-teal-500 text-white font-bold hover:bg-teal-600 h-11"
-                  >
-                    {creatingPlant || updatingPlant ? <Loader2 className="w-4 h-4 animate-spin" /> : (editingPlantId ? t('common.save', 'Save Changes') : t('common.add', 'Add'))}
-                  </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -596,14 +691,34 @@ export default function AdminPanel({ tab = "overview" }) {
             </CardHeader>
             <CardContent className="p-6">
               <TranslationTabs activeLang={activeLang} onLangChange={setActiveLang}>
-                <div className="pt-2">
-                  <Input
-                    placeholder={t('admin.categories.placeholder_name', "Category Name")}
-                    value={catTranslations[activeLang].name}
-                    onChange={(e) => setCatTranslations({ ...catTranslations, [activeLang]: { ...catTranslations[activeLang], name: e.target.value } })}
-                    className="bg-white/5 border-white/10 text-white h-11"
-                  />
-                </div>
+                  <div className="flex gap-4 items-end">
+                    <div className="flex-1">
+                      <Input
+                        placeholder={t('admin.categories.placeholder_name', "Category Name")}
+                        value={catTranslations[activeLang].name}
+                        onChange={(e) => setCatTranslations({ ...catTranslations, [activeLang]: { ...catTranslations[activeLang], name: e.target.value } })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                    </div>
+                    <div className="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0">
+                      {catIconPreview ? <img src={catIconPreview} className="w-full h-full object-cover" /> : <LayoutGrid className="w-5 h-5 text-white/10" />}
+                    </div>
+                    <label className="h-11 px-4 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-bold uppercase tracking-widest text-white/40 cursor-pointer hover:bg-white/10 transition-colors">
+                      {t('common.upload', 'Upload Icon')}
+                      <input 
+                        type="file" 
+                        className="hidden" 
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setCatIcon(file);
+                            setCatIconPreview(URL.createObjectURL(file));
+                          }
+                        }}
+                      />
+                    </label>
+                  </div>
               </TranslationTabs>
               
               <div className="flex gap-4 mt-6 pt-6 border-t border-white/5">
@@ -621,6 +736,8 @@ export default function AdminPanel({ tab = "overview" }) {
                         setEditingCategoryId(null)
                         setCatTranslations(initialCategoryTranslations)
                         setCatSlug("")
+                        setCatIcon(null)
+                        setCatIconPreview(null)
                       }}
                       className="flex-1 border-white/10 text-white hover:bg-white/5 h-11"
                     >
@@ -691,6 +808,130 @@ export default function AdminPanel({ tab = "overview" }) {
             </CardContent>
           </Card>
         </div>
+      )}
+      {activeTab === "therapists" && (
+        <div className="space-y-8">
+           <Card className="bg-[#09090b] border-white/5">
+              <CardHeader className="p-8 border-b border-white/5">
+                 <CardTitle className="text-xl font-display font-bold text-white">{t('admin.therapists.requests', 'Therapist Verification Requests')}</CardTitle>
+              </CardHeader>
+              <CardContent className="p-8">
+                 {loadingRequests ? (
+                   <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
+                 ) : !therapistRequests || therapistRequests.length === 0 ? (
+                   <p className="text-center text-white/30 py-16 font-bold">{t('admin.therapists.no_requests', 'No pending requests.')}</p>
+                 ) : (
+                   <div className="overflow-x-auto">
+                      <table className="w-full text-sm text-left border-collapse">
+                         <thead className="text-[10px] font-bold uppercase tracking-widest text-white/30 border-b border-white/5">
+                            <tr>
+                               <th className="px-6 py-4">Therapist</th>
+                               <th className="px-6 py-4">Specialization</th>
+                               <th className="px-6 py-4">Experience</th>
+                               <th className="px-6 py-4 text-right">Actions</th>
+                            </tr>
+                         </thead>
+                         <tbody className="divide-y divide-white/[0.02]">
+                            {therapistRequests.map((req) => (
+                               <tr key={req.id} className="hover:bg-white/[0.02] transition-colors group">
+                                  <td className="px-6 py-5">
+                                     <div className="font-bold text-white">{req.fullName}</div>
+                                     <div className="text-[10px] text-white/30">{req.phone}</div>
+                                  </td>
+                                  <td className="px-6 py-5 text-white/60">{req.specialization}</td>
+                                  <td className="px-6 py-5 text-white/60">{req.experienceYears} Years</td>
+                                  <td className="px-6 py-5 text-right">
+                                     <div className="flex justify-end gap-2">
+                                        <Button 
+                                           size="sm" 
+                                           className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
+                                           onClick={async () => {
+                                              await api.post(`/Therapists/requests/${req.id}/approve`)
+                                              queryClient.invalidateQueries(["admin", "therapist-requests"])
+                                              queryClient.invalidateQueries(["admin", "therapists"])
+                                              toast.success("Therapist approved!")
+                                           }}
+                                        >
+                                           Approve
+                                        </Button>
+                                        <Button 
+                                           size="sm" 
+                                           variant="destructive"
+                                           onClick={async () => {
+                                              const reason = prompt("Enter rejection reason:")
+                                              if (reason) {
+                                                 await api.post(`/Therapists/requests/${req.id}/reject`, { reason })
+                                                 queryClient.invalidateQueries(["admin", "therapist-requests"])
+                                                 toast.info("Request rejected.")
+                                              }
+                                           }}
+                                        >
+                                           Reject
+                                        </Button>
+                                     </div>
+                                  </td>
+                               </tr>
+                            ))}
+                         </tbody>
+                      </table>
+                   </div>
+                 )}
+              </CardContent>
+           </Card>
+
+           <Card className="bg-[#09090b] border-white/5">
+              <CardHeader className="p-8 border-b border-white/5">
+                 <CardTitle className="text-xl font-display font-bold text-white">{t('admin.therapists.list', 'Verified Therapists')}</CardTitle>
+              </CardHeader>
+              <CardContent className="p-8">
+                 {loadingTherapists ? (
+                   <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
+                 ) : !allTherapists || allTherapists.length === 0 ? (
+                   <p className="text-center text-white/30 py-16 font-bold">{t('admin.therapists.no_therapists', 'No therapists found.')}</p>
+                 ) : (
+                   <div className="grid gap-4">
+                      {allTherapists.map((t) => (
+                        <div key={t.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5">
+                           <div className="flex items-center gap-4">
+                              <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden flex-shrink-0">
+                                 {t.avatar && <img src={t.avatar} className="w-full h-full object-cover" alt="" />}
+                              </div>
+                              <div>
+                                 <div className="font-bold text-white">{t.fullName}</div>
+                                 <div className="text-xs text-white/30 mt-0.5">{t.specialization} • {t.rating} ⭐</div>
+                              </div>
+                           </div>
+                           <div className="flex items-center gap-3">
+                              <Badge className={`${t.isVerified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'} border-none font-bold text-[9px]`}>
+                                 {t.isVerified ? "VERIFIED" : "PENDING"}
+                              </Badge>
+                              <button className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-400">
+                                 <Trash2 className="w-4 h-4" />
+                              </button>
+                           </div>
+                        </div>
+                      ))}
+                   </div>
+                 )}
+              </CardContent>
+           </Card>
+        </div>
+      )}
+
+      {activeTab === "sessions" && (
+        <Card className="bg-[#09090b] border-white/5">
+           <CardHeader className="p-8 border-b border-white/5">
+              <CardTitle className="text-xl font-display font-bold text-white">Institutional Session Ledger</CardTitle>
+              <CardDescription className="text-white/40 text-xs font-bold uppercase tracking-widest mt-1">Global appointment tracking</CardDescription>
+           </CardHeader>
+           <CardContent className="p-8">
+              <div className="text-center py-20">
+                 <Activity className="h-10 w-10 text-white/10 mx-auto mb-4" />
+                 <p className="text-white/30 font-bold">Session management is restricted to authorized clinicians.</p>
+                 <p className="text-[10px] uppercase tracking-widest text-white/20 mt-2">Access Point: Private Therapist Dashboard</p>
+              </div>
+           </CardContent>
+        </Card>
       )}
     </div>
   )

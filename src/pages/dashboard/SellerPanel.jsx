@@ -296,17 +296,21 @@ function ProductManager({ myProducts, isLoading, client }) {
 
   const [translations, setTranslations] = useState(initialTranslations)
   const [formData, setFormData] = useState({ price: "", stock: "", verified: true })
-  const [imageUrls, setImageUrls] = useState([])
-  const [mainImageIndex, setMainImageIndex] = useState(0)
-  const [newUrl, setNewUrl] = useState("")
+  const [imageFile, setImageFile] = useState(null)
+  const [galleryFiles, setGalleryFiles] = useState([])
+  const [existingImages, setExistingImages] = useState([])
+  const [deleteGalleryUrls, setDeleteGalleryUrls] = useState([])
+  const [previews, setPreviews] = useState({ main: null, gallery: [] })
   
   const resetForm = () => {
     setEditingId(null)
     setTranslations(initialTranslations)
     setFormData({ price: "", stock: "", verified: true })
-    setImageUrls([])
-    setMainImageIndex(0)
-    setNewUrl("")
+    setImageFile(null)
+    setGalleryFiles([])
+    setExistingImages([])
+    setDeleteGalleryUrls([])
+    setPreviews({ main: null, gallery: [] })
   }
 
   const handleEdit = (product) => {
@@ -317,7 +321,7 @@ function ProductManager({ myProducts, isLoading, client }) {
       verified: product.verified || true
     })
     
-    // Map all translations from product object
+    // Map all translations
     const newTrans = { ...initialTranslations }
     product.translations?.forEach(item => {
       if (newTrans[item.language]) {
@@ -331,38 +335,38 @@ function ProductManager({ myProducts, isLoading, client }) {
     })
     setTranslations(newTrans)
 
-    // Handle images
-    const imgs = product.images && Array.isArray(product.images) ? [...product.images] : []
-    if (product.image && !imgs.includes(product.image)) {
-        imgs.unshift(product.image)
-    }
-    
-    setImageUrls(imgs)
-    
-    // Set main image index
-    const mainIdx = product.image ? imgs.indexOf(product.image) : 0
-    setMainImageIndex(mainIdx >= 0 ? mainIdx : 0)
+    setExistingImages(product.images || [])
+    setPreviews({ main: product.image, gallery: [] })
     
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const { mutate: saveProduct, isPending: saving } = useMutation({
     mutationFn: (data) => {
-      const validImages = imageUrls.filter(u => u && u.trim())
-      const transArray = Object.entries(translations).map(([lang, fields]) => ({
-        language: lang,
-        ...fields
-      })).filter(tr => tr.title.trim())
+      const form = new FormData()
+      form.append("price", data.price)
+      form.append("stock", data.stock)
+      if (imageFile) form.append("ImageFile", imageFile)
+      if (imageFile) form.append("NewImageFile", imageFile) // For UpdateDto compatibility
+      
+      galleryFiles.forEach(file => {
+        form.append("GalleryFiles", file)
+        form.append("NewGalleryFiles", file) // For UpdateDto compatibility
+      })
 
-      const payload = {
-        ...data,
-        price: parseFloat(data.price),
-        stock: parseInt(data.stock),
-        image: validImages[mainImageIndex] || validImages[0] || "",
-        images: validImages,
-        translations: transArray
+      if (editingId && deleteGalleryUrls.length > 0) {
+        deleteGalleryUrls.forEach(url => form.append("DeleteGalleryUrls", url))
       }
-      return editingId ? updateProduct(editingId, payload) : createProduct(payload)
+
+      const transArray = Object.entries(translations)
+        .map(([lang, fields]) => ({ language: lang, ...fields }))
+        .filter(tr => tr.title.trim())
+      
+      transArray.forEach(tr => {
+        form.append("translationJson", JSON.stringify(tr))
+      })
+
+      return editingId ? updateProduct(editingId, form) : createProduct(form)
     },
     onSuccess: () => {
       client.invalidateQueries(["myProducts"])
@@ -381,16 +385,19 @@ function ProductManager({ myProducts, isLoading, client }) {
     }
   })
 
-  const removeImage = (index) => {
-    setImageUrls(prev => {
-      const next = prev.filter((_, i) => i !== index)
-      if (mainImageIndex === index) {
-        setMainImageIndex(0)
-      } else if (mainImageIndex > index) {
-        setMainImageIndex(mainImageIndex - 1)
-      }
-      return next
-    })
+  const handleFileChange = (e, type) => {
+    const files = Array.from(e.target.files)
+    if (!files.length) return
+
+    if (type === 'main') {
+      const file = files[0]
+      setImageFile(file)
+      setPreviews(prev => ({ ...prev, main: URL.createObjectURL(file) }))
+    } else {
+      setGalleryFiles(prev => [...prev, ...files])
+      const newPreviews = files.map(f => URL.createObjectURL(f))
+      setPreviews(prev => ({ ...prev, gallery: [...prev.gallery, ...newPreviews] }))
+    }
   }
 
   const getDisplayTitle = (product) => {
@@ -473,58 +480,48 @@ function ProductManager({ myProducts, isLoading, client }) {
                </div>
             </div>
 
-            <div className="space-y-4">
-               <div className="space-y-1">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_images', 'Product Images')}</label>
-                  <div className="flex gap-2">
-                    <Input
-                      placeholder="URL..."
-                      value={newUrl}
-                      onChange={e => setNewUrl(e.target.value)}
-                      className="h-10 rounded-xl bg-neutral-50 border-neutral-200 text-sm flex-1"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => { if (newUrl.trim()) { setImageUrls(prev => [...prev.filter(u => u && u.trim()), newUrl.trim()]); setNewUrl("") } }}
-                      className="h-10 px-4 rounded-xl bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors"
-                    >
-                      +
-                    </button>
+            <div className="space-y-6">
+               <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_main_image', 'Main Specimen Media')}</label>
+                  <div className="flex items-center gap-4">
+                     <div className="w-20 h-20 rounded-2xl bg-neutral-50 border border-neutral-100 flex items-center justify-center overflow-hidden">
+                        {previews.main ? <img src={previews.main} className="w-full h-full object-cover" /> : <UploadCloud className="w-6 h-6 text-neutral-300" />}
+                     </div>
+                     <Input type="file" accept="image/*" onChange={(e) => handleFileChange(e, 'main')} className="flex-1 rounded-xl cursor-pointer" />
                   </div>
                </div>
 
-               {imageUrls.length > 0 && (
-                 <div className="grid grid-cols-3 gap-2 p-3 bg-neutral-50 rounded-xl border border-neutral-100">
-                    {imageUrls.map((url, idx) => (
-                      <div key={idx} className={`relative group aspect-square rounded-lg overflow-hidden border-2 transition-all ${mainImageIndex === idx ? 'border-primary shadow-sm' : 'border-transparent bg-white'}`}>
-                        <img src={url} className="w-full h-full object-cover" alt="" />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                           <button
-                             type="button"
-                             onClick={() => setMainImageIndex(idx)}
-                             className={`p-1.5 rounded-md transition-transform hover:scale-110 ${mainImageIndex === idx ? 'bg-primary text-white' : 'bg-white text-primary'}`}
-                             title="Set as main image"
-                           >
-                              <Star className={`w-3.5 h-3.5 ${mainImageIndex === idx ? 'fill-current' : ''}`} />
-                           </button>
-                           <button
-                             type="button"
-                             onClick={() => removeImage(idx)}
-                             className="p-1.5 rounded-md bg-white text-red-500 transition-transform hover:scale-110"
-                             title="Remove image"
-                           >
-                              <Trash2 className="w-3.5 h-3.5" />
-                           </button>
-                        </div>
-                        {mainImageIndex === idx && (
-                           <div className="absolute top-1 left-1 bg-primary text-white px-1.5 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider shadow-sm">
-                              CARD
-                           </div>
-                        )}
-                      </div>
-                    ))}
-                 </div>
-               )}
+               <div className="space-y-2">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_gallery', 'Auxiliary Gallery')}</label>
+                  <Input type="file" multiple accept="image/*" onChange={(e) => handleFileChange(e, 'gallery')} className="rounded-xl cursor-pointer" />
+                  
+                  {(previews.gallery.length > 0 || existingImages.length > 0) && (
+                    <div className="grid grid-cols-4 gap-2 p-3 bg-neutral-50 rounded-xl border border-neutral-100 mt-2">
+                       {existingImages.map((url, idx) => (
+                         <div key={`existing-${idx}`} className="relative group aspect-square rounded-lg overflow-hidden border border-neutral-200">
+                            <img src={url} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                               <button type="button" onClick={() => {
+                                 setDeleteGalleryUrls(prev => [...prev, url])
+                                 setExistingImages(prev => prev.filter(u => u !== url))
+                               }} className="p-1.5 rounded-md bg-white text-red-500"><X className="w-3.5 h-3.5" /></button>
+                            </div>
+                         </div>
+                       ))}
+                       {previews.gallery.map((url, idx) => (
+                         <div key={`new-${idx}`} className="relative group aspect-square rounded-lg overflow-hidden border border-primary/20">
+                            <img src={url} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                               <button type="button" onClick={() => {
+                                 setPreviews(prev => ({ ...prev, gallery: prev.gallery.filter((_, i) => i !== idx) }))
+                                 setGalleryFiles(prev => prev.filter((_, i) => i !== idx))
+                               }} className="p-1.5 rounded-md bg-white text-red-500"><X className="w-3.5 h-3.5" /></button>
+                            </div>
+                         </div>
+                       ))}
+                    </div>
+                  )}
+               </div>
             </div>
 
             <div className="pt-4 flex gap-3">

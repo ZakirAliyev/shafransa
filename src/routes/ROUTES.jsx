@@ -10,6 +10,10 @@ import LoginPage from "../pages/auth/LoginPage"
 import RegisterPage from "../pages/auth/RegisterPage"
 import OTPPage from "../pages/auth/OTPPage"
 
+import TherapistListingPage from "../pages/public/TherapistListingPage"
+import TherapistDetailPage from "../pages/public/TherapistDetailPage"
+import TherapistRegisterPage from "../pages/public/TherapistRegisterPage"
+
 import GlobalError from "../components/ui/GlobalError"
 import GuestGuard from "../components/layout/GuestGuard"
 import AuthGuard from "../components/layout/AuthGuard"
@@ -69,6 +73,11 @@ export const ROUTES = [
       { path: "contact", element: <ContactPage /> },
       { path: "how-it-works", element: <HowItWorksPage /> },
       { path: "ai-consultant", element: <AIConsultant /> },
+      
+      // ── THERAPISTS ──
+      { path: "therapists", element: <TherapistListingPage /> },
+      { path: "therapist/:id", element: <TherapistDetailPage /> },
+      { path: "register-therapist", element: <AuthGuard><TherapistRegisterPage /></AuthGuard> },
     ]
   },
 
@@ -81,6 +90,7 @@ export const ROUTES = [
       { index: true, element: <UserProfile tab="profile" /> },
       { path: "orders",   element: <UserProfile tab="orders" /> },
       { path: "wishlist", element: <UserProfile tab="wishlist" /> },
+      { path: "sessions", element: <UserProfile tab="sessions" /> },
       { path: "settings", element: <UserProfile tab="settings" /> },
     ]
   },
@@ -109,6 +119,8 @@ export const ROUTES = [
       { path: "products",  element: <AdminPanel tab="products" /> },
       { path: "plants",    element: <AdminPanel tab="plants" /> },
       { path: "categories",element: <AdminPanel tab="categories" /> },
+      { path: "therapists",element: <AdminPanel tab="therapists" /> },
+      { path: "sessions",  element: <AdminPanel tab="sessions" /> },
     ]
   }
 ]
