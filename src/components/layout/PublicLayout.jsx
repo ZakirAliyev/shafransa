@@ -345,7 +345,7 @@ export default function PublicLayout() {
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-muted-foreground hover:bg-neutral-50 hover:text-[#1a1c1e] transition-colors"
               >
                 <ShoppingCart className="w-5 h-5" />
-                {t('cart', 'Cart')}
+                {t('cart.title', 'Cart')}
                 {cartCount > 0 && <span className="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{cartCount}</span>}
               </Link>
               {isAuthenticated && (

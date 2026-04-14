@@ -23,7 +23,7 @@ export default function SellerStorefrontPage() {
     </div>
   )
 
-  if (error || !data || !data.seller) return (
+  if (error || !storeData || !storeData.seller) return (
     <div className="text-center py-40 max-w-md mx-auto">
       <Store className="mx-auto h-12 w-12 text-rose-500 mb-4 opacity-50" />
       <p className="font-bold text-rose-500 text-lg">{t('store.not_found', 'Institution Not Found')}</p>
@@ -31,7 +31,7 @@ export default function SellerStorefrontPage() {
     </div>
   )
 
-  const { seller, products } = data
+  const { seller, products } = storeData
 
   return (
     <div className="min-h-screen bg-[#fafafa]">

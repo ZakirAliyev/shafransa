@@ -40,7 +40,7 @@ export default function EncyclopediaIndexPage() {
   })
 
   // Filter client-side
-  const herbList = Array.isArray(plants) ? plants : []
+  const herbList = plants?.data && Array.isArray(plants.data) ? plants.data : []
   const filtered = herbList.filter(p => {
     if (activeGrade && p.evidenceGrade !== activeGrade) return false
     if (activeContinent && p.continent !== activeContinent) return false

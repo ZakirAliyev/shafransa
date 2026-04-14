@@ -33,14 +33,14 @@ export default function HerbDetailsPage() {
     </div>
   )
 
-  if (error || !herb) return (
+  if (error || !herbData) return (
     <div className="text-center py-40 max-w-md mx-auto">
       <p className="font-bold text-rose-500 text-lg">{t('herb.not_found', 'Botanical entry not found')}</p>
       <Link to="/herbs" className="text-sm text-primary mt-4 block hover:underline">← {t('herb.back', 'Back to Herb Bank')}</Link>
     </div>
   )
 
-  const items = herb.products || []
+  const items = herbData.products || []
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-4 lg:px-8">
@@ -58,57 +58,57 @@ export default function HerbDetailsPage() {
           <div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 mb-3">
               <Badge className="bg-primary/10 text-primary border-primary/20 font-bold uppercase tracking-widest text-[10px] px-3">
-                {herb.evidenceGrade ? `${t('encyclopedia.grade', 'Grade')}: ${herb.evidenceGrade}` : t('herb.badge.default', "Clinical Monograph")}
+                {herbData.evidenceGrade ? `${t('encyclopedia.grade', 'Grade')}: ${herbData.evidenceGrade}` : t('herb.badge.default', "Clinical Monograph")}
               </Badge>
-              {herb.region && (
+              {herbData.region && (
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 border border-neutral-200 rounded-full px-3 py-1 flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> {herb.region}
+                  <MapPin className="w-3 h-3" /> {herbData.region}
                 </span>
               )}
             </div>
             <h1 className="text-4xl lg:text-5xl font-display font-bold text-[#1a1c1e] leading-tight flex items-center gap-4">
-              {herb.name}
+              {herbData.name}
             </h1>
 
-            {(herb.scientificName || herb.localName) && (
+            {(herbData.scientificName || herbData.localName) && (
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 mt-3 text-lg text-muted-foreground font-medium">
-                {herb.scientificName && <span className="italic">{herb.scientificName}</span>}
-                {herb.scientificName && herb.localName && <span className="hidden sm:inline text-neutral-300">•</span>}
-                {herb.localName && <span>{t('herb.local_name', 'Local')}: {herb.localName}</span>}
+                {herbData.scientificName && <span className="italic">{herbData.scientificName}</span>}
+                {herbData.scientificName && herbData.localName && <span className="hidden sm:inline text-neutral-300">•</span>}
+                {herbData.localName && <span>{t('herb.local_name', 'Local')}: {herbData.localName}</span>}
               </div>
             )}
           </div>
 
           <div className="prose prose-neutral max-w-none">
             <p className="text-lg text-muted-foreground leading-relaxed font-medium">
-              {herb.shortSummary || (herb.description?.substring(0, 150) + "...")}
+              {herbData.shortSummary || (herbData.description?.substring(0, 150) + "...")}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4 pt-4 border-t border-neutral-100">
             <div>
               <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('encyclopedia.filters.continent', 'Continent')}</div>
-              <div className="font-bold text-[#1a1c1e]">{herb.continent || "Global"}</div>
+              <div className="font-bold text-[#1a1c1e]">{herbData.continent || "Global"}</div>
             </div>
             <div>
               <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('herb.meta.terroir', 'Terroir')}</div>
-              <div className="font-bold text-[#1a1c1e]">{herb.terroir || "Varied"}</div>
+              <div className="font-bold text-[#1a1c1e]">{herbData.terroir || "Varied"}</div>
             </div>
             <div>
               <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('herb.meta.cultivation', 'Cultivation')}</div>
-              <div className="font-bold text-[#1a1c1e]">{herb.wildCultivated || "Wildcrafted"}</div>
+              <div className="font-bold text-[#1a1c1e]">{herbData.wildCultivated || "Wildcrafted"}</div>
             </div>
             <div>
               <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('herb.meta.chemotype', 'Chemotype')}</div>
-              <div className="font-bold text-[#1a1c1e]">{herb.chemotype || "Standard"}</div>
+              <div className="font-bold text-[#1a1c1e]">{herbData.chemotype || "Standard"}</div>
             </div>
           </div>
         </div>
 
         {/* Gallery Image */}
         <div className="relative aspect-square bg-[#f5f5f7] rounded-3xl overflow-hidden border border-neutral-100 flex items-center justify-center">
-          {herb.image ? (
-            <img src={herb.image} alt={herb.name} className="w-full h-full object-cover" />
+          {herbData.image ? (
+            <img src={herbData.image} alt={herbData.name} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center gap-4">
               <Leaf className="w-24 h-24 text-primary/10 stroke-1" />
@@ -144,24 +144,24 @@ export default function HerbDetailsPage() {
               <section>
                 <h2 className="text-2xl font-display font-bold text-[#1a1c1e] mb-4">{t('herb.sections.description', 'Botanical Description')}</h2>
                 <div className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed">
-                  {herb.description}
+                  {herbData.description}
                 </div>
               </section>
               <section>
                 <h2 className="text-2xl font-display font-bold text-[#1a1c1e] mb-4">{t('herb.sections.benefits', 'Therapeutic Benefits')}</h2>
                 <div className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed p-6 rounded-2xl bg-primary/5 border border-primary/10">
-                  {herb.benefits}
+                  {herbData.benefits}
                 </div>
               </section>
             </div>
             <div className="space-y-6">
               <div className="p-6 rounded-2xl bg-white border border-neutral-100 shadow-xl shadow-black/5">
                 <h3 className="font-bold text-[#1a1c1e] mb-4 flex items-center gap-2"><MapPin className="w-4 h-4 text-primary" /> {t('herb.meta.climate', 'Endemic Climate')}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{herb.climate || t('herb.climate_default', "Global adaptivity. Often found in temperate to subtropical zones.")}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{herbData.climate || t('herb.climate_default', "Global adaptivity. Often found in temperate to subtropical zones.")}</p>
               </div>
               <div className="p-6 rounded-2xl bg-white border border-neutral-100 shadow-xl shadow-black/5">
                 <h3 className="font-bold text-[#1a1c1e] mb-4 flex items-center gap-2"><Leaf className="w-4 h-4 text-primary" /> {t('herb.sections.usage', 'Traditional Usage')}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{herb.usage}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{herbData.usage}</p>
               </div>
             </div>
           </div>
@@ -175,7 +175,7 @@ export default function HerbDetailsPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-[#1a1c1e] mb-2">{t('herb.sections.compounds', 'Active Compounds')}</h3>
-                <p className="text-muted-foreground leading-relaxed">{herb.activeCompounds || t('herb.compounds_pending', "Pending precise spectrophotometry analytics.")}</p>
+                <p className="text-muted-foreground leading-relaxed">{herbData.activeCompounds || t('herb.compounds_pending', "Pending precise spectrophotometry analytics.")}</p>
               </div>
             </div>
 
@@ -185,7 +185,7 @@ export default function HerbDetailsPage() {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-[#1a1c1e] mb-2">{t('herb.sections.dosage', 'Clinical Dosage')}</h3>
-                <p className="text-muted-foreground leading-relaxed">{herb.dosage}</p>
+                <p className="text-muted-foreground leading-relaxed">{herbData.dosage}</p>
               </div>
             </div>
           </div>
@@ -198,7 +198,7 @@ export default function HerbDetailsPage() {
                 <AlertTriangle className="w-6 h-6 text-rose-500" />
                 <h3 className="text-xl font-bold text-rose-700">{t('herb.sections.contraindications', 'Contraindications')}</h3>
               </div>
-              <p className="text-rose-600/80 leading-relaxed font-medium">{herb.contraindications}</p>
+              <p className="text-rose-600/80 leading-relaxed font-medium">{herbData.contraindications}</p>
             </div>
 
             <div className="p-8 rounded-3xl bg-orange-50/50 border border-orange-100 space-y-4">
@@ -206,21 +206,21 @@ export default function HerbDetailsPage() {
                 <ShieldCheck className="w-6 h-6 text-orange-500" />
                 <h3 className="text-xl font-bold text-orange-700">{t('herb.sections.side_effects', 'Side Effects')}</h3>
               </div>
-              <p className="text-orange-600/80 leading-relaxed font-medium">{herb.sideEffects}</p>
+              <p className="text-orange-600/80 leading-relaxed font-medium">{herbData.sideEffects}</p>
             </div>
 
-            {(herb.drugInteractions || herb.pregnancyWarnings) && (
+            {(herbData.drugInteractions || herbData.pregnancyWarnings) && (
               <div className="md:col-span-2 p-8 rounded-3xl bg-white border border-neutral-200 shadow-xl shadow-black/5 space-y-6">
-                {herb.drugInteractions && (
+                {herbData.drugInteractions && (
                   <div>
                     <h4 className="text-sm font-bold uppercase tracking-widest text-[#1a1c1e] mb-2 border-b border-neutral-100 pb-2">{t('herb.sections.drug_interactions', 'Drug Interactions')}</h4>
-                    <p className="text-muted-foreground leading-relaxed">{herb.drugInteractions}</p>
+                    <p className="text-muted-foreground leading-relaxed">{herbData.drugInteractions}</p>
                   </div>
                 )}
-                {herb.pregnancyWarnings && (
+                {herbData.pregnancyWarnings && (
                   <div>
                     <h4 className="text-sm font-bold uppercase tracking-widest text-rose-500 mb-2 border-b border-rose-100 pb-2">{t('herb.sections.pregnancy_warnings', 'Pregnancy & Nursing Warnings')}</h4>
-                    <p className="text-muted-foreground leading-relaxed">{herb.pregnancyWarnings}</p>
+                    <p className="text-muted-foreground leading-relaxed">{herbData.pregnancyWarnings}</p>
                   </div>
                 )}
               </div>

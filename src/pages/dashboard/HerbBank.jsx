@@ -25,6 +25,8 @@ export default function HerbBank() {
     queryFn: () => getPlants({ search: debouncedSearch, category })
   })
 
+  const plantList = plants?.data || (Array.isArray(plants) ? plants : [])
+
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 space-y-8">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
@@ -68,7 +70,7 @@ export default function HerbBank() {
         <div className="text-destructive font-semibold">Failed to load plant database.</div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {plants?.map((plant) => (
+          {plantList?.map((plant) => (
              <Card onClick={() => navigate(`/herb/${plant.id}`)} key={plant.id} className="group overflow-hidden cursor-pointer transition-all hover:shadow-md hover:border-primary/50">
               <div className="aspect-[4/3] w-full bg-muted/50 p-6 flex flex-col justify-between relative">
                 {(plant.imageUrl || plant.image) && <img src={plant.imageUrl || plant.image} alt={plant.name} className="absolute inset-0 w-full h-full object-cover mix-blend-multiply opacity-50" />}
@@ -89,7 +91,7 @@ export default function HerbBank() {
               </CardContent>
             </Card>
           ))}
-          {plants?.length === 0 && (
+          {plantList?.length === 0 && (
              <div className="col-span-full text-center py-20 text-muted-foreground">No herbs found in database.</div>
           )}
         </div>

@@ -46,7 +46,7 @@ export default function SellerPanel({ tab = "overview" }) {
   const myProducts = Array.isArray(myProductsRaw) ? myProductsRaw : 
                      Array.isArray(myProductsRaw?.data) ? myProductsRaw.data : []
 
-  const orderItems = Array.isArray(orders) ? orders : []
+  const orderItems = orders?.data || (Array.isArray(orders) ? orders : [])
   const revenue = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
 
   const tabs = [

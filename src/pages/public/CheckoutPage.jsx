@@ -49,11 +49,14 @@ export default function CheckoutPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (cart?.items?.length === 0) return
+    const cartData = cart?.data || cart
+    const cartItems = cartData?.items || []
+    if (cartItems.length === 0) return
     mutate(formData)
   }
 
-  const cartItems = cart?.items || []
+  const cartData = cart?.data || cart
+  const cartItems = cartData?.items || []
   const subtotal = cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
 
   if (success) {

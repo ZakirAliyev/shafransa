@@ -9,11 +9,6 @@ export const getTherapistById = async (id) => {
 };
 
 export const registerAsTherapist = async (data) => {
-    if (data instanceof FormData) {
-        return api.post("/Therapists/register", data, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
-    }
     return api.post("/Therapists/register", data);
 };
 

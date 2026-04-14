@@ -49,21 +49,16 @@ export default function UserProfile({ tab = "profile" }) {
 
   const { mutate: updateProfile, isPending: updating } = useMutation({
     mutationFn: (data) => {
-      const fd = new FormData()
-      fd.append("fullName", data.fullName)
-      fd.append("email", data.email)
-      if (data.description) fd.append("description", data.description)
-      if (avatarFile) fd.append("avatarFile", avatarFile)
-      
-      return api.put("/user/me", fd, {
-        headers: { "Content-Type": "multipart/form-data" }
+      // Backend expects JSON for /User/me
+      return api.put("/user/me", {
+        fullName: data.fullName,
+        description: data.description
       })
     },
     onSuccess: () => {
       fetchMe()
       setSaveMessage(t('user.profile_updated', "Profile updated!"))
       setTimeout(() => setSaveMessage(""), 3000)
-      setAvatarFile(null)
     }
   })
 

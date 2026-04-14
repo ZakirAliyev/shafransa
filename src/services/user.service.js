@@ -5,11 +5,6 @@ export const getMe = async () => {
 };
 
 export const updateMe = async (data) => {
-    if (data instanceof FormData) {
-        return api.put("/User/me", data, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
-    }
     return api.put("/User/me", data);
 };
 

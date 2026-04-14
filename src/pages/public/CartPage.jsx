@@ -41,7 +41,8 @@ export default function CartPage() {
 
   if (!isAuthenticated) return null;
 
-  const cartItems = cart?.items || []
+  const cartData = cart?.data || cart
+  const cartItems = cartData?.items || []
   const subtotal = cartItems.reduce((acc, item) => acc + (item.product.price * item.quantity), 0)
   const shipping = 0 // For now, could be dynamic
 

@@ -88,8 +88,8 @@ export default function AdminPanel({ tab = "overview" }) {
 
   const users       = Array.isArray(usersData) ? usersData : (usersData?.data || [])
   const products    = Array.isArray(productsData) ? productsData : (productsData?.data || [])
-  const plants      = Array.isArray(plantsData) ? plantsData : []
-  const categories  = Array.isArray(categoriesData) ? categoriesData : []
+  const plants      = Array.isArray(plantsData) ? plantsData : (plantsData?.data || [])
+  const categories  = Array.isArray(categoriesData) ? categoriesData : (categoriesData?.data || [])
   const isOnline    = healthData?.status === "ok"
 
   // ── Mutations ──
@@ -306,6 +306,9 @@ export default function AdminPanel({ tab = "overview" }) {
       toast.success(t('admin.plants.updated', 'Plant entry updated!'))
     },
   })
+
+  const requests = therapistRequests?.data || (Array.isArray(therapistRequests) ? therapistRequests : [])
+  const therapists = allTherapists?.data || (Array.isArray(allTherapists) ? allTherapists : [])
 
   return (
     <div className="max-w-7xl mx-auto p-6 md:p-10 space-y-10">
@@ -818,7 +821,7 @@ export default function AdminPanel({ tab = "overview" }) {
               <CardContent className="p-8">
                  {loadingRequests ? (
                    <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
-                 ) : !therapistRequests || therapistRequests.length === 0 ? (
+                 ) : !requests || requests.length === 0 ? (
                    <p className="text-center text-white/30 py-16 font-bold">{t('admin.therapists.no_requests', 'No pending requests.')}</p>
                  ) : (
                    <div className="overflow-x-auto">
@@ -832,7 +835,7 @@ export default function AdminPanel({ tab = "overview" }) {
                             </tr>
                          </thead>
                          <tbody className="divide-y divide-white/[0.02]">
-                            {therapistRequests.map((req) => (
+                            {requests.map((req) => (
                                <tr key={req.id} className="hover:bg-white/[0.02] transition-colors group">
                                   <td className="px-6 py-5">
                                      <div className="font-bold text-white">{req.fullName}</div>
@@ -886,11 +889,11 @@ export default function AdminPanel({ tab = "overview" }) {
               <CardContent className="p-8">
                  {loadingTherapists ? (
                    <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
-                 ) : !allTherapists || allTherapists.length === 0 ? (
+                 ) : !therapists || therapists.length === 0 ? (
                    <p className="text-center text-white/30 py-16 font-bold">{t('admin.therapists.no_therapists', 'No therapists found.')}</p>
                  ) : (
                    <div className="grid gap-4">
-                      {allTherapists.map((t) => (
+                      {therapists.map((t) => (
                         <div key={t.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5">
                            <div className="flex items-center gap-4">
                               <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden flex-shrink-0">

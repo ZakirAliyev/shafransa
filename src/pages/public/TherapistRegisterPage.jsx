@@ -37,17 +37,14 @@ export default function TherapistRegisterPage() {
 
   const { mutate: register, isPending: registering } = useMutation({
     mutationFn: (data) => {
-      const fd = new FormData()
-      Object.entries(data).forEach(([key, value]) => {
-        if (value) fd.append(key, value)
+      // Backend expects JSON for /Therapists/register
+      return registerAsTherapist({
+        email: data.email,
+        password: data.password,
+        phoneNumber: data.phoneNumber,
+        specialization: data.specialization,
+        bio: data.bio
       })
-      if (cvFile) fd.append("CvFile", cvFile)
-      if (profileImageFile) fd.append("ProfileImageFile", profileImageFile)
-      certificateFiles.forEach(file => {
-        fd.append("CertificateFiles", file)
-      })
-      
-      return registerAsTherapist(fd)
     },
     onSuccess: () => {
       toast.success(t('therapists.registration_success', 'Application submitted successfully!'))
@@ -168,112 +165,6 @@ export default function TherapistRegisterPage() {
                           placeholder="••••••••"
                           required
                           className="h-12 bg-neutral-50/50 border-neutral-200"
-                       />
-                    </div>
-
-                    <div className="space-y-8 py-6 border-y border-neutral-100">
-                       <h3 className="text-xs font-bold uppercase tracking-widest text-primary">{t('therapists.documentation', 'Clinical Documentation')}</h3>
-                       
-                       <div className="grid md:grid-cols-2 gap-8">
-                          {/* Profile Photo */}
-                          <div className="space-y-4">
-                             <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.avatar_photo', 'Profile Photo')}</label>
-                             <div className="flex items-center gap-4">
-                                <div className="w-20 h-20 rounded-2xl bg-neutral-50 border border-neutral-200 flex items-center justify-center overflow-hidden relative group">
-                                   {previews.profile ? <img src={previews.profile} className="w-full h-full object-cover" /> : <User className="w-8 h-8 text-neutral-200" />}
-                                   <label className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
-                                      <Camera className="w-5 h-5 text-white" />
-                                      <input 
-                                         type="file" 
-                                         accept="image/*" 
-                                         className="hidden" 
-                                         onChange={(e) => {
-                                            const file = e.target.files[0]
-                                            if (file) {
-                                               setProfileImageFile(file)
-                                               setPreviews(p => ({ ...p, profile: URL.createObjectURL(file) }))
-                                            }
-                                         }}
-                                      />
-                                   </label>
-                                </div>
-                                <p className="text-[9px] text-muted-foreground leading-tight max-w-[120px]">Used for your public specialist profile.</p>
-                             </div>
-                          </div>
-
-                          {/* CV Upload */}
-                          <div className="space-y-4">
-                             <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.cv_upload', 'CV / Resume (PDF)')}</label>
-                             <div className={`relative h-20 rounded-2xl border-2 border-dashed transition-all flex items-center justify-center ${cvFile ? 'border-emerald-200 bg-emerald-50' : 'border-neutral-200 hover:border-primary/20 bg-neutral-50'}`}>
-                                {cvFile ? (
-                                   <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs">
-                                      <FileText className="w-4 h-4" /> {cvFile.name.substring(0, 15)}...
-                                      <button onClick={() => setCvFile(null)}><X className="w-3 h-3 ml-2 text-rose-500" /></button>
-                                   </div>
-                                ) : (
-                                   <label className="cursor-pointer flex flex-col items-center">
-                                      <Upload className="w-5 h-5 text-neutral-300 mb-1" />
-                                      <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-400">Select File</span>
-                                      <input 
-                                         type="file" 
-                                         accept=".pdf,.doc,.docx" 
-                                         className="hidden" 
-                                         onChange={(e) => setCvFile(e.target.files[0])}
-                                      />
-                                   </label>
-                                )}
-                             </div>
-                          </div>
-                       </div>
-
-                       {/* Certificates */}
-                       <div className="space-y-4">
-                          <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.certificates', 'Clinical Certificates & Accreditations')}</label>
-                          <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
-                             {previews.certs.map((url, idx) => (
-                                <div key={idx} className="aspect-square rounded-xl bg-neutral-100 border border-neutral-200 overflow-hidden relative group">
-                                   <img src={url} className="w-full h-full object-cover" />
-                                   <button 
-                                      onClick={() => {
-                                         const newFiles = [...certificateFiles]
-                                         const newPreviews = [...previews.certs]
-                                         newFiles.splice(idx, 1)
-                                         newPreviews.splice(idx, 1)
-                                         setCertificateFiles(newFiles)
-                                         setPreviews(p => ({ ...p, certs: newPreviews }))
-                                      }}
-                                      className="absolute inset-0 bg-rose-500/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                                   >
-                                      <Trash2 className="w-4 h-4 text-white" />
-                                   </button>
-                                </div>
-                             ))}
-                             <label className="aspect-square rounded-xl border-2 border-dashed border-neutral-200 flex flex-col items-center justify-center cursor-pointer hover:bg-neutral-50 transition-colors">
-                                <Plus className="w-5 h-5 text-neutral-300" />
-                                <input 
-                                   type="file" 
-                                   multiple 
-                                   accept="image/*" 
-                                   className="hidden" 
-                                   onChange={(e) => {
-                                      const files = Array.from(e.target.files)
-                                      setCertificateFiles(prev => [...prev, ...files])
-                                      setPreviews(p => ({ ...p, certs: [...p.certs, ...files.map(f => URL.createObjectURL(f))] }))
-                                   }}
-                                />
-                             </label>
-                          </div>
-                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                       <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.label_bio', 'Professional Bio / Clinical Approach')}</label>
-                       <textarea 
-                          value={formData.bio} 
-                          onChange={(e) => setFormData({...formData, bio: e.target.value})}
-                          placeholder="Describe your methods, focus areas, and clinical experience..."
-                          required
-                          className="w-full min-h-[120px] p-4 rounded-xl bg-neutral-50/50 border border-neutral-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all"
                        />
                     </div>
 

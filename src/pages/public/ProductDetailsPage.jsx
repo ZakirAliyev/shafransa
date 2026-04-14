@@ -113,18 +113,20 @@ export default function ProductDetailsPage() {
     </div>
   )
 
-  if (error || !product) return (
+  const productData = product?.data || product
+
+  if (error || !productData) return (
     <div className="text-center py-40 max-w-md mx-auto">
       <p className="font-bold text-rose-500 text-lg">{t('product.not_found', 'Product not found')}</p>
       <Link to="/marketplace" className="text-sm text-primary mt-4 block hover:underline">← {t('product.back', 'Back to Marketplace')}</Link>
     </div>
   )
 
-  const images = [product.image, ...(product.images || [])].filter(Boolean)
-  const displayImage = mainImage || product.image
-  const avgRating = product.avgRating || 0
-  const related = product.related || []
-  const reviews = product.reviews || []
+  const images = [productData.image, ...(productData.images || [])].filter(Boolean)
+  const displayImage = mainImage || productData.image
+  const avgRating = productData.avgRating || 0
+  const related = productData.related || []
+  const reviews = productData.reviews || []
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-4 lg:px-8">
@@ -174,20 +176,20 @@ export default function ProductDetailsPage() {
         <div className="space-y-6">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              {product.category && (
+              {productData.category && (
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 border border-neutral-200 rounded-full px-3 py-1">
-                  {product.category.name}
+                  {productData.category.name}
                 </span>
               )}
-              {product.form && (
+              {productData.form && (
                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 border border-neutral-200 rounded-full px-3 py-1">
-                  {product.form}
+                  {productData.form}
                 </span>
               )}
             </div>
-            <h1 className="text-3xl lg:text-4xl font-display font-bold text-[#1a1c1e] leading-tight">{product.title}</h1>
-            {product.scientificName && (
-              <div className="italic text-lg text-muted-foreground mt-1">{product.scientificName}</div>
+            <h1 className="text-3xl lg:text-4xl font-display font-bold text-[#1a1c1e] leading-tight">{productData.title}</h1>
+            {productData.scientificName && (
+              <div className="italic text-lg text-muted-foreground mt-1">{productData.scientificName}</div>
             )}
           </div>
 
@@ -199,37 +201,37 @@ export default function ProductDetailsPage() {
               ))}
             </div>
             <span className="font-bold text-sm text-[#1a1c1e]">{avgRating.toFixed(1)}</span>
-            <span className="text-sm text-muted-foreground">({product._count?.reviews || 0} {t('product.reviews_count', 'reviews')})</span>
+            <span className="text-sm text-muted-foreground">({productData._count?.reviews || 0} {t('product.reviews_count', 'reviews')})</span>
           </div>
 
           {/* Price */}
           <div className="flex items-baseline gap-3">
-            <span className="text-4xl font-display font-bold text-[#1a1c1e]">${product.price}</span>
-            {product.originalPrice && (
+            <span className="text-4xl font-display font-bold text-[#1a1c1e]">${productData.price}</span>
+            {productData.originalPrice && (
               <>
-                <span className="text-xl line-through text-muted-foreground">${product.originalPrice}</span>
+                <span className="text-xl line-through text-muted-foreground">${productData.originalPrice}</span>
                 <Badge className="bg-rose-50 text-rose-600 border-rose-100 font-bold">
-                  {t('product.discount', 'Save {{percent}}%', { percent: Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) })}
+                  {t('product.discount', 'Save {{percent}}%', { percent: Math.round(((productData.originalPrice - productData.price) / productData.originalPrice) * 100) })}
                 </Badge>
               </>
             )}
           </div>
 
           {/* Seller */}
-          <Link to={`/seller/${product.seller?.id}`} className="flex items-center gap-3 p-4 rounded-2xl border border-neutral-100 hover:border-primary/20 hover:bg-primary/[0.02] transition-colors">
+          <Link to={`/seller/${productData.seller?.id}`} className="flex items-center gap-3 p-4 rounded-2xl border border-neutral-100 hover:border-primary/20 hover:bg-primary/[0.02] transition-colors">
             <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
-              {product.seller?.fullName?.charAt(0)}
+              {productData.seller?.fullName?.charAt(0)}
             </div>
             <div>
-              <div className="font-bold text-sm text-[#1a1c1e]">{product.seller?.fullName}</div>
+              <div className="font-bold text-sm text-[#1a1c1e]">{productData.seller?.fullName}</div>
               <div className="text-xs text-muted-foreground">{t('product.seller_badge', 'Verified Seller → View Storefront')}</div>
             </div>
           </Link>
 
           {/* Stock */}
-          <div className={`flex items-center gap-2 text-sm font-bold ${product.stock > 0 ? "text-emerald-600" : "text-rose-500"}`}>
-            <div className={`w-2 h-2 rounded-full ${product.stock > 0 ? "bg-emerald-500" : "bg-rose-500"}`} />
-            {product.stock > 0 ? t('product.stock_status', '{{count}} units in stock', { count: product.stock }) : t('product.out_of_stock', "Out of stock")}
+          <div className={`flex items-center gap-2 text-sm font-bold ${productData.stock > 0 ? "text-emerald-600" : "text-rose-500"}`}>
+            <div className={`w-2 h-2 rounded-full ${productData.stock > 0 ? "bg-emerald-500" : "bg-rose-500"}`} />
+            {productData.stock > 0 ? t('product.stock_status', '{{count}} units in stock', { count: productData.stock }) : t('product.out_of_stock', "Out of stock")}
           </div>
 
           {/* Qty + Actions */}
@@ -305,11 +307,11 @@ export default function ProductDetailsPage() {
 
       {activeTab === "Description" && (
         <div className="prose prose-neutral max-w-none">
-          <p className="text-muted-foreground text-base leading-relaxed">{product.description}</p>
-          {product.region && (
+          <p className="text-muted-foreground text-base leading-relaxed">{productData.description}</p>
+          {productData.region && (
             <div className="mt-6 p-5 rounded-2xl bg-neutral-50 border border-neutral-100">
               <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('product.meta.region', 'Origin Region')}</div>
-              <div className="font-bold text-[#1a1c1e]">{product.region}</div>
+              <div className="font-bold text-[#1a1c1e]">{productData.region}</div>
             </div>
           )}
         </div>
@@ -317,13 +319,13 @@ export default function ProductDetailsPage() {
 
       {activeTab === "Compounds" && (
         <div className="space-y-6">
-          {product.activeCompounds ? (
+          {productData.activeCompounds ? (
             <div className="p-6 rounded-2xl bg-neutral-50 border border-neutral-100">
               <div className="flex items-center gap-2 mb-4">
                 <Microscope className="w-5 h-5 text-primary" />
                 <h3 className="font-bold text-[#1a1c1e]">{t('product.tabs.compounds', 'Active Compounds')}</h3>
               </div>
-              <p className="text-muted-foreground leading-relaxed">{product.activeCompounds}</p>
+              <p className="text-muted-foreground leading-relaxed">{productData.activeCompounds}</p>
             </div>
           ) : (
             <div className="text-center py-16 text-muted-foreground">
@@ -337,10 +339,10 @@ export default function ProductDetailsPage() {
       {activeTab === "Quality" && (
         <div className="space-y-4">
           {[
-            { label: t('product.meta.batch', "Batch Number"), value: product.batchNumber || t('common.see_packaging', "See packaging"), icon: Package },
-            { label: t('product.meta.form', "Form"), value: product.form || t('common.raw', "Raw"), icon: Leaf },
-            { label: t('product.meta.status', "Verification Status"), value: product.verified ? t('product.verified_yes', "Lab Verified ✓") : t('product.verified_no', "Standard"), icon: ShieldCheck },
-            { label: t('product.meta.origin', "Region of Origin"), value: product.region || t('common.pending', "Information pending"), icon: Info },
+            { label: t('product.meta.batch', "Batch Number"), value: productData.batchNumber || t('common.see_packaging', "See packaging"), icon: Package },
+            { label: t('product.meta.form', "Form"), value: productData.form || t('common.raw', "Raw"), icon: Leaf },
+            { label: t('product.meta.status', "Verification Status"), value: productData.verified ? t('product.verified_yes', "Lab Verified ✓") : t('product.verified_no', "Standard"), icon: ShieldCheck },
+            { label: t('product.meta.origin', "Region of Origin"), value: productData.region || t('common.pending', "Information pending"), icon: Info },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-4 p-5 rounded-2xl bg-neutral-50 border border-neutral-100">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
