@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
@@ -45,10 +45,10 @@ export default function ProductDetailsPage() {
   const isWishlisted = wishlistStore.isInWishlist(id)
 
   const { mutate: addCartItem, isPending: addingCart } = useMutation({
-    mutationFn: () => addToCart(product.id, qty),
+    mutationFn: () => addToCart(productData.id, qty),
     onSuccess: () => {
       queryClient.invalidateQueries(["cart"])
-      toast.success(t('product.cart.added', '{{title}} added to cart!', { title: product.title }))
+      toast.success(t('product.cart.added', '{{title}} added to cart!', { title: productData.title }))
     },
     onError: () => toast.error(t('product.cart.error', 'Failed to add to cart')),
   })
@@ -142,7 +142,7 @@ export default function ProductDetailsPage() {
         {/* Gallery */}
         <div className="space-y-4">
           <div className="relative aspect-square bg-[#f5f5f7] rounded-3xl overflow-hidden border border-neutral-100 flex items-center justify-center">
-            {product.verified && (
+            {productData.verified && (
               <div className="absolute top-4 left-4 z-10">
                 <Badge className="bg-white/95 backdrop-blur-sm text-primary border-primary/20 font-bold px-2.5 py-1 text-[10px]">
                   <ShieldCheck className="w-3 h-3 mr-1" /> {t('product.verified_badge', 'LAB VERIFIED')}
@@ -150,7 +150,7 @@ export default function ProductDetailsPage() {
               </div>
             )}
             {displayImage ? (
-              <img src={displayImage} alt={product.title} className="w-full h-full object-cover" />
+              <img src={displayImage} alt={productData.title} className="w-full h-full object-cover" />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
                 <Leaf className="w-24 h-24 text-primary/10 stroke-1" />
@@ -240,7 +240,7 @@ export default function ProductDetailsPage() {
               <div className="flex items-center border border-neutral-200 rounded-xl overflow-hidden">
                 <button onClick={() => setQty(q => Math.max(1, q - 1))} className="px-4 py-3 font-bold text-muted-foreground hover:bg-neutral-50 transition-colors">−</button>
                 <span className="px-5 font-bold text-[#1a1c1e]">{qty}</span>
-                <button onClick={() => setQty(q => Math.min(product.stock, q + 1))} className="px-4 py-3 font-bold text-muted-foreground hover:bg-neutral-50 transition-colors">+</button>
+                <button onClick={() => setQty(q => Math.min(productData.stock, q + 1))} className="px-4 py-3 font-bold text-muted-foreground hover:bg-neutral-50 transition-colors">+</button>
               </div>
               <button
                 onClick={handleWishlist}
@@ -255,7 +255,7 @@ export default function ProductDetailsPage() {
 
             <button
               onClick={handleBuyNow}
-              disabled={product.stock === 0 || addingCart}
+              disabled={productData.stock === 0 || addingCart}
               className="w-full h-14 rounded-2xl bg-primary text-white font-bold text-base shadow-xl shadow-primary/25 hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {addingCart ? <Loader2 className="w-5 h-5 animate-spin" /> : <>{t('product.buy_now', 'Buy Now')} <ArrowRight className="w-5 h-5" /></>}
@@ -263,7 +263,7 @@ export default function ProductDetailsPage() {
 
             <button
               onClick={handleAddToCart}
-              disabled={product.stock === 0 || addingCart}
+              disabled={productData.stock === 0 || addingCart}
               className="w-full h-12 rounded-2xl border-2 border-[#1a1c1e] text-[#1a1c1e] font-bold text-sm hover:bg-[#1a1c1e] hover:text-white transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <ShoppingCart className="w-4 h-4" /> {t('product.add_to_cart', 'Add to Cart')}
@@ -366,7 +366,7 @@ export default function ProductDetailsPage() {
               <div className="flex justify-center mt-2">
                 {[1, 2, 3, 4, 5].map((s) => <Star key={s} className={`w-5 h-5 ${s <= Math.round(avgRating) ? "text-amber-400 fill-current" : "text-neutral-200 fill-current"}`} />)}
               </div>
-              <div className="text-sm text-muted-foreground mt-1">{product._count?.reviews || 0} {t('product.reviews_count', 'reviews')}</div>
+              <div className="text-sm text-muted-foreground mt-1">{productData._count?.reviews || 0} {t('product.reviews_count', 'reviews')}</div>
             </div>
           </div>
 

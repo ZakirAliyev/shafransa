@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { Button } from "../../components/ui/Button"
@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Leaf, ArrowRight, ShieldCheck, Zap, Globe, Eye, EyeOff } from "lucide-react"
 import { useAuthStore } from "../../store/useAuthStore"
 import { toast } from "../../store/useToastStore"
+import { getRoleName } from "../../constants/roles"
 
 export default function LoginPage() {
   const { t } = useTranslation()
@@ -15,7 +16,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
-  const { login } = useAuthStore()
+  const { login, user, isAuthenticated } = useAuthStore()
+
+  // Redirect when authentication state changes
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const role = getRoleName(user?.role)
+      console.log("🔐 Login successful! User role:", role)
+      if (role === "ADMIN" || role === "EDITOR") navigate("/admin")
+      else if (role === "SELLER") navigate("/seller")
+      else navigate("/user")
+    }
+  }, [isAuthenticated, user, navigate])
 
   const onSubmit = async (e) => {
     e.preventDefault()
@@ -23,14 +35,8 @@ export default function LoginPage() {
     try {
       await login({ email, password })
       toast.success(t('auth.login_success', "Welcome back! Redirecting..."))
-      const user = useAuthStore.getState().user
-      const role = user?.role?.toUpperCase()
-      if (role === "ADMIN") navigate("/admin")
-      else if (role === "SELLER") navigate("/seller")
-      else navigate("/user")
     } catch (err) {
       toast.error(err?.response?.data?.message || t('auth.login_error', "Invalid credentials. Please try again."))
-    } finally {
       setIsLoading(false)
     }
   }

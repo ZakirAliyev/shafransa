@@ -5,7 +5,7 @@ export const checkout = async (data) => {
 };
 
 export const getMyOrders = async () => {
-  return await api.get("/orders");
+  return await api.get("/orders/my");  // ✅ Backend route is /orders/my
 };
 
 export const getSellerOrders = async () => {

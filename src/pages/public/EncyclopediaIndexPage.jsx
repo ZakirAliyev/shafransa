@@ -39,8 +39,9 @@ export default function EncyclopediaIndexPage() {
     queryFn: () => getPlants(queryParams),
   })
 
-  // Filter client-side
-  const herbList = plants?.data && Array.isArray(plants.data) ? plants.data : []
+  // The interceptor unwraps {statusCode, message, data} → returns raw backend payload
+  // Plants endpoint returns a plain array directly
+  const herbList = Array.isArray(plants) ? plants : (Array.isArray(plants?.data) ? plants.data : [])
   const filtered = herbList.filter(p => {
     if (activeGrade && p.evidenceGrade !== activeGrade) return false
     if (activeContinent && p.continent !== activeContinent) return false

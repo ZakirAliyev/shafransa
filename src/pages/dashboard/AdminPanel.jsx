@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import api from "../../services/api"
+import { getRoleName } from "../../constants/roles"
 import { getProducts } from "../../services/product.service"
 import { getPlants, createPlant, deletePlant } from "../../services/plant.service"
 import { getCategories, createCategory, deleteCategory } from "../../services/category.service"
@@ -43,10 +44,7 @@ export default function AdminPanel({ tab = "overview" }) {
 
   const { data: usersData, isLoading: loadingUsers } = useQuery({
     queryKey: ["admin", "users"],
-    queryFn: async () => {
-      const res = await api.get("/users")
-      return res.data
-    },
+    queryFn: () => api.get("/user"),
     enabled: activeTab === "users" || activeTab === "overview",
   })
 
@@ -70,23 +68,17 @@ export default function AdminPanel({ tab = "overview" }) {
 
   const { data: therapistRequests, isLoading: loadingRequests } = useQuery({
     queryKey: ["admin", "therapist-requests"],
-    queryFn: async () => {
-      const res = await api.get("/Therapists/requests")
-      return res.data
-    },
+    queryFn: () => api.get("/therapists/requests"),
     enabled: activeTab === "therapists"
   })
 
   const { data: allTherapists, isLoading: loadingTherapists } = useQuery({
     queryKey: ["admin", "therapists"],
-    queryFn: async () => {
-      const res = await api.get("/Therapists")
-      return res.data
-    },
+    queryFn: () => api.get("/therapists"),
     enabled: activeTab === "therapists"
   })
 
-  const users       = Array.isArray(usersData) ? usersData : (usersData?.data || [])
+  const users       = Array.isArray(usersData) ? usersData : []
   const products    = Array.isArray(productsData) ? productsData : (productsData?.data || [])
   const plants      = Array.isArray(plantsData) ? plantsData : (plantsData?.data || [])
   const categories  = Array.isArray(categoriesData) ? categoriesData : (categoriesData?.data || [])
@@ -307,8 +299,8 @@ export default function AdminPanel({ tab = "overview" }) {
     },
   })
 
-  const requests = therapistRequests?.data || (Array.isArray(therapistRequests) ? therapistRequests : [])
-  const therapists = allTherapists?.data || (Array.isArray(allTherapists) ? allTherapists : [])
+  const requests = Array.isArray(therapistRequests) ? therapistRequests : (therapistRequests?.data || [])
+  const therapists = Array.isArray(allTherapists) ? allTherapists : (allTherapists?.data || [])
 
   return (
     <div className="max-w-7xl mx-auto p-6 md:p-10 space-y-10">
@@ -385,9 +377,14 @@ export default function AdminPanel({ tab = "overview" }) {
                         <td className="px-6 py-5 font-bold text-white whitespace-nowrap">{u.fullName}</td>
                         <td className="px-6 py-5 text-white/40">{u.email}</td>
                         <td className="px-6 py-5">
-                          <Badge className={`${u.role === 'ADMIN' ? 'bg-rose-500/10 text-rose-500' : u.role === 'SELLER' ? 'bg-blue-500/10 text-blue-500' : 'bg-white/5 text-white/60'} border-none font-bold text-[9px] px-2 py-0`}>
-                            {u.role}
-                          </Badge>
+                          {(() => {
+                            const roleStr = getRoleName(u.role);
+                            return (
+                              <Badge className={`${roleStr === 'ADMIN' || roleStr === 'EDITOR' ? 'bg-rose-500/10 text-rose-500' : roleStr === 'SELLER' ? 'bg-blue-500/10 text-blue-500' : 'bg-white/5 text-white/60'} border-none font-bold text-[9px] px-2 py-0`}>
+                                {roleStr}
+                              </Badge>
+                            );
+                          })()}
                         </td>
                         <td className="px-6 py-5 text-right">
                           <button className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-400 opacity-20 group-hover:opacity-100 transition-opacity">
@@ -849,7 +846,7 @@ export default function AdminPanel({ tab = "overview" }) {
                                            size="sm" 
                                            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
                                            onClick={async () => {
-                                              await api.post(`/Therapists/requests/${req.id}/approve`)
+                                              await api.post(`/therapists/requests/${req.id}/approve`)
                                               queryClient.invalidateQueries(["admin", "therapist-requests"])
                                               queryClient.invalidateQueries(["admin", "therapists"])
                                               toast.success("Therapist approved!")
@@ -863,7 +860,7 @@ export default function AdminPanel({ tab = "overview" }) {
                                            onClick={async () => {
                                               const reason = prompt("Enter rejection reason:")
                                               if (reason) {
-                                                 await api.post(`/Therapists/requests/${req.id}/reject`, { reason })
+                                                 await api.post(`/therapists/requests/${req.id}/reject`, { reason })
                                                  queryClient.invalidateQueries(["admin", "therapist-requests"])
                                                  toast.info("Request rejected.")
                                               }
@@ -893,20 +890,20 @@ export default function AdminPanel({ tab = "overview" }) {
                    <p className="text-center text-white/30 py-16 font-bold">{t('admin.therapists.no_therapists', 'No therapists found.')}</p>
                  ) : (
                    <div className="grid gap-4">
-                      {therapists.map((t) => (
-                        <div key={t.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5">
+                      {therapists.map((therapist) => (
+                        <div key={therapist.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5">
                            <div className="flex items-center gap-4">
                               <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden flex-shrink-0">
-                                 {t.avatar && <img src={t.avatar} className="w-full h-full object-cover" alt="" />}
+                                 {therapist.avatar && <img src={therapist.avatar} className="w-full h-full object-cover" alt="" />}
                               </div>
                               <div>
-                                 <div className="font-bold text-white">{t.fullName}</div>
-                                 <div className="text-xs text-white/30 mt-0.5">{t.specialization} • {t.rating} ⭐</div>
+                                 <div className="font-bold text-white">{therapist.fullName}</div>
+                                 <div className="text-xs text-white/30 mt-0.5">{therapist.specialization} • {therapist.rating} ⭐</div>
                               </div>
                            </div>
                            <div className="flex items-center gap-3">
-                              <Badge className={`${t.isVerified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'} border-none font-bold text-[9px]`}>
-                                 {t.isVerified ? "VERIFIED" : "PENDING"}
+                              <Badge className={`${therapist.isVerified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'} border-none font-bold text-[9px]`}>
+                                 {therapist.isVerified ? "VERIFIED" : "PENDING"}
                               </Badge>
                               <button className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-400">
                                  <Trash2 className="w-4 h-4" />

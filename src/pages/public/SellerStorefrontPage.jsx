@@ -11,10 +11,18 @@ export default function SellerStorefrontPage() {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const { data, isLoading, error } = useQuery({
+  const { data: rawData, isLoading, error } = useQuery({
     queryKey: ["sellerProducts", id],
     queryFn: () => getSellerProducts(id),
   })
+
+  // rawData is { data: [...products], pagination: {...} } because GET /products wraps in pagination
+  // Filter products by sellerId client-side
+  const allProducts = Array.isArray(rawData) ? rawData : (Array.isArray(rawData?.data) ? rawData.data : [])
+  const products = allProducts.filter(p => p.seller?.id === id || p.sellerId === id)
+  
+  // Extract seller info from the first matching product
+  const sellerInfo = products[0]?.seller || null
 
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -23,7 +31,7 @@ export default function SellerStorefrontPage() {
     </div>
   )
 
-  if (error || !storeData || !storeData.seller) return (
+  if (error || !sellerInfo) return (
     <div className="text-center py-40 max-w-md mx-auto">
       <Store className="mx-auto h-12 w-12 text-rose-500 mb-4 opacity-50" />
       <p className="font-bold text-rose-500 text-lg">{t('store.not_found', 'Institution Not Found')}</p>
@@ -31,7 +39,14 @@ export default function SellerStorefrontPage() {
     </div>
   )
 
-  const { seller, products } = storeData
+  const seller = {
+    id: sellerInfo.id || id,
+    fullName: sellerInfo.fullName || sellerInfo.fullname || "Unknown Seller",
+    avatar: sellerInfo.avatar || null,
+    description: sellerInfo.description || null,
+    createdAt: sellerInfo.createdAt || new Date().toISOString(),
+  }
+
 
   return (
     <div className="min-h-screen bg-[#fafafa]">

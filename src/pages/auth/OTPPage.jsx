@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ShieldCheck } from "lucide-react"
 import { useAuthStore } from "../../store/useAuthStore"
 import { toast } from "../../store/useToastStore"
+import { getRoleName } from "../../constants/roles"
 
 export default function OTPPage() {
   const { t } = useTranslation()
@@ -15,7 +16,7 @@ export default function OTPPage() {
   const [otp, setOtp] = useState("")
   const navigate = useNavigate()
   const location = useLocation()
-  const { verifyOTP } = useAuthStore()
+  const { verifyOTP, user, isAuthenticated } = useAuthStore()
   
   const email = location.state?.email
 
@@ -25,6 +26,17 @@ export default function OTPPage() {
       navigate("/register")
     }
   }, [email, navigate, t])
+
+  // Redirect when authentication state changes after OTP verification
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      const role = getRoleName(user?.role)
+      console.log("✅ OTP verification successful! User role:", role)
+      if (role === "ADMIN" || role === "EDITOR") navigate("/admin")
+      else if (role === "SELLER") navigate("/seller")
+      else navigate("/user")
+    }
+  }, [isAuthenticated, user, navigate])
 
   useEffect(() => {
     if (timeLeft <= 0) return
@@ -38,16 +50,8 @@ export default function OTPPage() {
     try {
       await verifyOTP(email, otp)
       toast.success(t('auth.verify_success', "Verification successful!"))
-      
-      const user = useAuthStore.getState().user
-      const role = user?.role?.toUpperCase() || "MEMBER"
-      
-      if (role === "ADMIN") navigate("/admin")
-      else if (role === "SELLER") navigate("/seller")
-      else navigate("/user")
     } catch (err) {
       toast.error(err?.message || err?.response?.data?.message || t('auth.invalid_otp', "Invalid verification code"))
-    } finally {
       setIsLoading(false)
     }
   }

@@ -1,13 +1,11 @@
 import api from "./api"
 
-// api.js interceptor already unwraps response.data
+// ✅ Interceptor already unwraps response.data
 
 export const createReview = async (productId, data) => {
-  const res = await api.post(`/reviews/${productId}`, data)
-  return res.data
+  return await api.post(`/reviews/${productId}`, data)
 }
 
 export const getProductReviews = async (productId) => {
-  const res = await api.get(`/reviews/${productId}`)
-  return res.data
+  return await api.get(`/reviews/${productId}`)
 }

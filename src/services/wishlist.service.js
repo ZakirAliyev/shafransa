@@ -1,10 +1,9 @@
 import api from "./api"
 
-// api.js interceptor already unwraps response.data
+// ✅ Interceptor already unwraps response.data
 
 export const getWishlist = async () => {
-  const res = await api.get("/wishlist")
-  return res.data
+  return await api.get("/wishlist")
 }
 
 export const toggleWishlist = async (productId) => {

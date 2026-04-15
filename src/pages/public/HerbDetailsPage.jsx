@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { getPlant } from "../../services/plant.service"
+import { safeGet } from "../../lib/safeData"
 import { Badge } from "../../components/ui/Badge"
 import {
   Leaf, ChevronLeft, Loader2, Microscope, ArrowRight, ShieldCheck,
@@ -27,13 +28,17 @@ export default function HerbDetailsPage() {
     queryFn: () => getPlant(id),
   })
 
+  // ✅ Safe fallback - herb contains the actual plant data now (thanks to interceptor)
+  const herbData = herb || {}
+
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
       <Loader2 className="h-10 w-10 animate-spin text-primary opacity-30" />
     </div>
   )
 
-  if (error || !herbData) return (
+  // ✅ Check if data loaded successfully (interceptor now properly unwraps)
+  if (error || !herbData?.name) return (
     <div className="text-center py-40 max-w-md mx-auto">
       <p className="font-bold text-rose-500 text-lg">{t('herb.not_found', 'Botanical entry not found')}</p>
       <Link to="/herbs" className="text-sm text-primary mt-4 block hover:underline">← {t('herb.back', 'Back to Herb Bank')}</Link>

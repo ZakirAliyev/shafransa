@@ -6,10 +6,6 @@ import { Package, BarChart3, Settings, LogOut, Store } from "lucide-react";
 export default function SellerLayout() {
   const { user, logout } = useAuthStore();
 
-  if (!user || user.role !== "SELLER") {
-    return <Navigate to="/login" replace />;
-  }
-
   return (
     <div className="flex min-h-screen bg-muted/20 text-foreground">
       <aside className="hidden w-64 flex-col border-r bg-card lg:flex shadow-sm">

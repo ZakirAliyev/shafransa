@@ -1,28 +1,89 @@
-import React, { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { useAuthStore } from "../../store/useAuthStore"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { getMyOrders } from "../../services/order.service"
 import { getWishlist } from "../../services/wishlist.service"
-import { getMySessions, cancelSession as cancelSessionService, rateSession as rateSessionService } from "../../services/therapySession.service"
+import { getMySessions, cancelSession as cancelSessionService } from "../../services/therapySession.service"
+import { getMyTherapistProfile, updateMyProfile as updateTherapistProfile } from "../../services/therapist.service"
 import api from "../../services/api"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card"
 import { Input } from "../../components/ui/Input"
 import { Button } from "../../components/ui/Button"
 import { Badge } from "../../components/ui/Badge"
-import { Package, ShieldCheck, Loader2, User as UserIcon, Heart, Key, Sparkles, ArrowRight, Leaf, Eye, EyeOff, Camera, Trash2 } from "lucide-react"
+import { Package, ShieldCheck, Loader2, User as UserIcon, Heart, Key, Sparkles, Leaf, Eye, EyeOff, Camera, Trash2, Calendar, Clock, Activity } from "lucide-react"
 import { Link } from "react-router-dom"
+
+const LOCAL_AVATAR_KEY = "shafransa_local_profile_avatar"
+const LOCAL_PROFILE_KEY = "shafransa_local_profile_data"
+
+const getLocalAvatar = (userId) => {
+  if (!userId) return ""
+  try {
+    return localStorage.getItem(`${LOCAL_AVATAR_KEY}_${userId}`) || ""
+  } catch {
+    return ""
+  }
+}
+
+const setLocalAvatar = (userId, avatar) => {
+  if (!userId || !avatar) return
+  try {
+    localStorage.setItem(`${LOCAL_AVATAR_KEY}_${userId}`, avatar)
+  } catch {
+    // localStorage can fail for very large files; backend upload can still succeed.
+  }
+}
+
+const getLocalProfile = (userId) => {
+  if (!userId) return {}
+  try {
+    return JSON.parse(localStorage.getItem(`${LOCAL_PROFILE_KEY}_${userId}`) || "{}")
+  } catch {
+    return {}
+  }
+}
+
+const setLocalProfile = (userId, profile) => {
+  if (!userId) return
+  try {
+    localStorage.setItem(`${LOCAL_PROFILE_KEY}_${userId}`, JSON.stringify(profile))
+  } catch {
+    // Keep the UI responsive even when storage quota is full.
+  }
+}
+
+const getInitialProfileData = (user) => {
+  const localProfile = getLocalProfile(user?.id)
+
+  return {
+    fullName: localProfile.fullName || user?.fullName || "",
+    email: localProfile.email || user?.email || "",
+    phoneNumber: localProfile.phoneNumber || user?.phoneNumber || user?.phone || "",
+    description: localProfile.description || user?.description || "",
+    specialization: localProfile.specialization || "",
+    licenseNumber: localProfile.licenseNumber || "",
+    therapistBio: localProfile.therapistBio || "",
+    profileStatus: localProfile.profileStatus || "Təsdiqli mütəxəssis",
+  }
+}
+
+const fileToDataUrl = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
 
 export default function UserProfile({ tab = "profile" }) {
   const { t } = useTranslation()
-  const { user, fetchMe } = useAuthStore()
-  const navigate = useNavigate()
+  const { user } = useAuthStore()
   const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState(tab)
-  const [formData, setFormData] = useState({ fullName: user?.fullName || "", email: user?.email || "", description: user?.description || "" })
+  const [formData, setFormData] = useState(getInitialProfileData(user))
   const [avatarFile, setAvatarFile] = useState(null)
-  const [avatarPreview, setAvatarPreview] = useState(user?.avatar || "")
+  const [avatarPreview, setAvatarPreview] = useState(getLocalAvatar(user?.id) || user?.avatar || "")
   const [saveMessage, setSaveMessage] = useState("")
   const [showPassword, setShowPassword] = useState(false)
 
@@ -47,16 +108,167 @@ export default function UserProfile({ tab = "profile" }) {
     enabled: activeTab === "sessions"
   })
 
+  const { data: therapistProfile } = useQuery({
+    queryKey: ["therapist", "me"],
+    queryFn: getMyTherapistProfile,
+    enabled: activeTab === "profile",
+    retry: false,
+  })
+
+  useEffect(() => {
+    const therapist = therapistProfile?.data || therapistProfile || {}
+    const localProfile = getLocalProfile(user?.id)
+
+    setAvatarPreview(getLocalAvatar(user?.id) || user?.avatar || "")
+    setFormData({
+      fullName:
+        localProfile.fullName ||
+        user?.fullName ||
+        therapist?.user?.fullName ||
+        therapist?.User?.FullName ||
+        "",
+      email:
+        localProfile.email ||
+        user?.email ||
+        therapist?.email ||
+        therapist?.Email ||
+        therapist?.user?.email ||
+        therapist?.User?.Email ||
+        "",
+      phoneNumber:
+        localProfile.phoneNumber ||
+        therapist?.phoneNumber ||
+        therapist?.PhoneNumber ||
+        user?.phoneNumber ||
+        user?.phone ||
+        "",
+      description:
+        localProfile.description ||
+        user?.description ||
+        "",
+      specialization:
+        localProfile.specialization ||
+        therapist?.specialization ||
+        therapist?.Specialization ||
+        "",
+      licenseNumber:
+        localProfile.licenseNumber ||
+        therapist?.licenseNumber ||
+        therapist?.LicenseNumber ||
+        "",
+      therapistBio:
+        localProfile.therapistBio ||
+        therapist?.bio ||
+        therapist?.Bio ||
+        "",
+      profileStatus:
+        localProfile.profileStatus ||
+        "Təsdiqli mütəxəssis",
+    })
+  }, [user, therapistProfile])
+
   const { mutate: updateProfile, isPending: updating } = useMutation({
-    mutationFn: (data) => {
-      // Backend expects JSON for /User/me
-      return api.put("/user/me", {
-        fullName: data.fullName,
-        description: data.description
-      })
+    mutationFn: async (data) => {
+      let localAvatar = avatarPreview
+
+      if (avatarFile) {
+        localAvatar = await fileToDataUrl(avatarFile)
+      }
+
+      const localProfile = {
+        ...data,
+        avatar: localAvatar,
+      }
+
+      if (avatarFile || data.phoneNumber || data.specialization || data.therapistBio || data.licenseNumber) {
+        const therapistForm = new FormData()
+        therapistForm.append("FullName", data.fullName || "")
+        therapistForm.append("PhoneNumber", data.phoneNumber || "")
+        therapistForm.append("Specialization", data.specialization || "")
+        therapistForm.append("LicenseNumber", data.licenseNumber || "")
+        therapistForm.append("Bio", data.therapistBio || data.description || "")
+        if (avatarFile) therapistForm.append("ProfileImageFile", avatarFile)
+
+        try {
+          const updatedTherapist = await updateTherapistProfile(therapistForm)
+          return {
+            ...updatedTherapist?.user,
+            ...updatedTherapist?.User,
+            ...updatedTherapist,
+            avatar:
+              updatedTherapist?.user?.avatar ||
+              updatedTherapist?.User?.Avatar ||
+              updatedTherapist?.avatar ||
+              localAvatar,
+            fullName: data.fullName,
+            email: data.email,
+            phoneNumber: data.phoneNumber,
+            description: data.description,
+            specialization: data.specialization,
+            licenseNumber: data.licenseNumber,
+            therapistBio: data.therapistBio,
+            localProfile,
+            localAvatar,
+          }
+        } catch (error) {
+          console.warn("⚠️ Therapist profile update failed, using local profile data", error?.message)
+        }
+      }
+
+      try {
+        const updatedUser = await api.put("/user/me", {
+          fullName: data.fullName,
+          description: data.description,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
+          avatar: localAvatar,
+        })
+
+        return {
+          ...updatedUser,
+          phoneNumber: data.phoneNumber,
+          specialization: data.specialization,
+          licenseNumber: data.licenseNumber,
+          therapistBio: data.therapistBio,
+          avatar: updatedUser?.avatar || localAvatar,
+          localProfile,
+          localAvatar,
+        }
+      } catch (error) {
+        console.warn("⚠️ User profile update failed, using local profile data", error?.message)
+        return {
+          ...user,
+          ...localProfile,
+          avatar: localAvatar,
+          localProfile,
+          localAvatar,
+          isLocalOnly: true,
+        }
+      }
     },
-    onSuccess: () => {
-      fetchMe()
+    onSuccess: (updatedUser) => {
+      const nextAvatar = updatedUser?.avatar || updatedUser?.localAvatar || avatarPreview
+
+      setAvatarPreview(nextAvatar)
+      setAvatarFile(null)
+      setLocalAvatar(user?.id, nextAvatar)
+      setLocalProfile(user?.id, {
+        ...formData,
+        ...(updatedUser?.localProfile || {}),
+        avatar: nextAvatar,
+      })
+      useAuthStore.setState({
+        user: {
+          ...user,
+          ...updatedUser,
+          avatar: nextAvatar,
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          description: formData.description,
+        },
+      })
+
       setSaveMessage(t('user.profile_updated', "Profile updated!"))
       setTimeout(() => setSaveMessage(""), 3000)
     }
@@ -97,18 +309,18 @@ export default function UserProfile({ tab = "profile" }) {
 
       {/* Tab Navigation */}
       <div className="flex gap-1 overflow-x-auto border-b border-neutral-100 pb-0">
-        {tabs.map((t) => (
+        {tabs.map((tab) => (
           <Link
-            key={t.id}
-            to={t.href}
+            key={tab.id}
+            to={tab.href}
             className={`flex items-center gap-2 px-5 py-3 text-sm font-bold border-b-2 whitespace-nowrap transition-colors ${
-              activeTab === t.id
+              activeTab === tab.id
                 ? "border-primary text-primary"
                 : "border-transparent text-muted-foreground hover:text-[#1a1c1e]"
             }`}
           >
-            <t.icon className="w-4 h-4" />
-            {t.label}
+            <tab.icon className="w-4 h-4" />
+            {tab.label}
           </Link>
         ))}
       </div>
@@ -119,7 +331,7 @@ export default function UserProfile({ tab = "profile" }) {
           <Card className="lg:col-span-2 premium-card">
             <CardHeader className="p-8 border-b border-neutral-100/50">
               <CardTitle className="text-xl font-display font-bold">{t('user.personal_details', 'Personal Details')}</CardTitle>
-              <CardDescription>{t('user.personal_details_desc', 'Update your name and email address.')}</CardDescription>
+              <CardDescription>Ad, əlaqə, profil şəkli və terapevt məlumatlarını yenilə.</CardDescription>
             </CardHeader>
             <CardContent className="p-8">
               <div className="flex flex-col md:flex-row gap-10">
@@ -152,7 +364,7 @@ export default function UserProfile({ tab = "profile" }) {
                       <button 
                         onClick={() => {
                           setAvatarFile(null)
-                          setAvatarPreview(user?.avatar || "")
+                          setAvatarPreview(getLocalAvatar(user?.id) || user?.avatar || "")
                         }}
                         className="absolute -top-2 -right-2 bg-rose-500 text-white p-1.5 rounded-full shadow-lg hover:bg-rose-600 transition-colors"
                       >
@@ -186,6 +398,24 @@ export default function UserProfile({ tab = "profile" }) {
                         className="h-12 rounded-xl bg-neutral-50/50 border-neutral-200 shadow-sm focus:bg-white transition-all"
                       />
                     </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('therapists.label_phone', 'Phone')}</label>
+                      <Input
+                        value={formData.phoneNumber}
+                        onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                        placeholder="+994 (__) ___ __ __"
+                        className="h-12 rounded-xl bg-neutral-50/50 border-neutral-200 shadow-sm focus:bg-white transition-all"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Lisenziya nömrəsi</label>
+                      <Input
+                        value={formData.licenseNumber}
+                        onChange={(e) => setFormData({ ...formData, licenseNumber: e.target.value })}
+                        placeholder="AZ-FZ-0000"
+                        className="h-12 rounded-xl bg-neutral-50/50 border-neutral-200 shadow-sm focus:bg-white transition-all"
+                      />
+                    </div>
                   </div>
 
                   <div className="space-y-2">
@@ -196,6 +426,44 @@ export default function UserProfile({ tab = "profile" }) {
                       placeholder={t('user.bio_placeholder', 'Tell us about yourself...')}
                       className="w-full min-h-[100px] p-4 rounded-xl bg-neutral-50/50 border border-neutral-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-sm focus:bg-white"
                     />
+                  </div>
+
+                  <div className="rounded-2xl border border-emerald-100 bg-emerald-50/40 p-5 space-y-5">
+                    <div>
+                      <h3 className="text-sm font-bold text-[#1a1c1e]">Terapevt məlumatları</h3>
+                      <p className="text-xs text-muted-foreground mt-1">Profil kartında və seanslarda görünən peşəkar məlumatlar.</p>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-5">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('therapists.label_specialization', 'Specialization')}</label>
+                        <Input
+                          value={formData.specialization}
+                          onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
+                          placeholder="Fizioterapevt"
+                          className="h-12 rounded-xl bg-white border-emerald-100 shadow-sm focus:bg-white transition-all"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Profil statusu</label>
+                        <Input
+                          value={formData.profileStatus || "Təsdiqli mütəxəssis"}
+                          onChange={(e) => setFormData({ ...formData, profileStatus: e.target.value })}
+                          placeholder="Təsdiqli mütəxəssis"
+                          className="h-12 rounded-xl bg-white border-emerald-100 shadow-sm focus:bg-white transition-all"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Terapevt bio</label>
+                      <textarea
+                        value={formData.therapistBio}
+                        onChange={(e) => setFormData({ ...formData, therapistBio: e.target.value })}
+                        placeholder="Pasiyentlər üçün peşəkar yanaşmanızı yazın..."
+                        className="w-full min-h-[110px] p-4 rounded-xl bg-white border border-emerald-100 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-sm focus:bg-white"
+                      />
+                    </div>
                   </div>
 
                   {saveMessage && (

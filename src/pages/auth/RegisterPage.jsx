@@ -141,6 +141,12 @@ export default function RegisterPage() {
                   {t('auth.sign_in_vault', 'Sign in to Vault')}
                 </Link>
               </div>
+              <div className="text-center font-medium text-sm text-muted-foreground border-t border-neutral-100 pt-4">
+                {t('auth.are_therapist', 'Are you a therapist?')}{" "}
+                <Link to="/register-therapist" className="font-bold text-emerald-600 hover:underline underline-offset-4">
+                  {t('auth.apply_as_therapist', 'Apply as a Specialist →')}
+                </Link>
+              </div>
             </CardFooter>
           </form>
         </Card>

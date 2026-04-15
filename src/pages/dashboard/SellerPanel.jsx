@@ -218,7 +218,7 @@ export default function SellerPanel({ tab = "overview" }) {
                 e.preventDefault()
                 setIsUpdatingProfile(true)
                 try {
-                  await api.put("/users/me", profileData)
+                  await api.put("/user/me", profileData)
                   toast.success(t('seller.settings.success', 'Storefront identity updated!'))
                   window.location.reload()
                 } catch (err) {

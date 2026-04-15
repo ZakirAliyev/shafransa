@@ -1,21 +1,17 @@
 import api from "./api"
 
-// api.js interceptor already unwraps response.data
-// Backend returns { success, data: [...] } so we access .data once
+// ✅ Interceptor already unwraps response.data, so don't use res.data
 export const getCategories = async () => {
-  const res = await api.get("/categories")
-  return res.data  // res is already response.data from interceptor, so res.data = the categories array
+  return await api.get("/categories")
 }
 
 export const createCategory = async (data) => {
   if (data instanceof FormData) {
-    const res = await api.post("/categories", data, {
+    return await api.post("/categories", data, {
       headers: { "Content-Type": "multipart/form-data" }
     })
-    return res.data
   }
-  const res = await api.post("/categories", data)
-  return res.data
+  return await api.post("/categories", data)
 }
 
 export const deleteCategory = async (id) => {

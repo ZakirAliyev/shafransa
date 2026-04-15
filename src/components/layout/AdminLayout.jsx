@@ -20,10 +20,6 @@ export default function AdminLayout() {
   const { user, logout } = useAuthStore();
   const location = useLocation();
 
-  if (!user || user.role !== "ADMIN") {
-    return <Navigate to="/login" replace />;
-  }
-
   const links = [
     { name: "Command Center", to: "/admin", icon: LayoutDashboard },
     { name: "Node Management", to: "/admin/nodes", icon: Terminal },

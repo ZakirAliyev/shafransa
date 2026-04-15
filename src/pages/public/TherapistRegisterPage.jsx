@@ -47,19 +47,14 @@ export default function TherapistRegisterPage() {
       })
     },
     onSuccess: () => {
-      toast.success(t('therapists.registration_success', 'Application submitted successfully!'))
-      navigate("/user")
+      toast.success(t('therapists.registration_success', 'Application submitted! You will be notified once verified.'))
+      navigate("/login")
     },
     onError: (err) => toast.error(err.message || t('therapists.registration_error', 'Failed to submit application'))
   })
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (!isAuthenticated) {
-      toast.info(t('auth.login_required_register', "Please sign in to register as a therapist"))
-      navigate("/login")
-      return
-    }
     register(formData)
   }
 

@@ -52,17 +52,17 @@ export const ROUTES = [
     children: [
       { index: true, element: <LandingPage /> },
 
-      // Auth — guest guard prevents logged-in users
-      { path: "login", element: <GuestGuard><LoginPage /></GuestGuard> },
-      { path: "register", element: <GuestGuard><RegisterPage /></GuestGuard> },
-      { path: "otp", element: <GuestGuard><OTPPage /></GuestGuard> },
+      // Auth — no guard, freely accessible
+      { path: "login", element: <LoginPage /> },
+      { path: "register", element: <RegisterPage /> },
+      { path: "otp", element: <OTPPage /> },
 
       // ── MARKETPLACE (commerce-first) ──
       { path: "marketplace", element: <Marketplace /> },
       { path: "product/:id", element: <ProductDetailsPage /> },
       { path: "seller/:id", element: <SellerStorefrontPage /> },
       { path: "cart", element: <CartPage /> },
-      { path: "checkout", element: <AuthGuard><CheckoutPage /></AuthGuard> },
+      { path: "checkout", element: <CheckoutPage /> },
 
       // ── ENCYCLOPEDIA (knowledge-first — distinct from marketplace) ──
       { path: "herbs", element: <EncyclopediaIndexPage /> },
@@ -77,14 +77,14 @@ export const ROUTES = [
       // ── THERAPISTS ──
       { path: "therapists", element: <TherapistListingPage /> },
       { path: "therapist/:id", element: <TherapistDetailPage /> },
-      { path: "register-therapist", element: <AuthGuard><TherapistRegisterPage /></AuthGuard> },
+      { path: "register-therapist", element: <TherapistRegisterPage /> },
     ]
   },
 
   // ── USER AREA ── /user/*
   {
     path: "/user",
-    element: <AuthGuard allowedRoles={["MEMBER", "SELLER", "ADMIN"]}><UserLayout /></AuthGuard>,
+    element: <UserLayout />,
     errorElement: <GlobalError />,
     children: [
       { index: true, element: <UserProfile tab="profile" /> },
@@ -98,7 +98,7 @@ export const ROUTES = [
   // ── SELLER AREA ── /seller/*
   {
     path: "/seller",
-    element: <AuthGuard allowedRoles={["SELLER"]}><SellerLayout /></AuthGuard>,
+    element: <SellerLayout />,
     errorElement: <GlobalError />,
     children: [
       { index: true,          element: <SellerPanel tab="overview" /> },
@@ -111,7 +111,7 @@ export const ROUTES = [
   // ── ADMIN AREA ── /admin/*
   {
     path: "/admin",
-    element: <AuthGuard allowedRoles={["ADMIN"]}><AdminLayout /></AuthGuard>,
+    element: <AdminLayout />,
     errorElement: <GlobalError />,
     children: [
       { index: true,       element: <AdminPanel tab="overview" /> },

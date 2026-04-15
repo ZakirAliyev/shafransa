@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useMemo, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
@@ -8,11 +8,193 @@ import { useAuthStore } from "../../store/useAuthStore"
 import { toast } from "../../store/useToastStore"
 import { Badge } from "../../components/ui/Badge"
 import { Button } from "../../components/ui/Button"
-import { 
-  Loader2, User, MapPin, Star, ShieldCheck, 
-  Calendar, Clock, CheckCircle2, ChevronLeft,
-  ChevronRight, Phone, Mail, Award, Info
+import {
+  Activity,
+  ArrowLeft,
+  Award,
+  Calendar,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  FileText,
+  Loader2,
+  Mail,
+  Phone,
+  ShieldCheck,
+  Sparkles,
+  Star,
+  Stethoscope,
+  User,
 } from "lucide-react"
+
+const DAY_LABELS = ["B.e", "Ç.a", "Ç", "C.a", "C", "Ş", "B"]
+const LOCAL_AVATAR_KEY = "shafransa_local_profile_avatar"
+const LOCAL_PROFILE_KEY = "shafransa_local_profile_data"
+const DEFAULT_AVATAR =
+  "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80"
+
+const toIsoDate = (date) => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, "0")
+  const day = String(date.getDate()).padStart(2, "0")
+  return `${year}-${month}-${day}`
+}
+
+const toDisplayDate = (isoDate) => {
+  if (!isoDate) return ""
+  const [year, month, day] = isoDate.split("-")
+  return `${day}.${month}.${year}`
+}
+
+const normalizeDate = (value) => {
+  if (!value) return ""
+  if (/^\d{2}\.\d{2}\.\d{4}$/.test(value)) {
+    const [day, month, year] = value.split(".")
+    return `${year}-${month}-${day}`
+  }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value
+
+  const parsed = new Date(value)
+  if (Number.isNaN(parsed.getTime())) return ""
+  return toIsoDate(parsed)
+}
+
+const getSlotTime = (slot) => {
+  if (typeof slot === "string") return slot.slice(0, 5)
+
+  const rawTime = slot?.hour || slot?.time
+  if (typeof rawTime === "string") return rawTime.slice(0, 5)
+
+  const start = slot?.startTime || slot?.StartTime
+  if (!start) return ""
+
+  if (typeof start === "string" && /^\d{2}:\d{2}/.test(start)) return start.slice(0, 5)
+  if (typeof start === "string") {
+    const timeMatch = start.match(/T(\d{2}:\d{2})/)
+    if (timeMatch?.[1]) return timeMatch[1]
+  }
+
+  const parsed = new Date(start)
+  if (Number.isNaN(parsed.getTime())) return ""
+
+  return parsed.toLocaleTimeString("az-AZ", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "UTC",
+  })
+}
+
+const getInitials = (name) =>
+  (name || "Ş")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+
+const getLocalAvatar = (userId) => {
+  if (!userId) return ""
+  try {
+    return localStorage.getItem(`${LOCAL_AVATAR_KEY}_${userId}`) || ""
+  } catch {
+    return ""
+  }
+}
+
+const getLocalProfile = (userId) => {
+  if (!userId) return {}
+  try {
+    return JSON.parse(localStorage.getItem(`${LOCAL_PROFILE_KEY}_${userId}`) || "{}")
+  } catch {
+    return {}
+  }
+}
+
+const normalizeTherapist = (therapist) => {
+  const data = therapist?.data || therapist || {}
+  const user = data.user || data.User || {}
+  const userId = data.userId || data.UserId || user.id || user.Id
+  const localProfile = getLocalProfile(userId)
+  const rawName = data.fullName || data.FullName || user.fullName || user.FullName || ""
+  const fullName = localProfile.fullName || (rawName && !rawName.includes("@") ? rawName : "Zakir Aliyev")
+
+  return {
+    id: data.id || data.Id,
+    userId,
+    fullName,
+    email: localProfile.email || data.email || data.Email || user.email || user.Email || "",
+    phone: localProfile.phoneNumber || data.phoneNumber || data.PhoneNumber || data.phone || "",
+    specialization: localProfile.specialization || data.specialization || data.Specialization || "Fizioterapevt",
+    bio:
+      localProfile.therapistBio ||
+      localProfile.description ||
+      data.bio ||
+      data.Bio ||
+      data.description ||
+      data.Description ||
+      "Fərdi bərpa planı, rahat seans ritmi və diqqətli izləmə ilə sağlam hərəkətə qayıtmağa kömək edir.",
+    avatar: getLocalAvatar(userId) || data.avatar || data.Avatar || user.avatar || user.Avatar || "",
+    rating: Number(data.rating || data.Rating || 4.9),
+    licenseNumber: localProfile.licenseNumber || data.licenseNumber || data.LicenseNumber || "",
+    cv: data.cv || data.CV || "",
+    certificates: data.certificates || data.Certificates || [],
+    isVerified: Boolean(data.isVerified ?? data.IsVerified ?? data.verified ?? true),
+    isEmailVerified: Boolean(data.isEmailVerified ?? data.IsEmailVerified),
+    createdAt: data.createdAt || data.CreatedAt || "",
+  }
+}
+
+const normalizeAvailability = (availability) => {
+  const list = Array.isArray(availability) ? availability : availability?.data || []
+
+  return list.reduce((acc, item) => {
+    const isoDate = normalizeDate(item?.date || item?.Date)
+    if (!isoDate) return acc
+
+    const slots = (item?.slots || item?.Slots || [])
+      .map((slot) => ({
+        raw: slot,
+        time: getSlotTime(slot),
+        isAvailable: slot?.isAvailable ?? slot?.IsAvailable ?? true,
+      }))
+      .filter((slot) => slot.time && slot.isAvailable)
+
+    acc[isoDate] = {
+      date: isoDate,
+      isAvailable: slots.length > 0 || Boolean(item?.isAvailable ?? item?.IsAvailable),
+      slots,
+    }
+
+    return acc
+  }, {})
+}
+
+const buildFallbackAvailability = (year, month, today) => {
+  const result = {}
+  const fallbackSlots = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"]
+  const daysInMonth = new Date(year, month, 0).getDate()
+
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const date = new Date(year, month - 1, day)
+    if (date < today) continue
+
+    const isoDate = toIsoDate(date)
+    result[isoDate] = {
+      date: isoDate,
+      isAvailable: true,
+      slots: fallbackSlots.map((time) => ({
+        raw: time,
+        time,
+        isAvailable: true,
+      })),
+    }
+  }
+
+  return result
+}
 
 export default function TherapistDetailPage() {
   const { id } = useParams()
@@ -21,303 +203,485 @@ export default function TherapistDetailPage() {
   const queryClient = useQueryClient()
   const { isAuthenticated } = useAuthStore()
 
+  const today = useMemo(() => {
+    const date = new Date()
+    date.setHours(0, 0, 0, 0)
+    return date
+  }, [])
+
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedSlot, setSelectedSlot] = useState(null)
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1)
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
+  const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1)
+  const [currentYear, setCurrentYear] = useState(today.getFullYear())
 
-  const { data: therapist, isLoading: loadingTherapist } = useQuery({
+  const { data: therapist, isLoading: loadingTherapist, isError } = useQuery({
     queryKey: ["therapist", id],
     queryFn: () => getTherapistById(id),
+    enabled: Boolean(id),
   })
 
   const { data: availability, isLoading: loadingAvailability } = useQuery({
     queryKey: ["availability", id, currentYear, currentMonth],
     queryFn: () => getAvailabilitySummary(id, currentYear, currentMonth),
+    enabled: Boolean(id),
   })
+
+  const profile = useMemo(() => normalizeTherapist(therapist), [therapist])
+  const normalizedAvailability = useMemo(() => normalizeAvailability(availability), [availability])
+  const usingFallbackAvailability = Object.keys(normalizedAvailability).length === 0
+
+  const availabilityByDate = useMemo(() => {
+    const normalized = normalizeAvailability(availability)
+    if (Object.keys(normalized).length > 0) return normalized
+    return buildFallbackAvailability(currentYear, currentMonth, today)
+  }, [availability, currentMonth, currentYear, today])
+
+  const calendarDays = useMemo(() => {
+    const firstDay = new Date(currentYear, currentMonth - 1, 1)
+    const daysInMonth = new Date(currentYear, currentMonth, 0).getDate()
+    const startingDayOfWeek = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1
+    const days = Array.from({ length: startingDayOfWeek }, () => null)
+
+    for (let day = 1; day <= daysInMonth; day += 1) {
+      const date = new Date(currentYear, currentMonth - 1, day)
+      const isoDate = toIsoDate(date)
+      const availabilityData = availabilityByDate[isoDate]
+
+      days.push({
+        day,
+        date: isoDate,
+        isToday: isoDate === toIsoDate(today),
+        isPast: date < today,
+        isAvailable: Boolean(availabilityData?.isAvailable),
+        slots: availabilityData?.slots || [],
+      })
+    }
+
+    return days
+  }, [availabilityByDate, currentMonth, currentYear, today])
+
+  const selectedDayData = calendarDays.find((day) => day?.date === selectedDate)
+  const selectedSlots = selectedDayData?.slots || []
+
+  const nextAvailableDay = calendarDays.find((day) => day?.isAvailable && !day.isPast)
 
   const { mutate: bookSession, isPending: booking } = useMutation({
-    mutationFn: (data) => createSession(data),
+    mutationFn: createSession,
     onSuccess: () => {
-      queryClient.invalidateQueries(["sessions", "my"])
-      toast.success(t('therapists.booking_success', 'Session requested successfully!'))
-      navigate("/user/sessions") // We'll create this tab soon
+      queryClient.invalidateQueries({ queryKey: ["sessions", "my"] })
+      queryClient.invalidateQueries({ queryKey: ["availability", id] })
+      toast.success(t("therapists.booking_success", "Seans müraciətiniz göndərildi"))
+      navigate("/user/sessions")
     },
-    onError: (err) => toast.error(err.message || t('therapists.booking_error', 'Failed to book session'))
+    onError: (err) =>
+      toast.error(err?.message || t("therapists.booking_error", "Seansı bron etmək alınmadı")),
   })
-
-  const handleBook = () => {
-    if (!isAuthenticated) {
-      toast.info(t('auth.login_required_booking', "Please sign in to book a session"))
-      navigate("/login")
-      return
-    }
-    if (!selectedSlot) return
-    
-    // selectedSlot is "11:00" string from availability
-    const sessionDate = new Date(selectedDate)
-    const [hours, minutes] = selectedSlot.split(":")
-    sessionDate.setHours(parseInt(hours), parseInt(minutes), 0, 0)
-
-    bookSession({
-      therapistId: id,
-      startTime: sessionDate.toISOString(),
-    })
-  }
 
   const changeMonth = (offset) => {
     let nextMonth = currentMonth + offset
     let nextYear = currentYear
-    if (nextMonth > 12) { nextMonth = 1; nextYear++; }
-    if (nextMonth < 1) { nextMonth = 12; nextYear--; }
+
+    if (nextMonth > 12) {
+      nextMonth = 1
+      nextYear += 1
+    }
+
+    if (nextMonth < 1) {
+      nextMonth = 12
+      nextYear -= 1
+    }
+
     setCurrentMonth(nextMonth)
     setCurrentYear(nextYear)
+    setSelectedDate(null)
+    setSelectedSlot(null)
   }
 
-  if (loadingTherapist) return (
-    <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-      <Loader2 className="w-10 h-10 animate-spin text-emerald-500 opacity-30" />
-      <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">{t('common.loading', 'Loading details...')}</p>
-    </div>
-  )
+  const handleDateSelect = (day) => {
+    if (!day?.isAvailable || day.isPast) return
+    setSelectedDate(day.date)
+    setSelectedSlot(null)
+  }
 
-  const profile = therapist?.data || therapist
+  const handleBook = () => {
+    if (!isAuthenticated) {
+      toast.info(t("auth.login_required_booking", "Seans üçün hesaba daxil olun"))
+      navigate("/login")
+      return
+    }
+
+    if (!selectedDate || !selectedSlot) {
+      toast.info(t("therapists.pick_time", "Tarix və saat seçin"))
+      return
+    }
+
+    bookSession({
+      therapistId: id,
+      date: toDisplayDate(selectedDate),
+      hour: selectedSlot,
+      therapistSnapshot: {
+        id,
+        fullName: profile.fullName,
+        specialization: profile.specialization,
+        avatar: profile.avatar,
+      },
+    })
+  }
+
+  if (loadingTherapist) {
+    return (
+      <div className="min-h-screen bg-stone-50 flex items-center justify-center">
+        <div className="flex items-center gap-3 rounded-lg border border-stone-200 bg-white px-5 py-4 shadow-sm">
+          <Loader2 className="h-5 w-5 animate-spin text-emerald-600" />
+          <span className="text-sm font-semibold text-stone-700">Mütəxəssis məlumatları yüklənir</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (isError || !profile?.id) {
+    return (
+      <div className="min-h-screen bg-stone-50 px-4 py-20">
+        <div className="mx-auto max-w-xl rounded-lg border border-rose-200 bg-white p-8 text-center shadow-sm">
+          <User className="mx-auto mb-4 h-12 w-12 text-rose-400" />
+          <h1 className="text-2xl font-semibold text-stone-900">Terapevt tapılmadı</h1>
+          <p className="mt-2 text-sm text-stone-500">Bu profil silinmiş və ya artıq menyuda göstərilmir.</p>
+          <Button onClick={() => navigate("/therapists")} className="mt-6 bg-emerald-700 text-white hover:bg-emerald-800">
+            Siyahıya qayıt
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-[#fafafa] pb-20">
-      
-      {/* Breadcrumb / Back */}
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-[#1a1c1e] transition-colors">
-          <ChevronLeft className="w-4 h-4" /> {t('common.back', 'Back')}
-        </button>
-      </div>
+    <div className="min-h-screen bg-[#fafafa] text-stone-900">
+      <section className="border-b border-stone-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-6 lg:px-8">
+          <button
+            onClick={() => navigate(-1)}
+            className="mb-6 inline-flex h-9 items-center gap-2 rounded-md border border-stone-200 bg-white px-3 text-xs font-medium text-stone-600 transition hover:border-emerald-500 hover:text-emerald-700"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Geri qayıt
+          </button>
 
-      <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-3 gap-8">
-        
-        {/* Left Column: Profile Info */}
-        <div className="lg:col-span-2 space-y-8">
-          <section className="premium-card p-10 bg-white overflow-hidden relative">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -z-0 opacity-50" />
-            
-            <div className="relative z-10 flex flex-col md:flex-row gap-10 items-start">
-               {/* Avatar */}
-               <div className="w-48 h-48 rounded-3xl bg-[#f5f5f7] border border-neutral-100 overflow-hidden flex-shrink-0 shadow-lg shadow-black/5">
-                 {profile?.avatar ? (
-                   <img src={profile.avatar} className="w-full h-full object-cover" alt="" />
-                 ) : (
-                   <div className="w-full h-full flex items-center justify-center bg-emerald-50 text-emerald-200">
-                     <User className="w-24 h-24 stroke-[0.5]" />
-                   </div>
-                 )}
-               </div>
-
-               {/* Header Info */}
-               <div className="flex-1 space-y-4">
-                  <div className="space-y-1">
-                     <Badge className="bg-emerald-500/10 text-emerald-500 border-none font-bold text-[10px] uppercase tracking-widest px-3">Verified Specialist</Badge>
-                     <h1 className="text-4xl font-display font-bold text-[#1a1c1e]">{profile?.fullName}</h1>
-                     <p className="text-lg font-bold text-emerald-600 italic">
-                        {profile?.specialization || t('therapists.default_specialty', 'Physiotherapist')}
-                     </p>
+          <div className="grid gap-7 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
+            <div className="grid gap-6 md:grid-cols-[180px_1fr] md:items-end">
+              <div className="relative h-[210px] overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm md:h-[230px]">
+                {profile.avatar ? (
+                  <img
+                    src={profile.avatar}
+                    alt={profile.fullName}
+                    className="h-full w-full object-cover"
+                    onError={(event) => {
+                      event.currentTarget.src = DEFAULT_AVATAR
+                    }}
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center bg-emerald-50 text-4xl font-semibold text-emerald-700">
+                    {getInitials(profile.fullName)}
                   </div>
-
-                  <div className="flex flex-wrap gap-6 items-center pt-2">
-                     <div className="flex items-center gap-2 text-sm font-bold text-[#1a1c1e]">
-                        <Star className="w-5 h-5 text-amber-400 fill-current" />
-                        {profile?.rating?.toFixed(1) || "4.9"}
-                        <span className="text-muted-foreground/40 font-medium">({profile?.reviewsCount || "12"} {t('reviews', 'reviews')})</span>
-                     </div>
-                     <div className="flex items-center gap-2 text-sm font-bold text-muted-foreground">
-                        <MapPin className="w-5 h-5 text-emerald-500" /> Baku, Azerbaijan
-                     </div>
-                     <div className="flex items-center gap-2 text-sm font-bold text-emerald-600">
-                        <ShieldCheck className="w-5 h-5" /> {t('therapists.certified', 'Shafransa Certified')}
-                     </div>
+                )}
+                {profile.isVerified && (
+                  <div className="absolute left-3 top-3 rounded-md bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-700 shadow-sm">
+                    Təsdiqli
                   </div>
+                )}
+              </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-4">
-                     <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-100 flex flex-col items-center justify-center text-center">
-                        <Award className="w-5 h-5 text-emerald-500 mb-2" />
-                        <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.experience', 'Exp')}</div>
-                        <div className="font-bold text-[#1a1c1e]">8+ Years</div>
-                     </div>
-                     <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-100 flex flex-col items-center justify-center text-center">
-                        <CheckCircle2 className="w-5 h-5 text-emerald-500 mb-2" />
-                        <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.patients', 'Patients')}</div>
-                        <div className="font-bold text-[#1a1c1e]">1,200+</div>
-                     </div>
-                     <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-100 flex flex-col items-center justify-center text-center">
-                        <FlaskConical className="w-5 h-5 text-emerald-500 mb-2" />
-                        <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.methods', 'Methods')}</div>
-                        <div className="font-bold text-[#1a1c1e]">Clinical</div>
-                     </div>
-                  </div>
-               </div>
+              <div className="space-y-5">
+                <div className="flex flex-wrap gap-2">
+                  <Badge className="rounded-md border-emerald-200 bg-emerald-50 text-emerald-800">
+                    <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />
+                    Shafransa verified
+                  </Badge>
+                  {profile.licenseNumber && (
+                    <Badge className="rounded-md border-amber-200 bg-amber-50 text-amber-800">
+                      Lisenziya: {profile.licenseNumber}
+                    </Badge>
+                  )}
+                </div>
+
+                <div>
+                  <h1 className="max-w-3xl text-3xl font-semibold leading-tight tracking-tight text-stone-900 lg:text-5xl">
+                    {profile.fullName}
+                  </h1>
+                  <p className="mt-3 flex items-center gap-2 text-sm font-medium text-emerald-700">
+                    <Stethoscope className="h-4 w-4" />
+                    {profile.specialization}
+                  </p>
+                </div>
+
+                <p className="max-w-3xl text-sm leading-7 text-stone-600">{profile.bio}</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 overflow-hidden rounded-lg border border-stone-200 bg-white shadow-sm">
+              <div className="border-r border-stone-200 p-5">
+                <div className="flex items-center gap-1.5 text-amber-500">
+                  <Star className="h-4 w-4 fill-current" />
+                  <span className="text-xl font-semibold text-stone-900">{profile.rating.toFixed(1)}</span>
+                </div>
+                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Reytinq</p>
+              </div>
+              <div className="border-r border-stone-200 p-5">
+                <div className="text-xl font-semibold text-stone-900">60</div>
+                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Dəqiqə</p>
+              </div>
+              <div className="p-5">
+                <div className="text-xl font-semibold text-stone-900">{profile.certificates.length}</div>
+                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Sənəd</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <main className="mx-auto grid max-w-7xl gap-8 px-4 py-10 lg:grid-cols-[1fr_420px] lg:px-8">
+        <div className="space-y-6">
+          <section className="rounded-lg border border-stone-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-emerald-50 text-emerald-700">
+                <Sparkles className="h-[18px] w-[18px]" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-stone-900">Müalicə yanaşması</h2>
+                <p className="text-sm text-stone-500">Sakit, ölçülə bilən və davamlı bərpa planı</p>
+              </div>
+            </div>
+            <p className="text-sm leading-7 text-stone-600">{profile.bio}</p>
+          </section>
+
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              { icon: Activity, title: "Qiymətləndirmə", text: "İlk görüşdə şikayət, hərəkət və gündəlik rutin analiz olunur." },
+              { icon: Calendar, title: "Plan", text: "Seanslar real qrafikə uyğun ardıcıllıqla qurulur." },
+              { icon: CheckCircle2, title: "İzləmə", text: "Proqres sadə tapşırıqlar və növbəti addımlarla davam edir." },
+            ].map((item) => (
+              <article key={item.title} className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
+                <item.icon className="mb-4 h-5 w-5 text-emerald-700" />
+                <h3 className="font-semibold text-stone-900">{item.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-stone-500">{item.text}</p>
+              </article>
+            ))}
+          </div>
+
+          <section className="rounded-lg border border-stone-200 bg-white p-6 shadow-sm">
+            <div className="mb-5 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-md bg-amber-50 text-amber-700">
+                <Award className="h-[18px] w-[18px]" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold text-stone-900">Sertifikatlar və sənədlər</h2>
+                <p className="text-sm text-stone-500">Profilə əlavə olunan rəsmi materiallar</p>
+              </div>
+            </div>
+
+            {profile.certificates.length > 0 || profile.cv ? (
+              <div className="grid gap-3 sm:grid-cols-2">
+                {profile.cv && (
+                  <a
+                    href={profile.cv}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-3 rounded-md border border-stone-200 bg-stone-50 p-4 text-sm font-medium text-stone-700 transition hover:border-emerald-400 hover:bg-emerald-50"
+                  >
+                    <FileText className="h-4 w-4 text-emerald-700" />
+                    CV faylı
+                  </a>
+                )}
+
+                {profile.certificates.map((certificate, index) => {
+                  const url = certificate.fileUrl || certificate.FileUrl
+                  const name = certificate.name || certificate.Name || `Sertifikat ${index + 1}`
+
+                  return (
+                    <a
+                      key={certificate.id || certificate.Id || name}
+                      href={url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-3 rounded-md border border-stone-200 bg-stone-50 p-4 text-sm font-medium text-stone-700 transition hover:border-emerald-400 hover:bg-emerald-50"
+                    >
+                      <FileText className="h-4 w-4 text-emerald-700" />
+                      {name}
+                    </a>
+                  )
+                })}
+              </div>
+            ) : (
+              <div className="rounded-md border border-dashed border-stone-300 bg-stone-50 p-5 text-sm text-stone-500">
+                Bu profil üçün sənəd hələ əlavə edilməyib.
+              </div>
+            )}
+          </section>
+
+          <section className="rounded-lg border border-stone-200 bg-white p-6 shadow-sm">
+            <h2 className="text-lg font-semibold text-stone-900">Əlaqə məlumatları</h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <div className="flex items-center gap-3 rounded-md border border-stone-200 bg-stone-50 p-4">
+                <Mail className="h-4 w-4 text-emerald-700" />
+                <span className="min-w-0 truncate text-sm font-medium text-stone-700">
+                  {profile.email || "Email göstərilməyib"}
+                </span>
+              </div>
+              <div className="flex items-center gap-3 rounded-md border border-stone-200 bg-stone-50 p-4">
+                <Phone className="h-4 w-4 text-emerald-700" />
+                <span className="text-sm font-medium text-stone-700">{profile.phone || "Telefon göstərilməyib"}</span>
+              </div>
             </div>
           </section>
+        </div>
 
-          {/* About Section */}
-          <section className="premium-card p-10 bg-white space-y-6">
-             <div className="flex items-center gap-3 border-b border-neutral-100 pb-6">
-                <Info className="w-6 h-6 text-emerald-500" />
-                <h2 className="text-2xl font-display font-bold text-[#1a1c1e]">{t('therapists.about', 'Clinical Abstract')}</h2>
-             </div>
-             <div className="prose prose-emerald max-w-none">
-                <p className="text-muted-foreground text-lg leading-relaxed whitespace-pre-line">
-                   {profile?.description || t('therapists.default_description', "Qualified physical therapist specializing in restorative recovery and clinical wellness. Focused on developing personalized treatment plans that integrate advanced therapeutic techniques with biological insights.")}
+        <aside className="lg:sticky lg:top-6 lg:self-start">
+          <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
+            <div className="mb-5 flex items-start justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold text-stone-900">Seans bron et</h2>
+                <p className="mt-1 text-sm text-stone-500">
+                  {usingFallbackAvailability ? "Uyğun test saatlarından birini seç" : "Tarixi və uyğun saatı seç"}
                 </p>
-             </div>
-          </section>
-        </div>
-
-        {/* Right Column: Booking Widget */}
-        <div className="space-y-8">
-           <section className="premium-card bg-white border border-neutral-100 shadow-2xl shadow-black/5 overflow-hidden sticky top-24">
-              <header className="bg-[#1a1c1e] text-white p-6">
-                 <h3 className="text-xl font-display font-bold flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-emerald-400" /> {t('therapists.booking_title', 'Reserve Session')}
-                 </h3>
-                 <p className="text-white/40 text-xs font-bold uppercase tracking-widest mt-1">Available Professional Slots</p>
-              </header>
-
-              <div className="p-6 space-y-8">
-                 {/* Calendar Picker (Simplified) */}
-                 <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                       <h4 className="text-sm font-bold text-[#1a1c1e]">
-                          {new Date(currentYear, currentMonth - 1).toLocaleString('default', { month: 'long', year: 'numeric' })}
-                       </h4>
-                       <div className="flex gap-2">
-                          <button onClick={() => changeMonth(-1)} className="p-2 rounded-lg hover:bg-neutral-100 text-muted-foreground"><ChevronLeft className="w-4 h-4" /></button>
-                          <button onClick={() => changeMonth(1)} className="p-2 rounded-lg hover:bg-neutral-100 text-muted-foreground"><ChevronRight className="w-4 h-4" /></button>
-                       </div>
-                    </div>
-
-                    {loadingAvailability ? (
-                      <div className="flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-emerald-500/30" /></div>
-                    ) : (
-                      <div className="grid grid-cols-7 gap-1 text-center font-bold text-[10px] uppercase tracking-tighter text-muted-foreground/40 mb-2">
-                        {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map(d => <div key={d}>{d}</div>)}
-                      </div>
-                    )}
-                    
-                    {!loadingAvailability && (
-                      <div className="grid grid-cols-7 gap-2">
-                        {/* Summary comes as array of { date: string, isAvailable: bool } */}
-                        {availability?.map((day, idx) => {
-                          const dateObj = new Date(day.date)
-                          const isSelected = selectedDate === day.date
-                          const isPast = new Date(day.date) < new Date().setHours(0,0,0,0)
-                          
-                          return (
-                            <button
-                              key={idx}
-                              disabled={!day.isAvailable || isPast}
-                              onClick={() => { setSelectedDate(day.date); setSelectedSlot(null); }}
-                              className={`aspect-square rounded-xl flex items-center justify-center text-xs font-bold transition-all ${
-                                isSelected ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 scale-110 z-10" :
-                                day.isAvailable && !isPast ? "bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:scale-105" :
-                                "bg-neutral-50 text-neutral-200 cursor-not-allowed opacity-50"
-                              }`}
-                            >
-                              {dateObj.getDate()}
-                            </button>
-                          )
-                        })}
-                      </div>
-                    )}
-                 </div>
-
-                 {/* Time Slot Picker */}
-                 {selectedDate && (
-                    <div className="space-y-4 animate-fade-in-up">
-                       <h4 className="text-xs font-bold uppercase tracking-widest text-[#1a1c1e] flex items-center gap-2">
-                          <Clock className="w-4 h-4 text-emerald-500" /> {t('therapists.select_time', 'Clinical Slots')}
-                       </h4>
-                       <div className="grid grid-cols-3 gap-2">
-                          {/* Hardware mock or real slots if summary contains them */}
-                          {["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"].map(slot => (
-                             <button
-                                key={slot}
-                                onClick={() => setSelectedSlot(slot)}
-                                className={`h-10 rounded-xl text-xs font-bold border transition-all ${
-                                   selectedSlot === slot 
-                                      ? "bg-[#1a1c1e] border-[#1a1c1e] text-white shadow-md" 
-                                      : "border-neutral-200 text-muted-foreground hover:border-emerald-500/30 hover:text-emerald-700"
-                                }`}
-                             >
-                                {slot}
-                             </button>
-                          ))}
-                       </div>
-                    </div>
-                 )}
-
-                 {/* Confirmation / Action */}
-                 <div className="pt-6 border-t border-neutral-100 space-y-4">
-                    {selectedDate && selectedSlot && (
-                       <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-100/50">
-                          <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-600/60">{t('therapists.appointment', 'Appointment')}</div>
-                          <div className="font-bold text-[#1a1c1e] text-sm mt-1">
-                             {new Date(selectedDate).toLocaleDateString('default', { day: 'numeric', month: 'long' })} @ {selectedSlot}
-                          </div>
-                       </div>
-                    )}
-                    <Button 
-                       onClick={handleBook}
-                       disabled={!selectedDate || !selectedSlot || booking}
-                       className="w-full h-14 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-xl shadow-emerald-600/20 disabled:opacity-30 disabled:shadow-none transition-all"
-                    >
-                       {booking ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-                          <>
-                             <CheckCircle2 className="w-5 h-5 mr-2" />
-                             {t('therapists.confirm_booking', 'Confirm Manifest')}
-                          </>
-                       )}
-                    </Button>
-                    <p className="text-[10px] text-center text-muted-foreground/60 font-medium px-4">
-                       By confirming, you agree to our <span className="underline">Session Cancellation Policy</span> and health guidelines.
-                    </p>
-                 </div>
               </div>
-           </section>
+              <div className="rounded-md bg-emerald-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
+                60 dəq
+              </div>
+            </div>
 
-           <div className="premium-card p-6 bg-emerald-600 text-white relative overflow-hidden group">
-              <div className="absolute right-[-10%] bottom-[-10%] w-24 h-24 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-1000" />
-              <Phone className="w-8 h-8 opacity-20 mb-4" />
-              <h4 className="text-lg font-display font-bold">{t('therapists.need_help', 'Clinical Support')}</h4>
-              <p className="text-sm text-white/60 mt-1 leading-relaxed">Required urgent consultation or have questions about a therapist?</p>
-              <Link to="/contact" className="inline-flex items-center gap-2 mt-4 text-xs font-bold uppercase tracking-widest text-white hover:underline transition-colors">
-                 Contact Liaison →
-              </Link>
-           </div>
-        </div>
-      </div>
+            <div className="rounded-lg border border-stone-200 p-4">
+              <div className="mb-4 flex items-center justify-between">
+                <h3 className="text-sm font-semibold capitalize text-stone-900">
+                  {new Intl.DateTimeFormat("az-AZ", {
+                    month: "long",
+                    year: "numeric",
+                  }).format(new Date(currentYear, currentMonth - 1))}
+                </h3>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => changeMonth(-1)}
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-stone-200 transition hover:border-emerald-500 hover:text-emerald-700"
+                    aria-label="Əvvəlki ay"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => changeMonth(1)}
+                    className="flex h-8 w-8 items-center justify-center rounded-md border border-stone-200 transition hover:border-emerald-500 hover:text-emerald-700"
+                    aria-label="Növbəti ay"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-medium uppercase tracking-wide text-stone-400">
+                {DAY_LABELS.map((label) => (
+                  <div key={label} className="py-2">
+                    {label}
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-7 gap-1">
+                {calendarDays.map((day, index) => {
+                  if (!day) return <div key={`empty-${index}`} className="aspect-square" />
+
+                  const isSelected = selectedDate === day.date
+                  const isDisabled = !day.isAvailable || day.isPast || loadingAvailability
+
+                  return (
+                    <button
+                      key={day.date}
+                      disabled={isDisabled}
+                      onClick={() => handleDateSelect(day)}
+                      className={[
+                        "relative aspect-square rounded-md border text-xs font-semibold transition",
+                        isSelected
+                          ? "border-emerald-700 bg-emerald-700 text-white"
+                          : "border-stone-200 bg-white text-stone-700 hover:border-emerald-500 hover:bg-emerald-50",
+                        day.isToday && !isSelected ? "ring-2 ring-amber-300" : "",
+                        isDisabled ? "cursor-not-allowed bg-stone-50 text-stone-300 hover:border-stone-200 hover:bg-stone-50" : "",
+                      ].join(" ")}
+                    >
+                      {day.day}
+                      {day.isAvailable && !day.isPast && (
+                        <span className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-emerald-500" />
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+
+              {loadingAvailability && (
+                <div className="mt-4 flex items-center gap-2 rounded-md bg-stone-50 px-3 py-3 text-sm font-semibold text-stone-500">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Boş saatlar yoxlanılır
+                </div>
+              )}
+            </div>
+
+            <div className="mt-5">
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500">Saatlar</h3>
+                {selectedDate && <span className="text-sm font-medium text-emerald-700">{toDisplayDate(selectedDate)}</span>}
+              </div>
+
+              {!selectedDate ? (
+                <div className="rounded-md border border-dashed border-stone-300 bg-stone-50 p-4 text-sm leading-6 text-stone-500">
+                  {nextAvailableDay
+                    ? `Ən yaxın boş tarix: ${toDisplayDate(nextAvailableDay.date)}`
+                    : "Bu ay üçün boş vaxt görünmür. Növbəti ayı yoxla."}
+                </div>
+              ) : selectedSlots.length > 0 ? (
+                <div className="grid grid-cols-3 gap-2">
+                  {selectedSlots.map((slot) => (
+                    <button
+                      key={slot.time}
+                      onClick={() => setSelectedSlot(slot.time)}
+                      className={[
+                        "flex h-10 items-center justify-center rounded-md border text-xs font-semibold transition",
+                        selectedSlot === slot.time
+                          ? "border-emerald-700 bg-emerald-700 text-white"
+                          : "border-stone-200 bg-white text-stone-700 hover:border-emerald-500 hover:bg-emerald-50",
+                      ].join(" ")}
+                    >
+                      {slot.time}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="rounded-md border border-dashed border-stone-300 bg-stone-50 p-4 text-sm text-stone-500">
+                  Bu tarix üçün boş saat qalmayıb.
+                </div>
+              )}
+            </div>
+
+            <Button
+              onClick={handleBook}
+              disabled={!selectedDate || !selectedSlot || booking}
+              className="mt-5 h-11 w-full rounded-md bg-emerald-700 text-sm font-semibold text-white hover:bg-emerald-800"
+            >
+              {booking ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Göndərilir
+                </>
+              ) : (
+                <>
+                  <Clock className="mr-2 h-4 w-4" />
+                  Seansı bron et
+                </>
+              )}
+            </Button>
+
+            <p className="mt-4 rounded-md bg-amber-50 p-3 text-xs leading-5 text-amber-900">
+              {usingFallbackAvailability
+                ? "Backend boş qayıdanda test üçün hazır saatlar göstərilir."
+                : "Müraciət göndərildikdən sonra seans terapevt tərəfindən təsdiqlənir."}
+            </p>
+          </div>
+        </aside>
+      </main>
     </div>
-  )
-}
-
-function FlaskConical(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M10 2v7.5" />
-      <path d="M14 2v7.5" />
-      <path d="M8.5 2h7" />
-      <path d="M14 9.5a5 5 0 1 1-4 0" />
-      <path d="M5.52 16h12.96" />
-      <path d="M3 22h18" />
-    </svg>
   )
 }

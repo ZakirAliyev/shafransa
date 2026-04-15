@@ -19,10 +19,6 @@ export default function UserLayout() {
   const { user, logout } = useAuthStore();
   const location = useLocation();
 
-  if (!user || user.role !== "MEMBER") {
-    return <Navigate to="/login" replace />;
-  }
-
   const links = [
     { name: "Overview", to: "/user", icon: LayoutDashboard },
     { name: "Order History", to: "/user/orders", icon: ShoppingBag },

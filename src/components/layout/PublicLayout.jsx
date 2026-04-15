@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { useAuthStore } from "../../store/useAuthStore"
+import { getRoleName } from "../../constants/roles"
 import { getCart } from "../../services/cart.service"
 import { getWishlist } from "../../services/wishlist.service"
 import { useWishlistStore } from "../../store/useWishlistStore"
@@ -226,7 +227,14 @@ export default function PublicLayout() {
                     <div className="px-4 py-3 border-b border-neutral-50">
                       <div className="font-bold text-sm text-[#1a1c1e]">{user?.fullName}</div>
                       <div className="text-xs text-muted-foreground font-medium truncate">{user?.email}</div>
-                      <div className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${user?.role === "ADMIN" ? "text-rose-500" : user?.role === "SELLER" ? "text-blue-500" : "text-primary"}`}>{user?.role}</div>
+                      {(() => {
+                        const userRole = getRoleName(user?.role);
+                        return (
+                          <>
+                            <div className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${userRole === "ADMIN" || userRole === "EDITOR" ? "text-rose-500" : userRole === "SELLER" ? "text-blue-500" : "text-primary"}`}>{userRole}</div>
+                          </>
+                        );
+                      })()}
                     </div>
                     {USER_MENU.map((item) => (
                       <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-[#1a1c1e] hover:bg-neutral-50 transition-colors">
@@ -234,12 +242,12 @@ export default function PublicLayout() {
                         {t(item.label)}
                       </Link>
                     ))}
-                    {user?.role === "SELLER" && (
+                    {(getRoleName(user?.role) === "SELLER") && (
                       <Link to="/seller" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors">
                         <Settings className="w-4 h-4" /> {t('seller_dashboard')}
                       </Link>
                     )}
-                    {user?.role === "ADMIN" && (
+                    {(getRoleName(user?.role) === "ADMIN" || getRoleName(user?.role) === "EDITOR") && (
                       <Link to="/admin" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
                         <ShieldCheck className="w-4 h-4" /> {t('admin_panel')}
                       </Link>

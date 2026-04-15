@@ -6,12 +6,16 @@ import { Suspense } from "react";
 import { PulseLoader } from "react-spinners";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Toaster from "./components/ui/Toaster.jsx";
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 1,
       staleTime: 1000 * 60 * 2,
+      onError: (error) => {
+        console.error("🔴 Query error:", error)
+      },
     },
   },
 });
@@ -20,16 +24,18 @@ function App() {
   const routes = createBrowserRouter(ROUTES);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Suspense fallback={
-        <div className="flex justify-center items-center h-screen w-full">
-          <PulseLoader color="#22c55e" />
-        </div>
-      }>
-        <RouterProvider router={routes} />
-      </Suspense>
-      <Toaster />
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Suspense fallback={
+          <div className="flex justify-center items-center h-screen w-full">
+            <PulseLoader color="#22c55e" />
+          </div>
+        }>
+          <RouterProvider router={routes} />
+        </Suspense>
+        <Toaster />
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
 

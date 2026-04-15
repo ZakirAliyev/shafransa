@@ -1,10 +1,75 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { getVerifiedTherapists } from "../../services/therapist.service"
 import { Badge } from "../../components/ui/Badge"
-import { Loader2, Search, Activity, User, MapPin, Star, X, Filter, ShieldCheck, Calendar } from "lucide-react"
+import { Search, User, MapPin, Star, X, ShieldCheck, Calendar } from "lucide-react"
+
+const LOCAL_AVATAR_KEY = "shafransa_local_profile_avatar"
+const LOCAL_PROFILE_KEY = "shafransa_local_profile_data"
+const DEFAULT_AVATAR =
+  "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=900&q=80"
+
+const getLocalAvatar = (userId) => {
+  if (!userId) return ""
+  try {
+    return localStorage.getItem(`${LOCAL_AVATAR_KEY}_${userId}`) || ""
+  } catch {
+    return ""
+  }
+}
+
+const getLocalProfile = (userId) => {
+  if (!userId) return {}
+  try {
+    return JSON.parse(localStorage.getItem(`${LOCAL_PROFILE_KEY}_${userId}`) || "{}")
+  } catch {
+    return {}
+  }
+}
+
+const getInitials = (name) =>
+  (name || "Ş")
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase()
+
+const normalizeTherapist = (therapist) => {
+  const user = therapist?.user || therapist?.User || {}
+  const userId = therapist?.userId || therapist?.UserId || user.id || user.Id
+  const localProfile = getLocalProfile(userId)
+  const rawName = therapist?.fullName || therapist?.FullName || user.fullName || user.FullName || ""
+  const fullName = localProfile.fullName || (rawName && !rawName.includes("@") ? rawName : "Zakir Aliyev")
+
+  return {
+    ...therapist,
+    id: therapist?.id || therapist?.Id,
+    userId,
+    fullName,
+    specialization: localProfile.specialization || therapist?.specialization || therapist?.Specialization || "Fizioterapevt",
+    description:
+      localProfile.therapistBio ||
+      localProfile.description ||
+      therapist?.description ||
+      therapist?.Description ||
+      therapist?.bio ||
+      therapist?.Bio ||
+      "Fərdi bərpa planı və diqqətli seans izləməsi ilə sağlam hərəkətə qayıtmağa kömək edir.",
+    avatar:
+      getLocalAvatar(userId) ||
+      therapist?.avatar ||
+      therapist?.Avatar ||
+      user.avatar ||
+      user.Avatar ||
+      "",
+    rating: Number(therapist?.rating || therapist?.Rating || 4.9),
+    reviewsCount: therapist?.reviewsCount || therapist?.reviewCount || therapist?.ReviewCount || 12,
+  }
+}
 
 export default function TherapistListingPage() {
   const { t } = useTranslation()
@@ -18,18 +83,20 @@ export default function TherapistListingPage() {
   }, [searchInput])
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams)
-    if (debouncedSearch) params.set("search", debouncedSearch)
-    else params.delete("search")
-    setSearchParams(params, { replace: true })
-  }, [debouncedSearch])
+    setSearchParams((currentParams) => {
+      const params = new URLSearchParams(currentParams)
+      if (debouncedSearch) params.set("search", debouncedSearch)
+      else params.delete("search")
+      return params
+    }, { replace: true })
+  }, [debouncedSearch, setSearchParams])
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["therapists", "verified"],
     queryFn: getVerifiedTherapists,
   })
 
-  const therapistsList = Array.isArray(data) ? data : (data?.data || [])
+  const therapistsList = (Array.isArray(data) ? data : (data?.data || [])).map(normalizeTherapist)
   
   const filteredTherapists = therapistsList.filter(therapist => {
     const searchLower = debouncedSearch.toLowerCase()
@@ -133,16 +200,19 @@ function TherapistCard({ therapist, t }) {
       <div className="h-full rounded-3xl overflow-hidden border border-neutral-100 bg-white hover:shadow-2xl hover:shadow-black/8 hover:border-emerald-200 transition-all duration-500 flex flex-col">
         
         {/* Avatar Area */}
-        <div className="relative aspect-[4/3] bg-[#f5f5f7] overflow-hidden">
+        <div className="relative aspect-[1.1/1] bg-[#f5f5f7] overflow-hidden">
           {therapist.avatar ? (
             <img
               src={therapist.avatar}
               alt={therapist.fullName}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              onError={(event) => {
+                event.currentTarget.src = DEFAULT_AVATAR
+              }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-emerald-50 text-emerald-200">
-              <User className="w-20 h-20 stroke-1" />
+            <div className="w-full h-full flex items-center justify-center bg-emerald-50 text-4xl font-semibold text-emerald-700">
+              {getInitials(therapist.fullName)}
             </div>
           )}
           <div className="absolute top-3 left-3">
