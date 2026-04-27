@@ -4,14 +4,14 @@ import { useAuthStore } from "../../store/useAuthStore"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { getMyOrders } from "../../services/order.service"
 import { getWishlist } from "../../services/wishlist.service"
-import { getMySessions, cancelSession as cancelSessionService } from "../../services/therapySession.service"
+import { getMySessions, cancelSession as cancelSessionService, confirmSessionAsUser } from "../../services/therapySession.service"
 import { getMyTherapistProfile, updateMyProfile as updateTherapistProfile } from "../../services/therapist.service"
 import api from "../../services/api"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card"
 import { Input } from "../../components/ui/Input"
 import { Button } from "../../components/ui/Button"
 import { Badge } from "../../components/ui/Badge"
-import { Package, ShieldCheck, Loader2, User as UserIcon, Heart, Key, Sparkles, Leaf, Eye, EyeOff, Camera, Trash2, Calendar, Clock, Activity } from "lucide-react"
+import { Package, ShieldCheck, Loader2, User as UserIcon, Heart, Key, Sparkles, Leaf, Eye, EyeOff, Camera, Trash2, Calendar, Clock, Activity, Video } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const LOCAL_AVATAR_KEY = "shafransa_local_profile_avatar"
@@ -640,6 +640,7 @@ export default function UserProfile({ tab = "profile" }) {
                        <Badge className={`${
                           session.status === "CONFIRMED" ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
                           session.status === "PENDING" ? "bg-amber-50 text-amber-600 border-amber-100" :
+                          session.status === "THERAPIST_CONFIRMED" ? "bg-blue-50 text-blue-600 border-blue-100" :
                           "bg-neutral-50 text-neutral-400 border-neutral-100"
                         } font-bold text-[9px] px-3 uppercase tracking-widest`}>
                           {t(`session.status.${session.status?.toLowerCase()}`, session.status)}

@@ -67,8 +67,14 @@ export default function AdminPanel({ tab = "overview" }) {
   })
 
   const { data: therapistRequests, isLoading: loadingRequests } = useQuery({
-    queryKey: ["admin", "therapist-requests"],
-    queryFn: () => api.get("/therapists/requests"),
+    queryKey: ["admin", "therapist-requests", "pending"],
+    queryFn: () => api.get("/therapists/requests/pending"),
+    enabled: activeTab === "therapists"
+  })
+
+  const { data: processedRequests, isLoading: loadingProcessed } = useQuery({
+    queryKey: ["admin", "therapist-requests", "processed"],
+    queryFn: () => api.get("/therapists/requests/processed"),
     enabled: activeTab === "therapists"
   })
 
@@ -120,12 +126,14 @@ export default function AdminPanel({ tab = "overview" }) {
   const [catSlug, setCatSlug] = useState("")
   const [catIcon, setCatIcon] = useState(null)
   const [catIconPreview, setCatIconPreview] = useState(null)
+  const [catParentId, setCatParentId] = useState("")
   const [editingCategoryId, setEditingCategoryId] = useState(null)
 
   const handleEditCategory = (cat) => {
     setEditingCategoryId(cat.id)
     setCatSlug(cat.slug || "")
     setCatIconPreview(cat.icon || "")
+    setCatParentId(cat.parentId || "")
     
     const newTrans = { ...initialCategoryTranslations }
     cat.translations?.forEach(t => {
@@ -142,6 +150,7 @@ export default function AdminPanel({ tab = "overview" }) {
       const form = new FormData()
       form.append("slug", catSlug || catTranslations.az.name.toLowerCase().replace(/\s+/g, "-"))
       if (catIcon) form.append("IconFile", catIcon)
+      if (catParentId) form.append("ParentId", catParentId)
 
       const transArray = Object.entries(catTranslations).map(([lang, fields]) => ({
         language: lang,
@@ -171,6 +180,7 @@ export default function AdminPanel({ tab = "overview" }) {
       const form = new FormData()
       form.append("slug", catSlug)
       if (catIcon) form.append("NewIconFile", catIcon)
+      if (catParentId) form.append("ParentId", catParentId)
 
       const transArray = Object.entries(catTranslations).map(([lang, fields]) => ({
         language: lang,
@@ -198,10 +208,10 @@ export default function AdminPanel({ tab = "overview" }) {
 
   // Plant Form
   const initialPlantTranslations = {
-    az: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" },
-    en: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" },
-    ru: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" },
-    tr: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "" }
+    az: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "" },
+    en: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "" },
+    ru: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "" },
+    tr: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "" }
   }
   const [plantTranslations, setPlantTranslations] = useState(initialPlantTranslations)
   const [plantMisc, setPlantMisc] = useState({ scientificName: "" })
@@ -300,6 +310,7 @@ export default function AdminPanel({ tab = "overview" }) {
   })
 
   const requests = Array.isArray(therapistRequests) ? therapistRequests : (therapistRequests?.data || [])
+  const processed = Array.isArray(processedRequests) ? processedRequests : (processedRequests?.data || [])
   const therapists = Array.isArray(allTherapists) ? allTherapists : (allTherapists?.data || [])
 
   return (
@@ -513,6 +524,42 @@ export default function AdminPanel({ tab = "overview" }) {
                       onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], drugInteractions: e.target.value } })}
                       className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
                     />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_safety', "General Safety")}
+                      value={plantTranslations[activeLang].generalSafety}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], generalSafety: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_pregnancy', "Pregnancy Warnings")}
+                      value={plantTranslations[activeLang].pregnancy}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], pregnancy: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_allergy', "Allergy Warnings")}
+                      value={plantTranslations[activeLang].allergy}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], allergy: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_medical_conditions', "Medical Conditions")}
+                      value={plantTranslations[activeLang].medicalConditions}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], medicalConditions: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_used_in', "Used In (Traditional Medicine)")}
+                      value={plantTranslations[activeLang].usedIn}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], usedIn: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_notes', "Expert Notes")}
+                      value={plantTranslations[activeLang].notes}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], notes: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
                   </div>
 
                   {/* Habitat & Scientific */}
@@ -692,12 +739,18 @@ export default function AdminPanel({ tab = "overview" }) {
             <CardContent className="p-6">
               <TranslationTabs activeLang={activeLang} onLangChange={setActiveLang}>
                   <div className="flex gap-4 items-end">
-                    <div className="flex-1">
+                    <div className="flex-1 space-y-4">
                       <Input
                         placeholder={t('admin.categories.placeholder_name', "Category Name")}
                         value={catTranslations[activeLang].name}
                         onChange={(e) => setCatTranslations({ ...catTranslations, [activeLang]: { ...catTranslations[activeLang], name: e.target.value } })}
                         className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                      <textarea
+                        placeholder={t('admin.categories.placeholder_desc', "Category Description")}
+                        value={catTranslations[activeLang].description}
+                        onChange={(e) => setCatTranslations({ ...catTranslations, [activeLang]: { ...catTranslations[activeLang], description: e.target.value } })}
+                        className="w-full bg-white/5 border border-white/10 text-white rounded-xl p-3 text-sm min-h-[80px] focus:ring-1 focus:ring-blue-500/50 outline-none"
                       />
                     </div>
                     <div className="w-11 h-11 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0">
@@ -728,6 +781,16 @@ export default function AdminPanel({ tab = "overview" }) {
                   onChange={(e) => setCatSlug(e.target.value)}
                   className="bg-white/5 border-white/10 text-white max-w-xs"
                 />
+                <select 
+                  value={catParentId}
+                  onChange={(e) => setCatParentId(e.target.value)}
+                  className="bg-white/5 border border-white/10 text-white/60 h-11 px-4 rounded-xl text-sm focus:bg-[#09090b] outline-none"
+                >
+                  <option value="">{t('admin.categories.no_parent', '-- No Parent --')}</option>
+                  {categories.filter(c => c.id !== editingCategoryId && !c.parentId).map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
                 <div className="flex gap-2 w-full">
                   {editingCategoryId && (
                     <Button
@@ -738,6 +801,7 @@ export default function AdminPanel({ tab = "overview" }) {
                         setCatSlug("")
                         setCatIcon(null)
                         setCatIconPreview(null)
+                        setCatParentId("")
                       }}
                       className="flex-1 border-white/10 text-white hover:bg-white/5 h-11"
                     >
@@ -902,6 +966,17 @@ export default function AdminPanel({ tab = "overview" }) {
                               </div>
                            </div>
                            <div className="flex items-center gap-3">
+                              <button 
+                                onClick={async () => {
+                                   await api.put(`/therapists/${therapist.id}/menu-status`, { isShowMenu: !therapist.isShowMenu })
+                                   queryClient.invalidateQueries(["admin", "therapists"])
+                                   toast.success("Menu status updated!")
+                                }}
+                                className={`p-2 rounded-lg transition-colors ${therapist.isShowMenu ? 'bg-blue-500/10 text-blue-400' : 'bg-white/5 text-white/20'}`}
+                                title={therapist.isShowMenu ? "Visible in Menu" : "Hidden from Menu"}
+                              >
+                                 {therapist.isShowMenu ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                              </button>
                               <Badge className={`${therapist.isVerified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'} border-none font-bold text-[9px]`}>
                                  {therapist.isVerified ? "VERIFIED" : "PENDING"}
                               </Badge>

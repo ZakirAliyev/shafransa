@@ -287,15 +287,33 @@ function ProductManager({ myProducts, isLoading, client }) {
   const [editingId, setEditingId] = useState(null)
   const [activeLang, setActiveLang] = useState('az')
   
+  const { data: plantsResponse } = useQuery({
+    queryKey: ["plants", {}],
+    queryFn: () => api.get("/plants")
+  })
+  const plants = Array.isArray(plantsResponse) ? plantsResponse : (plantsResponse?.data || [])
+  
   const initialTranslations = {
-    az: { title: "", description: "", region: "", form: "" },
-    en: { title: "", description: "", region: "", form: "" },
-    ru: { title: "", description: "", region: "", form: "" },
-    tr: { title: "", description: "", region: "", form: "" }
+    az: { title: "", description: "", region: "", form: "", activeCompounds: "", qualityTracking: "" },
+    en: { title: "", description: "", region: "", form: "", activeCompounds: "", qualityTracking: "" },
+    ru: { title: "", description: "", region: "", form: "", activeCompounds: "", qualityTracking: "" },
+    tr: { title: "", description: "", region: "", form: "", activeCompounds: "", qualityTracking: "" }
   }
 
   const [translations, setTranslations] = useState(initialTranslations)
-  const [formData, setFormData] = useState({ price: "", stock: "", verified: true })
+  const [formData, setFormData] = useState({ 
+    price: "", 
+    originalPrice: "", 
+    stock: "", 
+    verified: true, 
+    featured: false,
+    scientificName: "",
+    batchNumber: "",
+    heavyMetalTest: false,
+    pesticideTest: false,
+    activeCompoundPercent: "",
+    plantId: ""
+  })
   const [imageFile, setImageFile] = useState(null)
   const [galleryFiles, setGalleryFiles] = useState([])
   const [existingImages, setExistingImages] = useState([])
@@ -305,7 +323,19 @@ function ProductManager({ myProducts, isLoading, client }) {
   const resetForm = () => {
     setEditingId(null)
     setTranslations(initialTranslations)
-    setFormData({ price: "", stock: "", verified: true })
+    setFormData({ 
+      price: "", 
+      originalPrice: "", 
+      stock: "", 
+      verified: true, 
+      featured: false,
+      scientificName: "",
+      batchNumber: "",
+      heavyMetalTest: false,
+      pesticideTest: false,
+      activeCompoundPercent: "",
+      plantId: ""
+    })
     setImageFile(null)
     setGalleryFiles([])
     setExistingImages([])
@@ -317,8 +347,16 @@ function ProductManager({ myProducts, isLoading, client }) {
     setEditingId(product.id)
     setFormData({
       price: product.price,
+      originalPrice: product.originalPrice || "",
       stock: product.stock,
-      verified: product.verified || true
+      verified: product.verified || true,
+      featured: product.featured || false,
+      scientificName: product.scientificName || "",
+      batchNumber: product.batchNumber || "",
+      heavyMetalTest: product.heavyMetalTest || false,
+      pesticideTest: product.pesticideTest || false,
+      activeCompoundPercent: product.activeCompoundPercent || "",
+      plantId: product.plantId || ""
     })
     
     // Map all translations
@@ -329,7 +367,9 @@ function ProductManager({ myProducts, isLoading, client }) {
           title: item.title || "", 
           description: item.description || "", 
           region: item.region || "", 
-          form: item.form || "" 
+          form: item.form || "",
+          activeCompounds: item.activeCompounds || "",
+          qualityTracking: item.qualityTracking || ""
         }
       }
     })
@@ -345,7 +385,16 @@ function ProductManager({ myProducts, isLoading, client }) {
     mutationFn: (data) => {
       const form = new FormData()
       form.append("price", data.price)
+      if (data.originalPrice) form.append("originalPrice", data.originalPrice)
       form.append("stock", data.stock)
+      form.append("featured", data.featured)
+      if (data.scientificName) form.append("scientificName", data.scientificName)
+      if (data.batchNumber) form.append("batchNumber", data.batchNumber)
+      form.append("heavyMetalTest", data.heavyMetalTest)
+      form.append("pesticideTest", data.pesticideTest)
+      if (data.activeCompoundPercent) form.append("activeCompoundPercent", data.activeCompoundPercent)
+      if (data.plantId) form.append("plantId", data.plantId)
+
       if (imageFile) form.append("ImageFile", imageFile)
       if (imageFile) form.append("NewImageFile", imageFile) // For UpdateDto compatibility
       
@@ -466,17 +515,110 @@ function ProductManager({ myProducts, isLoading, client }) {
                     />
                   </div>
                 </div>
+
+                <div className="space-y-1">
+                   <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    {t('seller.products.label_active_compounds', 'Active Compounds')} ({activeLang.toUpperCase()})
+                   </label>
+                   <Input 
+                    placeholder="..." 
+                    value={translations[activeLang].activeCompounds} 
+                    onChange={e => setTranslations({...translations, [activeLang]: {...translations[activeLang], activeCompounds: e.target.value}})} 
+                    className="h-11 rounded-xl bg-neutral-50 border-neutral-200 text-xs" 
+                   />
+                </div>
+                
+                <div className="space-y-1">
+                   <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                    {t('seller.products.label_quality', 'Quality Tracking')} ({activeLang.toUpperCase()})
+                   </label>
+                   <textarea 
+                      placeholder="..." 
+                      value={translations[activeLang].qualityTracking} 
+                      onChange={e => setTranslations({...translations, [activeLang]: {...translations[activeLang], qualityTracking: e.target.value}})} 
+                      className="w-full min-h-[60px] p-3 rounded-xl bg-neutral-50 border border-neutral-200 text-xs focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                   />
+                </div>
               </div>
             </TranslationTabs>
 
             <div className="grid grid-cols-2 gap-4 pt-4 border-t border-neutral-50">
                <div className="space-y-1">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_price', 'Price ($)')}</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_price', 'Market Price ($)')}</label>
                   <Input type="number" step="0.01" placeholder="99.00" required value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className="h-12 rounded-xl bg-neutral-50 border-neutral-200" />
                </div>
                <div className="space-y-1">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_stock', 'Inventory')}</label>
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_original_price', 'Retail MSRP ($)')}</label>
+                  <Input type="number" step="0.01" placeholder="120.00" value={formData.originalPrice} onChange={e => setFormData({...formData, originalPrice: e.target.value})} className="h-12 rounded-xl bg-neutral-50 border-neutral-200" />
+               </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+               <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_stock', 'Inventory Level')}</label>
                   <Input type="number" placeholder="500" required value={formData.stock} onChange={e => setFormData({...formData, stock: e.target.value})} className="h-12 rounded-xl bg-neutral-50 border-neutral-200" />
+               </div>
+               <div className="space-y-1 flex flex-col justify-end">
+                  <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, featured: !formData.featured})}
+                    className={`h-12 rounded-xl border flex items-center justify-center gap-2 transition-colors ${formData.featured ? 'bg-amber-500/10 border-amber-500 text-amber-600' : 'bg-neutral-50 border-neutral-200 text-muted-foreground'}`}
+                  >
+                    <Star className={`w-4 h-4 ${formData.featured ? 'fill-current' : ''}`} />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">{t('seller.products.featured', 'Featured')}</span>
+                  </button>
+               </div>
+            </div>
+
+            <div className="space-y-4 pt-4 border-t border-neutral-50">
+               <h3 className="text-xs font-bold uppercase tracking-widest text-primary mb-2">{t('seller.products.sections.clinical', 'Clinical & Laboratory')}</h3>
+               <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_batch', 'Batch Number')}</label>
+                    <Input placeholder="BN-2026-X" value={formData.batchNumber} onChange={e => setFormData({...formData, batchNumber: e.target.value})} className="h-11 rounded-xl bg-neutral-50 border-neutral-200" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_scientific', 'Scientific Name')}</label>
+                    <Input placeholder="Crocus sativus" value={formData.scientificName} onChange={e => setFormData({...formData, scientificName: e.target.value})} className="h-11 rounded-xl bg-neutral-50 border-neutral-200" />
+                  </div>
+               </div>
+
+               <div className="space-y-2">
+                 <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_link_plant', 'Link to Encyclopedia')}</label>
+                 <select 
+                    value={formData.plantId} 
+                    onChange={e => setFormData({...formData, plantId: e.target.value})}
+                    className="w-full h-11 rounded-xl bg-neutral-50 border border-neutral-200 text-sm px-3 outline-none"
+                 >
+                    <option value="">{t('seller.products.select_plant', 'None (Manual Registry)')}</option>
+                    {plants.map(p => (
+                      <option key={p.id} value={p.id}>{p.name} ({p.scientificName})</option>
+                    ))}
+                 </select>
+               </div>
+
+               <div className="grid grid-cols-2 gap-4">
+                  <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, heavyMetalTest: !formData.heavyMetalTest})}
+                    className={`h-11 rounded-xl border flex items-center justify-center gap-2 transition-colors ${formData.heavyMetalTest ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600' : 'bg-neutral-50 border-neutral-200 text-muted-foreground'}`}
+                  >
+                    <ShieldCheck className="w-4 h-4" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Heavy Metals</span>
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setFormData({...formData, pesticideTest: !formData.pesticideTest})}
+                    className={`h-11 rounded-xl border flex items-center justify-center gap-2 transition-colors ${formData.pesticideTest ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600' : 'bg-neutral-50 border-neutral-200 text-muted-foreground'}`}
+                  >
+                    <ShieldCheck className="w-4 h-4" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest">Pesticides</span>
+                  </button>
+               </div>
+
+               <div className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t('seller.products.label_purity', 'Active Compound %')}</label>
+                  <Input type="number" placeholder="- %" value={formData.activeCompoundPercent} onChange={e => setFormData({...formData, activeCompoundPercent: e.target.value})} className="h-11 rounded-xl bg-neutral-50 border-neutral-200" />
                </div>
             </div>
 

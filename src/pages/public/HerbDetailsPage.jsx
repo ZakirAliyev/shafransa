@@ -158,6 +158,14 @@ export default function HerbDetailsPage() {
                   {herbData.benefits}
                 </div>
               </section>
+              {herbData.usedIn && (
+                <section>
+                  <h2 className="text-2xl font-display font-bold text-[#1a1c1e] mb-4">{t('herb.sections.used_in', 'Traditional Medicine & Used In')}</h2>
+                  <div className="prose prose-neutral max-w-none text-muted-foreground leading-relaxed">
+                    {herbData.usedIn}
+                  </div>
+                </section>
+              )}
             </div>
             <div className="space-y-6">
               <div className="p-6 rounded-2xl bg-white border border-neutral-100 shadow-xl shadow-black/5">
@@ -165,9 +173,15 @@ export default function HerbDetailsPage() {
                 <p className="text-sm text-muted-foreground leading-relaxed">{herbData.climate || t('herb.climate_default', "Global adaptivity. Often found in temperate to subtropical zones.")}</p>
               </div>
               <div className="p-6 rounded-2xl bg-white border border-neutral-100 shadow-xl shadow-black/5">
-                <h3 className="font-bold text-[#1a1c1e] mb-4 flex items-center gap-2"><Leaf className="w-4 h-4 text-primary" /> {t('herb.sections.usage', 'Traditional Usage')}</h3>
+                <h3 className="font-bold text-[#1a1c1e] mb-2 flex items-center gap-2"><Leaf className="w-4 h-4 text-primary" /> {t('herb.sections.usage', 'Traditional Usage')}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{herbData.usage}</p>
               </div>
+              {herbData.notes && (
+                <div className="p-6 rounded-2xl bg-[#f5f5f7] border border-neutral-200">
+                  <h3 className="font-bold text-[#1a1c1e] mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">{t('herb.sections.expert_notes', 'Expert Notes')}</h3>
+                  <p className="text-xs text-muted-foreground leading-relaxed italic">{herbData.notes}</p>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -214,18 +228,36 @@ export default function HerbDetailsPage() {
               <p className="text-orange-600/80 leading-relaxed font-medium">{herbData.sideEffects}</p>
             </div>
 
-            {(herbData.drugInteractions || herbData.pregnancyWarnings) && (
-              <div className="md:col-span-2 p-8 rounded-3xl bg-white border border-neutral-200 shadow-xl shadow-black/5 space-y-6">
+            {(herbData.drugInteractions || herbData.pregnancyWarnings || herbData.pregnancy || herbData.allergy || herbData.generalSafety || herbData.medicalConditions) && (
+              <div className="md:col-span-2 p-8 rounded-3xl bg-white border border-neutral-200 shadow-xl shadow-black/5 space-y-8">
+                {herbData.generalSafety && (
+                  <div>
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-primary mb-2 border-b border-neutral-100 pb-2">{t('herb.sections.general_safety', 'Clinical Safety Overview')}</h4>
+                    <p className="text-muted-foreground leading-relaxed">{herbData.generalSafety}</p>
+                  </div>
+                )}
                 {herbData.drugInteractions && (
                   <div>
                     <h4 className="text-sm font-bold uppercase tracking-widest text-[#1a1c1e] mb-2 border-b border-neutral-100 pb-2">{t('herb.sections.drug_interactions', 'Drug Interactions')}</h4>
                     <p className="text-muted-foreground leading-relaxed">{herbData.drugInteractions}</p>
                   </div>
                 )}
-                {herbData.pregnancyWarnings && (
+                {(herbData.pregnancyWarnings || herbData.pregnancy) && (
                   <div>
                     <h4 className="text-sm font-bold uppercase tracking-widest text-rose-500 mb-2 border-b border-rose-100 pb-2">{t('herb.sections.pregnancy_warnings', 'Pregnancy & Nursing Warnings')}</h4>
-                    <p className="text-muted-foreground leading-relaxed">{herbData.pregnancyWarnings}</p>
+                    <p className="text-muted-foreground leading-relaxed">{herbData.pregnancy || herbData.pregnancyWarnings}</p>
+                  </div>
+                )}
+                {herbData.allergy && (
+                  <div>
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-orange-500 mb-2 border-b border-orange-100 pb-2">{t('herb.sections.allergy_warnings', 'Potential Allergen Alerts')}</h4>
+                    <p className="text-muted-foreground leading-relaxed">{herbData.allergy}</p>
+                  </div>
+                )}
+                {herbData.medicalConditions && (
+                  <div>
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-amber-500 mb-2 border-b border-amber-100 pb-2">{t('herb.sections.clinical_conditions', 'Sensitive Medical Conditions')}</h4>
+                    <p className="text-muted-foreground leading-relaxed">{herbData.medicalConditions}</p>
                   </div>
                 )}
               </div>

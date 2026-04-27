@@ -143,10 +143,20 @@ export default function ProductDetailsPage() {
         <div className="space-y-4">
           <div className="relative aspect-square bg-[#f5f5f7] rounded-3xl overflow-hidden border border-neutral-100 flex items-center justify-center">
             {productData.verified && (
-              <div className="absolute top-4 left-4 z-10">
+              <div className="absolute top-4 left-4 z-10 flex flex-col gap-2">
                 <Badge className="bg-white/95 backdrop-blur-sm text-primary border-primary/20 font-bold px-2.5 py-1 text-[10px]">
                   <ShieldCheck className="w-3 h-3 mr-1" /> {t('product.verified_badge', 'LAB VERIFIED')}
                 </Badge>
+                {productData.heavyMetalTest && (
+                  <Badge className="bg-emerald-500/90 backdrop-blur-sm text-white border-none font-bold px-2.5 py-1 text-[10px] transform -translate-x-1">
+                    H-METAL SAFE
+                  </Badge>
+                )}
+                {productData.pesticideTest && (
+                  <Badge className="bg-blue-500/90 backdrop-blur-sm text-white border-none font-bold px-2.5 py-1 text-[10px] transform -translate-x-2">
+                    PESTICIDE FREE
+                  </Badge>
+                )}
               </div>
             )}
             {displayImage ? (
@@ -326,6 +336,17 @@ export default function ProductDetailsPage() {
                 <h3 className="font-bold text-[#1a1c1e]">{t('product.tabs.compounds', 'Active Compounds')}</h3>
               </div>
               <p className="text-muted-foreground leading-relaxed">{productData.activeCompounds}</p>
+              {productData.activeCompoundPercent && (
+                <div className="mt-6 pt-6 border-t border-neutral-200">
+                   <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-bold text-[#1a1c1e]">{t('product.purity_level', 'Purity Concentration')}</span>
+                      <span className="text-primary font-bold">{productData.activeCompoundPercent}%</span>
+                   </div>
+                   <div className="h-2 w-full bg-primary/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-primary" style={{ width: `${productData.activeCompoundPercent}%` }}></div>
+                   </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-16 text-muted-foreground">
@@ -348,12 +369,21 @@ export default function ProductDetailsPage() {
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <item.icon className="w-5 h-5 text-primary" />
               </div>
-              <div>
+              <div className="flex-1">
                 <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60">{item.label}</div>
                 <div className="font-bold text-[#1a1c1e] mt-0.5">{item.value}</div>
               </div>
             </div>
           ))}
+          {productData.qualityTracking && (
+             <div className="p-6 rounded-2xl bg-[#1a1c1e] text-white border-none mt-4">
+                <div className="flex items-center gap-2 mb-3">
+                   <ShieldCheck className="w-5 h-5 text-primary" />
+                   <h3 className="font-bold">{t('product.quality_track', 'Quality Control Tracking')}</h3>
+                </div>
+                <p className="text-sm text-white/60 leading-relaxed italic">"{productData.qualityTracking}"</p>
+             </div>
+          )}
         </div>
       )}
 

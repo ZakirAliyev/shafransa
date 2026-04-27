@@ -57,6 +57,15 @@ export const getAllRequests = async () => {
     }
 };
 
+export const getProcessedRequests = async () => {
+    try {
+        return await api.get("/therapists/requests/processed");
+    } catch (error) {
+        console.warn("⚠️ Using mock data for processed requests (API failed)");
+        return MOCK_THERAPY_REQUESTS.filter(r => r.status !== "Pending");
+    }
+};
+
 export const getPendingRequests = async () => {
     try {
         return await api.get("/therapists/requests/pending");
