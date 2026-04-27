@@ -2,6 +2,7 @@ import { useMemo, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
+import i18next from "i18next"
 import { getTherapistById } from "../../services/therapist.service"
 import { getAvailabilitySummary, createSession } from "../../services/therapySession.service"
 import { useAuthStore } from "../../store/useAuthStore"
@@ -28,7 +29,15 @@ import {
   User,
 } from "lucide-react"
 
-const DAY_LABELS = ["B.e", "Ç.a", "Ç", "C.a", "C", "Ş", "B"]
+const DAY_LABELS = [
+  i18next.t('therapist.days.mon', 'Mon'),
+  i18next.t('therapist.days.tue', 'Tue'),
+  i18next.t('therapist.days.wed', 'Wed'),
+  i18next.t('therapist.days.thu', 'Thu'),
+  i18next.t('therapist.days.fri', 'Fri'),
+  i18next.t('therapist.days.sat', 'Sat'),
+  i18next.t('therapist.days.sun', 'Sun')
+]
 const LOCAL_AVATAR_KEY = "shafransa_local_profile_avatar"
 const LOCAL_PROFILE_KEY = "shafransa_local_profile_data"
 const DEFAULT_AVATAR =
@@ -143,6 +152,9 @@ const normalizeTherapist = (therapist) => {
     certificates: data.certificates || data.Certificates || [],
     isVerified: Boolean(data.isVerified ?? data.IsVerified ?? data.verified ?? true),
     isEmailVerified: Boolean(data.isEmailVerified ?? data.IsEmailVerified),
+    onlinePrice: data.onlinePrice || 0,
+    offlinePrice: data.offlinePrice || 0,
+    sessionDurationInMinutes: data.sessionDurationInMinutes || 60,
     createdAt: data.createdAt || data.CreatedAt || "",
   }
 }
@@ -211,6 +223,7 @@ export default function TherapistDetailPage() {
 
   const [selectedDate, setSelectedDate] = useState(null)
   const [selectedSlot, setSelectedSlot] = useState(null)
+  const [isOnline, setIsOnline] = useState(true)
   const [currentMonth, setCurrentMonth] = useState(today.getMonth() + 1)
   const [currentYear, setCurrentYear] = useState(today.getFullYear())
 
@@ -319,6 +332,7 @@ export default function TherapistDetailPage() {
       therapistId: id,
       date: toDisplayDate(selectedDate),
       hour: selectedSlot,
+      isOnline,
       therapistSnapshot: {
         id,
         fullName: profile.fullName,
@@ -426,12 +440,12 @@ export default function TherapistDetailPage() {
                 <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Reytinq</p>
               </div>
               <div className="border-r border-stone-200 p-5">
-                <div className="text-xl font-semibold text-stone-900">60</div>
+                <div className="text-xl font-semibold text-stone-900">{profile.sessionDurationInMinutes}</div>
                 <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Dəqiqə</p>
               </div>
               <div className="p-5">
-                <div className="text-xl font-semibold text-stone-900">{profile.certificates.length}</div>
-                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Sənəd</p>
+                <div className="text-xl font-semibold text-emerald-700">₼{isOnline ? profile.onlinePrice : profile.offlinePrice}</div>
+                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Qiymət</p>
               </div>
             </div>
           </div>
@@ -544,8 +558,24 @@ export default function TherapistDetailPage() {
                 </p>
               </div>
               <div className="rounded-md bg-emerald-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
-                60 dəq
+                {profile.sessionDurationInMinutes} dəq
               </div>
+            </div>
+
+            {/* Online/Offline Choice */}
+            <div className="mb-6 grid grid-cols-2 gap-2 p-1 bg-stone-100 rounded-xl">
+               <button 
+                  onClick={() => setIsOnline(true)}
+                  className={`h-10 rounded-lg text-xs font-bold transition-all ${isOnline ? "bg-white text-[#1a1c1e] shadow-sm" : "text-stone-500 hover:text-stone-700"}`}
+               >
+                  Onlayn (₼{profile.onlinePrice})
+               </button>
+               <button 
+                  onClick={() => setIsOnline(false)}
+                  className={`h-10 rounded-lg text-xs font-bold transition-all ${!isOnline ? "bg-white text-[#1a1c1e] shadow-sm" : "text-stone-500 hover:text-stone-700"}`}
+               >
+                  Əyani (₼{profile.offlinePrice})
+               </button>
             </div>
 
             <div className="rounded-lg border border-stone-200 p-4">

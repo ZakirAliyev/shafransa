@@ -2,17 +2,19 @@ import React, { useState } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { getMyTherapistSessions, confirmSessionAsTherapist, rejectSessionAsTherapist, completeSession, setWorkingHours } from "../../services/therapySession.service"
+import { getMyTherapistProfile, updateMyProfile } from "../../services/therapist.service"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card"
 import { Button } from "../../components/ui/Button"
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/Avatar"
 import { Badge } from "../../components/ui/Badge"
 import { Input } from "../../components/ui/Input"
-import { Calendar, Video, Clock, DollarSign, Loader2, CheckCircle2, XCircle, PlayCircle, Settings } from "lucide-react"
+import { Calendar, Video, Clock, DollarSign, Loader2, CheckCircle2, XCircle, PlayCircle, Settings, ShieldCheck, CheckCircle } from "lucide-react"
 import { toast } from "../../store/useToastStore"
 
 export default function ExpertPanel() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
+  const [activeTab, setActiveTab] = useState("sessions")
   const [isConfiguringHours, setIsConfiguringHours] = useState(false)
   const [workingHours, setWorkingHoursInput] = useState("")
 
@@ -50,13 +52,71 @@ export default function ExpertPanel() {
 
   const { mutate: saveHours, isPending: savingHours } = useMutation({
     mutationFn: () => setWorkingHours({ 
-      workingHours: workingHours.split(',').map(s => s.trim()).filter(Boolean) 
+      Hours: workingHours.split(',').map(s => s.trim()).filter(Boolean) 
     }),
     onSuccess: () => {
       toast.success(t('expert.hours_updated', 'Working hours updated!'))
       setIsConfiguringHours(false)
     }
   })
+
+  const { data: therapistProfile, isLoading: loadingProfile } = useQuery({
+    queryKey: ["therapist", "me"],
+    queryFn: getMyTherapistProfile
+  })
+
+  const therapist = therapistProfile?.data || therapistProfile || {}
+
+  const [profileForm, setProfileForm] = useState({
+    fullName: "",
+    specialization: "",
+    bio: "",
+    phoneNumber: "",
+    onlinePrice: 0,
+    offlinePrice: 0,
+    sessionDurationInMinutes: 60
+  })
+
+  const [files, setFiles] = useState({
+    cv: null,
+    avatar: null,
+    certificates: []
+  })
+
+  React.useEffect(() => {
+    if (therapist) {
+      setProfileForm({
+        fullName: therapist.user?.fullName || therapist.fullName || "",
+        specialization: therapist.specialization || "",
+        bio: therapist.bio || "",
+        phoneNumber: therapist.phoneNumber || "",
+        onlinePrice: therapist.onlinePrice || 0,
+        offlinePrice: therapist.offlinePrice || 0,
+        sessionDurationInMinutes: therapist.sessionDurationInMinutes || 60
+      })
+    }
+  }, [therapistProfile])
+
+  const { mutate: updateProfile, isPending: updatingProfile } = useMutation({
+    mutationFn: (formData) => updateMyProfile(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["therapist", "me"])
+      toast.success(t('expert.profile_updated', 'Profile updated successfully!'))
+    }
+  })
+
+  const handleProfileSubmit = (e) => {
+    e.preventDefault()
+    const form = new FormData()
+    Object.entries(profileForm).forEach(([key, value]) => {
+      form.append(key.charAt(0).toUpperCase() + key.slice(1), value)
+    })
+    if (files.cv) form.append("CvFile", files.cv)
+    if (files.avatar) form.append("ProfileImageFile", files.avatar)
+    files.certificates.forEach(file => form.append("CertificateFiles", file))
+    
+    updateProfile(form)
+  }
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -77,14 +137,167 @@ export default function ExpertPanel() {
           <p className="text-muted-foreground font-medium">{t('expert.subtitle', 'Manage clinical sessions and patient protocols.')}</p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" className="rounded-xl font-bold h-11" onClick={() => setIsConfiguringHours(!isConfiguringHours)}>
-            <Settings className="mr-2 h-4 w-4" /> {t('expert.configure_hours', 'Session Schema')}
+          <Button 
+            variant={activeTab === "settings" ? "default" : "outline"} 
+            className="rounded-xl font-bold h-11" 
+            onClick={() => setActiveTab(activeTab === "settings" ? "sessions" : "settings")}
+          >
+            <Settings className="mr-2 h-4 w-4" /> {t('expert.profile_settings', 'Profile Settings')}
           </Button>
-          <Button className="rounded-xl font-bold h-11 shadow-lg shadow-primary/20">
-            <Calendar className="mr-2 h-4 w-4" /> {t('expert.view_calendar', 'Calendar')}
+          <Button variant="outline" className="rounded-xl font-bold h-11" onClick={() => setIsConfiguringHours(!isConfiguringHours)}>
+            <Clock className="mr-2 h-4 w-4" /> {t('expert.configure_hours', 'Work Schema')}
           </Button>
         </div>
       </div>
+
+      {activeTab === "settings" && (
+        <div className="grid lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+           <div className="lg:col-span-2 space-y-8">
+              <Card className="premium-card">
+                 <CardHeader className="p-8 border-b border-neutral-100">
+                    <CardTitle className="text-xl font-display font-bold">{t('expert.profile.title', 'Professional Profile')}</CardTitle>
+                    <CardDescription>{t('expert.profile.desc', 'Update your clinical identity, specialization, and session details.')}</CardDescription>
+                 </CardHeader>
+                 <CardContent className="p-8">
+                    <form onSubmit={handleProfileSubmit} className="space-y-6">
+                       <div className="grid md:grid-cols-2 gap-6">
+                          <div className="space-y-2">
+                             <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('expert.field.fullname', 'Full Name')}</label>
+                             <Input 
+                                value={profileForm.fullName}
+                                onChange={e => setProfileForm({...profileForm, fullName: e.target.value})}
+                                className="h-12 rounded-xl bg-neutral-50/50"
+                             />
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('expert.field.specialization', 'Specialization')}</label>
+                             <Input 
+                                value={profileForm.specialization}
+                                onChange={e => setProfileForm({...profileForm, specialization: e.target.value})}
+                                className="h-12 rounded-xl bg-neutral-50/50"
+                             />
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('expert.field.phone', 'Contact Number')}</label>
+                             <Input 
+                                value={profileForm.phoneNumber}
+                                onChange={e => setProfileForm({...profileForm, phoneNumber: e.target.value})}
+                                className="h-12 rounded-xl bg-neutral-50/50"
+                             />
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('expert.field.duration', 'Session Duration (Min)')}</label>
+                             <Input 
+                                type="number"
+                                value={profileForm.sessionDurationInMinutes}
+                                onChange={e => setProfileForm({...profileForm, sessionDurationInMinutes: e.target.value})}
+                                className="h-12 rounded-xl bg-neutral-50/50"
+                             />
+                          </div>
+                       </div>
+
+                       <div className="grid md:grid-cols-2 gap-6 p-6 rounded-2xl bg-emerald-50/30 border border-emerald-100">
+                          <div className="space-y-2">
+                             <label className="text-xs font-bold uppercase tracking-widest text-emerald-600">{t('expert.field.online_price', 'Online Session Price')}</label>
+                             <div className="relative">
+                                <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500" />
+                                <Input 
+                                   type="number"
+                                   value={profileForm.onlinePrice}
+                                   onChange={e => setProfileForm({...profileForm, onlinePrice: e.target.value})}
+                                   className="h-12 rounded-xl bg-white pl-10 border-emerald-100"
+                                />
+                             </div>
+                          </div>
+                          <div className="space-y-2">
+                             <label className="text-xs font-bold uppercase tracking-widest text-emerald-600">{t('expert.field.offline_price', 'In-Person Session Price')}</label>
+                             <div className="relative">
+                                <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500" />
+                                <Input 
+                                   type="number"
+                                   value={profileForm.offlinePrice}
+                                   onChange={e => setProfileForm({...profileForm, offlinePrice: e.target.value})}
+                                   className="h-12 rounded-xl bg-white pl-10 border-emerald-100"
+                                />
+                             </div>
+                          </div>
+                       </div>
+
+                       <div className="space-y-2">
+                          <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('expert.field.bio', 'Professional Bio')}</label>
+                          <textarea 
+                             value={profileForm.bio}
+                             onChange={e => setProfileForm({...profileForm, bio: e.target.value})}
+                             className="w-full min-h-[150px] p-4 rounded-xl bg-neutral-50/50 border border-neutral-100 text-sm outline-none focus:ring-2 focus:ring-primary/20"
+                             placeholder={t('expert.bio_placeholder', 'Detail your clinical experience and therapeutic approach...')}
+                          />
+                       </div>
+
+                       <div className="flex justify-end pt-4">
+                          <Button type="submit" disabled={updatingProfile} className="rounded-full px-12 h-12 font-bold shadow-xl shadow-primary/20">
+                             {updatingProfile ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : t('common.save_profile', 'Deploy Updates')}
+                          </Button>
+                       </div>
+                    </form>
+                 </CardContent>
+              </Card>
+           </div>
+
+           <div className="space-y-8">
+              <Card className="premium-card bg-[#1a1c1e] text-white overflow-hidden border-none shadow-2xl">
+                 <div className="absolute top-0 right-0 p-8 opacity-10">
+                    <ShieldCheck className="w-24 h-24" />
+                 </div>
+                 <CardHeader className="p-8 pb-4">
+                    <CardTitle className="text-lg font-bold">{t('expert.docs.title', 'Clinical Documentation')}</CardTitle>
+                    <CardDescription className="text-white/40">{t('expert.docs.desc', 'Verification assets and credentials.')}</CardDescription>
+                 </CardHeader>
+                 <CardContent className="p-8 pt-4 space-y-6">
+                    <div className="space-y-4">
+                       <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group relative">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{t('expert.docs.cv', 'Curriculum Vitae')}</p>
+                          <p className="text-xs font-medium text-white/60">{files.cv ? files.cv.name : (therapist.cv ? 'CV_Document.pdf' : 'Not uploaded')}</p>
+                          <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={e => setFiles({...files, cv: e.target.files[0]})} />
+                       </div>
+                       <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group relative">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{t('expert.docs.avatar', 'Profile Media')}</p>
+                          <p className="text-xs font-medium text-white/60">{files.avatar ? files.avatar.name : (therapist.user?.avatar ? 'Avatar_Media.jpg' : 'Not uploaded')}</p>
+                          <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={e => setFiles({...files, avatar: e.target.files[0]})} />
+                       </div>
+                       <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-colors cursor-pointer group relative">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">{t('expert.docs.certs', 'Clinical Certificates')}</p>
+                          <p className="text-xs font-medium text-white/60">{files.certificates.length > 0 ? `${files.certificates.length} files staged` : `${therapist.certificates?.length || 0} verified assets`}</p>
+                          <input type="file" multiple className="absolute inset-0 opacity-0 cursor-pointer" onChange={e => setFiles({...files, certificates: Array.from(e.target.files)})} />
+                       </div>
+                    </div>
+                    <p className="text-[9px] text-white/30 italic leading-relaxed">
+                       {t('expert.docs.privacy', '* All medical credentials are encrypted and stored in high-security botanical vaults.')}
+                    </p>
+                 </CardContent>
+              </Card>
+
+              <Card className="premium-card border-emerald-100 bg-emerald-50/30">
+                 <CardHeader className="p-6">
+                    <CardTitle className="text-sm font-bold text-emerald-900">{t('expert.revenue.title', 'Clinical Settlements')}</CardTitle>
+                 </CardHeader>
+                 <CardContent className="p-6 pt-0">
+                    <div className="space-y-4">
+                       <div className="flex justify-between items-end border-b border-emerald-100 pb-4">
+                          <span className="text-xs font-bold text-emerald-600/60 uppercase tracking-widest">{t('expert.revenue.total', 'Gross Total')}</span>
+                          <span className="text-2xl font-display font-bold text-emerald-900">${(sessions.filter(s => s.status === 3).length * (therapist.onlinePrice || 45)).toFixed(2)}</span>
+                       </div>
+                       <Button variant="ghost" className="w-full rounded-xl text-emerald-600 hover:bg-emerald-100/50 font-bold text-xs h-10">
+                          {t('expert.revenue.view_history', 'Transaction Ledger')}
+                       </Button>
+                    </div>
+                 </CardContent>
+              </Card>
+           </div>
+        </div>
+      )}
+
+      {activeTab === "sessions" && (
+        <>
 
       {isConfiguringHours && (
         <Card className="border-primary/20 bg-primary/[0.02]">
@@ -99,6 +312,16 @@ export default function ExpertPanel() {
                  onChange={e => setWorkingHoursInput(e.target.value)}
                  className="h-12 rounded-xl bg-white"
               />
+              
+              {therapist.workingHours?.length > 0 && (
+                 <div className="flex flex-wrap gap-2 pt-2">
+                    {therapist.workingHours.map((wh, idx) => (
+                       <Badge key={idx} variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-100">
+                          {wh.hour}
+                       </Badge>
+                    ))}
+                 </div>
+              )}
               <div className="flex justify-end gap-3">
                  <Button variant="ghost" onClick={() => setIsConfiguringHours(false)}>{t('common.cancel', 'Cancel')}</Button>
                  <Button disabled={savingHours} onClick={() => saveHours()}>
@@ -216,6 +439,8 @@ export default function ExpertPanel() {
           )}
         </CardContent>
       </Card>
+      </>
+      )}
     </div>
   )
 }

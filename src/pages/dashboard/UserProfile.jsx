@@ -4,7 +4,7 @@ import { useAuthStore } from "../../store/useAuthStore"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { getMyOrders } from "../../services/order.service"
 import { getWishlist } from "../../services/wishlist.service"
-import { getMySessions, cancelSession as cancelSessionService, confirmSessionAsUser } from "../../services/therapySession.service"
+import { getMySessions, cancelSession as cancelSessionService, confirmSessionAsUser, rateSession } from "../../services/therapySession.service"
 import { getMyTherapistProfile, updateMyProfile as updateTherapistProfile } from "../../services/therapist.service"
 import api from "../../services/api"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card"
@@ -84,8 +84,10 @@ export default function UserProfile({ tab = "profile" }) {
   const [formData, setFormData] = useState(getInitialProfileData(user))
   const [avatarFile, setAvatarFile] = useState(null)
   const [avatarPreview, setAvatarPreview] = useState(getLocalAvatar(user?.id) || user?.avatar || "")
-  const [saveMessage, setSaveMessage] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [ratingSessionId, setRatingSessionId] = useState(null)
+  const [ratingValue, setRatingValue] = useState(5)
+  const [reviewText, setReviewText] = useState("")
 
   // Sync tab prop with the route
   useEffect(() => setActiveTab(tab), [tab])
@@ -271,6 +273,17 @@ export default function UserProfile({ tab = "profile" }) {
 
       setSaveMessage(t('user.profile_updated', "Profile updated!"))
       setTimeout(() => setSaveMessage(""), 3000)
+    }
+  })
+
+  const { mutate: submitRating, isPending: submittingRating } = useMutation({
+    mutationFn: ({ sessionId, rating, review }) => rateSession(sessionId, rating, review),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["sessions", "my"])
+      setRatingSessionId(null)
+      setRatingValue(5)
+      setReviewText("")
+      toast.success(t('user.rating_submitted', 'Thank you for your feedback!'))
     }
   })
 
@@ -466,11 +479,6 @@ export default function UserProfile({ tab = "profile" }) {
                     </div>
                   </div>
 
-                  {saveMessage && (
-                    <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-3 text-emerald-700 text-sm font-bold animate-in fade-in slide-in-from-top-2">
-                      <Sparkles className="w-4 h-4" /> {saveMessage}
-                    </div>
-                  )}
                   
                   <div className="pt-2">
                     <Button type="submit" disabled={updating} className="rounded-full px-10 h-12 font-bold shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all">
@@ -660,6 +668,27 @@ export default function UserProfile({ tab = "profile" }) {
                             {t('common.cancel', 'Cancel')}
                          </Button>
                        )}
+
+                       {session.status === "CONFIRMED" && session.meetingLink && (
+                          <Button 
+                             size="sm" 
+                             className="h-9 px-4 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
+                             onClick={() => window.open(session.meetingLink, '_blank')}
+                          >
+                             <Video className="w-4 h-4 mr-2" /> {t('session.join', 'Join')}
+                          </Button>
+                       )}
+
+                       {session.status === "COMPLETED" && (
+                          <Button 
+                             size="sm" 
+                             variant="outline"
+                             className="h-9 px-4 rounded-xl font-bold border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                             onClick={() => setRatingSessionId(session.id)}
+                          >
+                             <Sparkles className="w-4 h-4 mr-2" /> {t('user.rate_session', 'Rate Session')}
+                          </Button>
+                       )}
                     </div>
                   </div>
                 ))}
@@ -667,6 +696,65 @@ export default function UserProfile({ tab = "profile" }) {
             )}
           </CardContent>
         </Card>
+      )}
+
+      {/* ── RATING MODAL ── */}
+      {ratingSessionId && (
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm animate-fade-in">
+           <Card className="w-full max-w-md shadow-2xl animate-scale-up border-none overflow-hidden">
+              <CardHeader className="p-8 bg-[#1a1c1e] text-white">
+                 <CardTitle className="text-xl font-display font-bold flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-primary" /> {t('user.rate_title', 'Share Your Experience')}
+                 </CardTitle>
+                 <CardDescription className="text-white/60">
+                    {t('user.rate_desc', 'How was your session with the specialist?')}
+                 </CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 space-y-6">
+                 {/* Star Rating */}
+                 <div className="flex justify-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                       <button 
+                          key={star} 
+                          onClick={() => setRatingValue(star)}
+                          className={`p-1 transition-all hover:scale-110 ${ratingValue >= star ? "text-primary" : "text-neutral-200"}`}
+                       >
+                          <svg className="w-10 h-10 fill-current" viewBox="0 0 24 24">
+                             <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                          </svg>
+                       </button>
+                    ))}
+                 </div>
+
+                 <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{t('user.review_label', 'Your Review')}</label>
+                    <textarea 
+                       value={reviewText}
+                       onChange={(e) => setReviewText(e.target.value)}
+                       placeholder={t('user.review_placeholder', 'Write your feedback here...')}
+                       className="w-full min-h-[120px] p-4 rounded-2xl bg-neutral-50 border border-neutral-100 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-inner"
+                    />
+                 </div>
+
+                 <div className="flex gap-3 pt-2">
+                    <Button 
+                       variant="ghost" 
+                       className="flex-1 rounded-xl h-12 font-bold"
+                       onClick={() => setRatingSessionId(null)}
+                    >
+                       {t('common.cancel', 'Cancel')}
+                    </Button>
+                    <Button 
+                       className="flex-1 rounded-xl h-12 font-bold shadow-lg shadow-primary/20"
+                       disabled={submittingRating}
+                       onClick={() => submitRating({ sessionId: ratingSessionId, rating: ratingValue, review: reviewText })}
+                    >
+                       {submittingRating ? <Loader2 className="w-4 h-4 animate-spin" /> : t('common.submit', 'Submit')}
+                    </Button>
+                 </div>
+              </CardContent>
+           </Card>
+        </div>
       )}
 
       {/* ── SETTINGS ── */}

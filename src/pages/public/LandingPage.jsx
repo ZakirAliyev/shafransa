@@ -19,9 +19,18 @@ import {
   ArrowUpRight
 } from "lucide-react";
 import { Badge } from "../../components/ui/Badge";
+import { useQuery } from "@tanstack/react-query";
+import { getBlogs } from "../../services/blog.service";
 
 export default function LandingPage() {
   const { t } = useTranslation();
+
+  const { data: blogsResponse, isLoading } = useQuery({
+    queryKey: ["blogs", "latest"],
+    queryFn: () => getBlogs(),
+  })
+
+  const blogs = blogsResponse?.data?.data || blogsResponse?.data || []
 
   return (
     <div className="flex flex-col items-center justify-center w-full selection:bg-primary/20 bg-[#fafafa]">
@@ -105,6 +114,76 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* 2.5 LATEST INSIGHTS (BLOG) */}
+      <section className="w-full py-32 px-4 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-end mb-16">
+            <div className="space-y-4">
+              <Badge className="bg-primary/10 text-primary border-primary/20 font-bold uppercase tracking-widest text-[10px] px-3">
+                {t('landing.blog.badge', 'Knowledge Hub')}
+              </Badge>
+              <h2 className="text-4xl md:text-5xl font-display font-bold tracking-tight text-[#1a1c1e]">
+                {t('landing.blog.title', 'Clinical Insights & Protocols')}
+              </h2>
+            </div>
+            <Link to="/blogs" className="hidden md:flex items-center gap-2 text-primary font-bold group">
+              {t('landing.blog.view_all', 'Explore All')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-10">
+            {isLoading ? (
+              [1, 2, 3].map((i) => (
+                <div key={i} className="animate-pulse space-y-6">
+                  <div className="aspect-[16/10] rounded-3xl bg-neutral-100"></div>
+                  <div className="h-4 bg-neutral-100 rounded w-1/4"></div>
+                  <div className="h-6 bg-neutral-100 rounded w-3/4"></div>
+                  <div className="h-4 bg-neutral-100 rounded w-full"></div>
+                </div>
+              ))
+            ) : blogs.length > 0 ? (
+              blogs.slice(0, 3).map((blog) => (
+                <Link key={blog.id} to={`/blog/${blog.id}`} className="group cursor-pointer">
+                  <div className="aspect-[16/10] rounded-3xl overflow-hidden mb-6 bg-neutral-100 relative">
+                    {blog.images?.[0] ? (
+                      <img 
+                        src={blog.images[0]} 
+                        alt={blog.title} 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Zap className="w-10 h-10 text-primary opacity-20" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  </div>
+                  <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-primary mb-3">
+                     <span>{t('blog.min_read', { count: 5 })}</span>
+                     <span className="w-1 h-1 rounded-full bg-neutral-200"></span>
+                     <span className="text-muted-foreground">{t('common.protocol', 'PROTOCOL')}</span>
+                  </div>
+                  <h3 className="text-xl font-display font-bold text-[#1a1c1e] mb-3 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
+                     {blog.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                     {blog.description}
+                  </p>
+                </Link>
+              ))
+            ) : (
+              <div className="col-span-3 text-center py-10 opacity-40 italic">
+                {t('blog.empty')}
+              </div>
+            )}
+          </div>
+
+          <Link to="/blogs" className="md:hidden flex items-center justify-center gap-2 text-primary font-bold mt-12 py-4 border border-primary/20 rounded-2xl">
+             {t('landing.blog.view_all', 'Explore All Insights')}
+          </Link>
         </div>
       </section>
 

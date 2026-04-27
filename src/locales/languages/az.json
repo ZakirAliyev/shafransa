@@ -6,6 +6,7 @@
   "nav_therapists": "Fizioterapevtlər",
   "nav_ai_consultant": "Süni İntellekt Məsləhətçisi",
   "nav_about": "Haqqımızda",
+  "nav_blogs": "Bloqlar",
   "nav_how_it_works": "Necə İşləyir",
   "nav_help_center": "Yardım Mərkəzi",
   "my_profile": "Profilim",
@@ -22,6 +23,8 @@
   "company": "Şirkət",
   "home": "Ana Səhifə",
   "rights_reserved": "Bütün hüquqlar qorunur",
+  "select_language": "Dili seçin",
+  "expert_panel": "Mütəxəssis Paneli",
   "common": {
     "reset_filters": "Filtrləri sıfırla",
     "reset": "Sıfırla",
@@ -117,6 +120,11 @@
       "subtitle": "Botanika elminin gələcəyinə qoşulun. Fərdi protokolunuzu dəqiqələr ərzində qurun.",
       "user": "Gözləmə siyahısına qoşul",
       "seller": "Tərəfdaş ol"
+    },
+    "blog": {
+      "badge": "Bilik Mərkəzi",
+      "title": "Klinik İnsaytlar və Protokollar",
+      "view_all": "Hamısını kəşf et"
     }
   },
   "footer": {
@@ -161,7 +169,35 @@
     "entry_count_plural": "nəticə",
     "found": "tapıldı",
     "grade": "Dərəcə",
-    "monograph": "Tam Monoqrafiya"
+    "monograph": "Tam Monoqrafiya",
+    "loading": "Botanika verilənlər bazası yüklənir..."
+  },
+  "blog": {
+    "badge": "Bilik Mərkəzi",
+    "title": "Shafransa İnsaytları",
+    "subtitle": "Fizioterapiya, bitki təbabəti və holistik sağlamlıq protokolları haqqında ətraflı məlumatlar.",
+    "loading": "Məqalələr hazırlanır...",
+    "empty": "Yeni protokollar hazırlanır. Tezliklə yenidən yoxlayın.",
+    "read_more": "Protokolu oxu",
+    "min_read": "{{count}} dəq mütaliə",
+    "author_default": "Shafransa Komandası"
+  },
+  "cart": {
+    "title": "Səbət"
+  },
+  "therapist": {
+    "specialization_default": "Fizioterapevt",
+    "bio_default": "Fərdi bərpa planı və diqqətli seans izləməsi ilə sağlam hərəkətə qayıtmağa kömək edir.",
+    "name_default": "Zakir Əliyev",
+    "days": {
+      "mon": "B.e",
+      "tue": "Ç.a",
+      "wed": "Ç",
+      "thu": "C.a",
+      "fri": "C",
+      "sat": "Ş",
+      "sun": "B"
+    }
   },
   "herb": {
     "tabs": {

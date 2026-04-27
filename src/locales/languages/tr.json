@@ -5,6 +5,7 @@
   "nav_encyclopedia": "Ansiklopedi",
   "nav_ai_consultant": "Yapay Zeka Danışmanı",
   "nav_about": "Hakkımızda",
+  "nav_blogs": "Bloglar",
   "nav_how_it_works": "Nasıl Çalışır",
   "nav_help_center": "Yardım Merkezi",
   "my_profile": "Profilim",
@@ -21,6 +22,8 @@
   "company": "Şirket",
   "home": "Ana Sayfa",
   "rights_reserved": "Tüm hakları saklıdır",
+  "select_language": "Dil Seçin",
+  "expert_panel": "Uzman Paneli",
   "common": {
     "reset_filters": "Filtreleri Sıfırla",
     "reset": "Sıfırla",
@@ -115,7 +118,12 @@
       "title": "İyileşmeniz sıfır tahminle başlar.",
       "subtitle": "Botanik biliminin geleceğine katılın. Kişiselleştirilmiş protokolünüzü dakikalar içinde devreye alın.",
       "user": "Bekleme Listesine Katıl",
-      "seller": "İş Ortağımız Ol"
+      "seller": "Ortak Ol"
+    },
+    "blog": {
+      "badge": "Bilgi Merkezi",
+      "title": "Klinik Görüşler ve Protokoller",
+      "view_all": "Hepsini Keşfet"
     }
   },
   "footer": {
@@ -160,7 +168,35 @@
     "entry_count_plural": "kayıt",
     "found": "bulundu",
     "grade": "Derece",
-    "monograph": "Tam Monograf"
+    "monograph": "Tam Monograf",
+    "loading": "Botanik veritabanı yükleniyor..."
+  },
+  "blog": {
+    "badge": "Bilgi Merkezi",
+    "title": "Shafransa Görüşleri",
+    "subtitle": "Fizyoterapi, bitkisel tıp ve bütünsel sağlık protokolleri üzerine derinlemesine incelemeler.",
+    "loading": "Makaleler hazırlanıyor...",
+    "empty": "Yeni protokoller hazırlanıyor. Yakında tekrar kontrol edin.",
+    "read_more": "Protokolü Oku",
+    "min_read": "{{count}} dk okuma",
+    "author_default": "Shafransa Ekibi"
+  },
+  "cart": {
+    "title": "Sepet"
+  },
+  "therapist": {
+    "specialization_default": "Fizyoterapist",
+    "bio_default": "Kişiselleştirilmiş iyileşme planları ve dikkatli seans takibi ile sağlıklı harekete dönmenize yardımcı olur.",
+    "name_default": "Zakir Aliyev",
+    "days": {
+      "mon": "Pzt",
+      "tue": "Sal",
+      "wed": "Çar",
+      "thu": "Per",
+      "fri": "Cum",
+      "sat": "Cmt",
+      "sun": "Paz"
+    }
   },
   "herb": {
     "tabs": {

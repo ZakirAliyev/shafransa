@@ -2,9 +2,10 @@ import { useState, useEffect } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
+import i18next from "i18next"
 import { getVerifiedTherapists } from "../../services/therapist.service"
 import { Badge } from "../../components/ui/Badge"
-import { Search, User, MapPin, Star, X, ShieldCheck, Calendar } from "lucide-react"
+import { Search, User, MapPin, Star, X, ShieldCheck, Calendar, Clock, DollarSign } from "lucide-react"
 
 const LOCAL_AVATAR_KEY = "shafransa_local_profile_avatar"
 const LOCAL_PROFILE_KEY = "shafransa_local_profile_data"
@@ -50,7 +51,7 @@ const normalizeTherapist = (therapist) => {
     id: therapist?.id || therapist?.Id,
     userId,
     fullName,
-    specialization: localProfile.specialization || therapist?.specialization || therapist?.Specialization || "Fizioterapevt",
+    specialization: localProfile.specialization || therapist?.specialization || therapist?.Specialization || i18next.t('therapist.specialization_default', "Physiotherapist"),
     description:
       localProfile.therapistBio ||
       localProfile.description ||
@@ -58,7 +59,7 @@ const normalizeTherapist = (therapist) => {
       therapist?.Description ||
       therapist?.bio ||
       therapist?.Bio ||
-      "Fərdi bərpa planı və diqqətli seans izləməsi ilə sağlam hərəkətə qayıtmağa kömək edir.",
+      i18next.t('therapist.bio_default', "Helping you return to healthy movement with personalized recovery plans and careful session tracking."),
     avatar:
       getLocalAvatar(userId) ||
       therapist?.avatar ||
@@ -68,6 +69,9 @@ const normalizeTherapist = (therapist) => {
       "",
     rating: Number(therapist?.rating || therapist?.Rating || 4.9),
     reviewsCount: therapist?.reviewsCount || therapist?.reviewCount || therapist?.ReviewCount || 12,
+    onlinePrice: therapist?.onlinePrice || therapist?.OnlinePrice || 0,
+    offlinePrice: therapist?.offlinePrice || therapist?.OfflinePrice || 0,
+    sessionDurationInMinutes: therapist?.sessionDurationInMinutes || therapist?.SessionDurationInMinutes || 60,
   }
 }
 
@@ -243,8 +247,11 @@ function TherapistCard({ therapist, t }) {
                   {therapist.rating?.toFixed(1) || "4.9"}
                   <span className="text-muted-foreground/40 font-medium">({therapist.reviewsCount || "12"})</span>
                </div>
+               <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 flex items-center gap-1">
+                  <DollarSign className="w-3 h-3" /> ₼{therapist.onlinePrice}
+               </div>
                <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 flex items-center gap-1">
-                  <MapPin className="w-3 h-3" /> Baku, AZ
+                  <Clock className="w-3 h-3" /> {therapist.sessionDurationInMinutes}m
                </div>
             </div>
 

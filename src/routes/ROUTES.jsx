@@ -1,4 +1,5 @@
 import React from "react"
+import { Navigate } from "react-router-dom"
 
 import PublicLayout from "../components/layout/PublicLayout"
 import UserLayout from "../components/layout/UserLayout"
@@ -13,6 +14,9 @@ import OTPPage from "../pages/auth/OTPPage"
 import TherapistListingPage from "../pages/public/TherapistListingPage"
 import TherapistDetailPage from "../pages/public/TherapistDetailPage"
 import TherapistRegisterPage from "../pages/public/TherapistRegisterPage"
+
+import BlogListingPage from "../pages/public/BlogListingPage"
+import BlogDetailPage from "../pages/public/BlogDetailPage"
 
 import GlobalError from "../components/ui/GlobalError"
 import GuestGuard from "../components/layout/GuestGuard"
@@ -34,6 +38,7 @@ import HerbDetailsPage from "../pages/public/HerbDetailsPage"
 import AboutPage from "../pages/public/AboutPage"
 import ContactPage from "../pages/public/ContactPage"
 import HowItWorksPage from "../pages/public/HowItWorksPage"
+import AIConsultantPage from "../pages/dashboard/AIConsultant"
 
 // User Area
 import UserProfile from "../pages/dashboard/UserProfile"
@@ -43,6 +48,9 @@ import SellerPanel from "../pages/dashboard/SellerPanel"
 
 // Admin Area
 import AdminPanel from "../pages/dashboard/AdminPanel"
+
+// Expert Area
+import ExpertPanel from "../pages/dashboard/ExpertPanel"
 
 export const ROUTES = [
   {
@@ -78,6 +86,10 @@ export const ROUTES = [
       { path: "therapists", element: <TherapistListingPage /> },
       { path: "therapist/:id", element: <TherapistDetailPage /> },
       { path: "register-therapist", element: <TherapistRegisterPage /> },
+
+      // ── BLOG ──
+      { path: "blogs", element: <BlogListingPage /> },
+      { path: "blog/:id", element: <BlogDetailPage /> },
     ]
   },
 
@@ -108,6 +120,16 @@ export const ROUTES = [
     ]
   },
 
+  // ── EXPERT AREA ── /expert/*
+  {
+    path: "/expert",
+    element: <UserLayout />, 
+    errorElement: <GlobalError />,
+    children: [
+      { index: true, element: <ExpertPanel /> },
+    ]
+  },
+
   // ── ADMIN AREA ── /admin/*
   {
     path: "/admin",
@@ -122,5 +144,12 @@ export const ROUTES = [
       { path: "therapists",element: <AdminPanel tab="therapists" /> },
       { path: "sessions",  element: <AdminPanel tab="sessions" /> },
     ]
-  }
+  },
+
+  // ── REDIRECTS & COMPATIBILITY ──
+  { path: "/cp/home", element: <Navigate to="/user" replace /> },
+  { path: "/cp/*", element: <Navigate to="/" replace /> },
+  { path: "/user/me", element: <Navigate to="/user" replace /> },
+  { path: "/me", element: <Navigate to="/user" replace /> },
+  { path: "/auth/login", element: <Navigate to="/login" replace /> }
 ]

@@ -28,8 +28,8 @@ export default function HerbDetailsPage() {
     queryFn: () => getPlant(id),
   })
 
-  // ✅ Safe fallback - herb contains the actual plant data now (thanks to interceptor)
-  const herbData = herb || {}
+  // ✅ Robust data extraction (handles arrays, nested data: { data: [...] } or single objects)
+  const herbData = (Array.isArray(herb) ? herb[0] : (herb?.data?.[0] || herb?.data || herb)) || {}
 
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
@@ -96,6 +96,14 @@ export default function HerbDetailsPage() {
               <div className="font-bold text-[#1a1c1e]">{herbData.continent || "Global"}</div>
             </div>
             <div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('herb.meta.country', 'Country')}</div>
+              <div className="font-bold text-[#1a1c1e]">{herbData.country || "Varied"}</div>
+            </div>
+            <div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('herb.meta.climate', 'Climate')}</div>
+              <div className="font-bold text-[#1a1c1e]">{herbData.climate || "Stable"}</div>
+            </div>
+            <div>
               <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('herb.meta.terroir', 'Terroir')}</div>
               <div className="font-bold text-[#1a1c1e]">{herbData.terroir || "Varied"}</div>
             </div>
@@ -110,14 +118,26 @@ export default function HerbDetailsPage() {
           </div>
         </div>
 
-        {/* Gallery Image */}
-        <div className="relative aspect-square bg-[#f5f5f7] rounded-3xl overflow-hidden border border-neutral-100 flex items-center justify-center">
-          {herbData.image ? (
-            <img src={herbData.image} alt={herbData.name} className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-              <Leaf className="w-24 h-24 text-primary/10 stroke-1" />
-              <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">{t('herb.image_pending', 'Imaging Pending')}</div>
+        {/* Media / Gallery Column */}
+        <div className="space-y-4">
+          <div className="relative aspect-square bg-[#f5f5f7] rounded-3xl overflow-hidden border border-neutral-100 flex items-center justify-center">
+            {herbData.image ? (
+              <img src={herbData.image} alt={herbData.name} className="w-full h-full object-cover" />
+            ) : (
+              <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+                <Leaf className="w-24 h-24 text-primary/10 stroke-1" />
+                <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/40">{t('herb.image_pending', 'Imaging Pending')}</div>
+              </div>
+            )}
+          </div>
+          
+          {herbData.gallery && herbData.gallery.length > 0 && (
+            <div className="grid grid-cols-4 gap-3">
+              {herbData.gallery.map((img, i) => (
+                <div key={i} className="aspect-square rounded-2xl bg-[#f5f5f7] border border-neutral-100 overflow-hidden hover:border-primary/40 transition-colors cursor-zoom-in">
+                  <img src={img} className="w-full h-full object-cover" alt="" />
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -158,6 +178,19 @@ export default function HerbDetailsPage() {
                   {herbData.benefits}
                 </div>
               </section>
+              {herbData.usageForms && herbData.usageForms.length > 0 && (
+                <section>
+                  <h2 className="text-2xl font-display font-bold text-[#1a1c1e] mb-6">{t('herb.sections.usage_forms', 'Available Forms')}</h2>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    {herbData.usageForms.map((f, idx) => (
+                      <div key={idx} className="p-5 rounded-2xl bg-white border border-neutral-100 shadow-sm hover:border-primary/20 transition-colors">
+                        <h3 className="font-bold text-[#1a1c1e] mb-2 text-sm uppercase tracking-wider">{f.name}</h3>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{f.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
               {herbData.usedIn && (
                 <section>
                   <h2 className="text-2xl font-display font-bold text-[#1a1c1e] mb-4">{t('herb.sections.used_in', 'Traditional Medicine & Used In')}</h2>
@@ -228,6 +261,16 @@ export default function HerbDetailsPage() {
               <p className="text-orange-600/80 leading-relaxed font-medium">{herbData.sideEffects}</p>
             </div>
 
+            {herbData.dosageCaution && (
+              <div className="p-8 rounded-3xl bg-amber-50/50 border border-amber-100 space-y-4">
+                <div className="flex items-center gap-3">
+                  <AlertTriangle className="w-6 h-6 text-amber-600" />
+                  <h3 className="text-xl font-bold text-amber-700">{t('herb.sections.dosage_caution', 'Dosage Caution')}</h3>
+                </div>
+                <p className="text-amber-700/80 leading-relaxed font-medium">{herbData.dosageCaution}</p>
+              </div>
+            )}
+
             {(herbData.drugInteractions || herbData.pregnancyWarnings || herbData.pregnancy || herbData.allergy || herbData.generalSafety || herbData.medicalConditions) && (
               <div className="md:col-span-2 p-8 rounded-3xl bg-white border border-neutral-200 shadow-xl shadow-black/5 space-y-8">
                 {herbData.generalSafety && (
@@ -242,10 +285,16 @@ export default function HerbDetailsPage() {
                     <p className="text-muted-foreground leading-relaxed">{herbData.drugInteractions}</p>
                   </div>
                 )}
-                {(herbData.pregnancyWarnings || herbData.pregnancy) && (
+                {herbData.pregnancy && (
                   <div>
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-rose-500 mb-2 border-b border-rose-100 pb-2">{t('herb.sections.pregnancy_warnings', 'Pregnancy & Nursing Warnings')}</h4>
-                    <p className="text-muted-foreground leading-relaxed">{herbData.pregnancy || herbData.pregnancyWarnings}</p>
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-rose-500 mb-2 border-b border-rose-100 pb-2">{t('herb.sections.pregnancy_clinical', 'Pregnancy (Clinical)')}</h4>
+                    <p className="text-muted-foreground leading-relaxed">{herbData.pregnancy}</p>
+                  </div>
+                )}
+                {herbData.pregnancyWarnings && (
+                  <div>
+                    <h4 className="text-sm font-bold uppercase tracking-widest text-rose-400 mb-2 border-b border-rose-100 pb-2">{t('herb.sections.pregnancy_warnings', 'Pregnancy Alerts')}</h4>
+                    <p className="text-muted-foreground leading-relaxed">{herbData.pregnancyWarnings}</p>
                   </div>
                 )}
                 {herbData.allergy && (
@@ -283,8 +332,12 @@ export default function HerbDetailsPage() {
                 {items.map((p) => (
                   <Link key={p.id} to={`/product/${p.id}`} className="group block rounded-3xl overflow-hidden border border-neutral-100 bg-white hover:shadow-xl hover:border-primary/20 transition-all duration-300">
                     <div className="aspect-square bg-[#f5f5f7] relative">
-                      {p.image ? (
-                        <img src={p.image} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      {herb.images?.[0] ? (
+                        <img
+                          src={herb.images[0]}
+                          alt={herb.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Leaf className="w-10 h-10 text-primary/10 stroke-1" />
@@ -303,6 +356,31 @@ export default function HerbDetailsPage() {
           </div>
         )}
       </div>
+
+      {herbData.references && herbData.references.length > 0 && (
+        <div className="mt-20 pt-10 border-t border-neutral-100">
+          <h3 className="text-xs font-bold uppercase tracking-widest text-muted-foreground/60 mb-6 flex items-center gap-2">
+            <Microscope className="w-4 h-4" /> {t('herb.sections.references', 'Scientific References')}
+          </h3>
+          <ul className="space-y-4">
+            {herbData.references.map((ref, idx) => (
+              <li key={idx} className="flex items-start gap-4 p-4 rounded-xl hover:bg-neutral-50 transition-colors group">
+                <div className="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center shrink-0 text-xs font-bold text-neutral-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                  {idx + 1}
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm text-muted-foreground leading-relaxed italic">{ref.description}</p>
+                  {ref.link && (
+                    <a href={ref.link} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-primary hover:underline mt-2 inline-block uppercase tracking-widest">
+                      {t('common.view_source', 'View Source')} →
+                    </a>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
     </div>
   )

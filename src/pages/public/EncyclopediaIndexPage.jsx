@@ -41,7 +41,7 @@ export default function EncyclopediaIndexPage() {
 
   // The interceptor unwraps {statusCode, message, data} → returns raw backend payload
   // Plants endpoint returns a plain array directly
-  const herbList = Array.isArray(plants) ? plants : (Array.isArray(plants?.data) ? plants.data : [])
+  const herbList = Array.isArray(plants) ? (Array.isArray(plants[0]?.data) ? plants[0].data : (plants?.data?.data || plants?.data || [])) : (plants?.data?.data || plants?.data || [])
   const filtered = herbList.filter(p => {
     if (activeGrade && p.evidenceGrade !== activeGrade) return false
     if (activeContinent && p.continent !== activeContinent) return false
@@ -202,9 +202,9 @@ export default function EncyclopediaIndexPage() {
                           </Badge>
                         </div>
                       )}
-                      {herb.image ? (
+                      {herb.images?.[0] ? (
                         <img
-                          src={herb.image}
+                          src={herb.images[0]}
                           alt={herb.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />

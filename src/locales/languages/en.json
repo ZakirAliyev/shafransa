@@ -7,6 +7,7 @@
   "nav_about": "About Us",
   "nav_how_it_works": "How It Works",
   "nav_help_center": "Help Center",
+  "nav_blogs": "Insights",
   "my_profile": "My Profile",
   "my_orders": "My Orders",
   "my_wishlist": "My Wishlist",
@@ -16,11 +17,13 @@
   "sign_out": "Sign out",
   "seller_dashboard": "Seller Dashboard",
   "admin_panel": "Admin Panel",
+  "expert_panel": "Expert Panel",
   "more": "More",
   "platform": "Platform",
   "company": "Company",
   "home": "Home",
   "rights_reserved": "All rights reserved",
+  "select_language": "Select Language",
   "common": {
     "reset_filters": "Reset Filters",
     "reset": "Reset",
@@ -39,6 +42,50 @@
     "back": "Back",
     "botanical": "BOTANICAL",
     "remove": "Remove"
+  },
+  "blog": {
+    "badge": "Knowledge Hub",
+    "title": "Shafransa Insights",
+    "subtitle": "Deep dives into physiotherapy, herbal medicine, and holistic wellness protocols.",
+    "loading": "Curating articles...",
+    "empty": "New protocols are being drafted. Check back soon.",
+    "read_more": "Read Protocol",
+    "loading_article": "Loading article...",
+    "not_found": "Article not found",
+    "back_to_listing": "Back to Blog",
+    "back": "Back to Hub",
+    "wellness": "Wellness",
+    "about_author": "About Shafransa Editorial",
+    "min_read": "{{count}} min read",
+    "author_default": "Shafransa Team"
+  },
+  "session": {
+    "join": "Join",
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "therapist_confirmed": "Therapist Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "admin": {
+    "blogs": {
+      "deleted": "Article removed.",
+      "created": "Article published!",
+      "updated": "Article updated!",
+      "create": "Draft New Article",
+      "edit": "Edit Article",
+      "field_title": "Article Title",
+      "field_author": "Author",
+      "field_category": "Category",
+      "field_summary": "Short Description",
+      "field_image": "Featured Media",
+      "field_content": "Full Content (HTML)",
+      "publish": "Publish Article",
+      "list_title": "Editorial Archives",
+      "empty_list": "No articles found in archives."
+    }
   },
   "landing": {
     "version": "Shafransa: Precision Botanical Intelligence",
@@ -116,6 +163,11 @@
       "subtitle": "Join the future of botanical science. Deploy your personalized protocol in minutes.",
       "user": "Join the Waitlist",
       "seller": "Become a Partner"
+    },
+    "blog": {
+      "badge": "Knowledge Hub",
+      "title": "Clinical Insights & Protocols",
+      "view_all": "Explore All"
     }
   },
   "footer": {
@@ -160,7 +212,35 @@
     "entry_count_plural": "entries",
     "found": "found",
     "grade": "Grade",
-    "monograph": "Full Monograph"
+    "monograph": "Full Monograph",
+    "loading": "Loading botanical database..."
+  },
+  "blog": {
+    "badge": "Knowledge Hub",
+    "title": "Shafransa Insights",
+    "subtitle": "Deep dives into physiotherapy, herbal medicine, and holistic wellness protocols.",
+    "loading": "Curating articles...",
+    "empty": "New protocols are being drafted. Check back soon.",
+    "read_more": "Read Protocol",
+    "min_read": "{{count}} min read",
+    "author_default": "Shafransa Team"
+  },
+  "cart": {
+    "title": "Cart"
+  },
+  "therapist": {
+    "specialization_default": "Physiotherapist",
+    "bio_default": "Helping you return to healthy movement with personalized recovery plans and careful session tracking.",
+    "name_default": "Zakir Aliyev",
+    "days": {
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat",
+      "sun": "Sun"
+    }
   },
   "herb": {
     "tabs": {

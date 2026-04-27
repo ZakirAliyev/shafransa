@@ -8,10 +8,11 @@ import { getCart } from "../../services/cart.service"
 import { getWishlist } from "../../services/wishlist.service"
 import { useWishlistStore } from "../../store/useWishlistStore"
 import LanguageSwitcher from "../LanguageSwitcher"
+import { getMyTherapistProfile } from "../../services/therapist.service"
 import { 
   Leaf, Search, ShoppingCart, Heart, User, LogOut, 
   Menu, X, ChevronDown, LayoutGrid, BrainCircuit, Package, 
-  Settings, ShieldCheck, Info, HelpCircle, Activity
+  Settings, ShieldCheck, Info, HelpCircle, Activity, BookOpen
 } from "lucide-react"
 import ScrollToTop from "../shared/ScrollToTop"
 
@@ -29,6 +30,7 @@ const MORE_NAV = [
   { label: "nav_ai_consultant", to: "/ai-consultant", icon: BrainCircuit },
   { label: "nav_about", to: "/about", icon: Info },
   { label: "nav_how_it_works", to: "/how-it-works", icon: Activity },
+  { label: "nav_blogs", to: "/blogs", icon: BookOpen },
   { label: "nav_help_center", to: "/contact", icon: HelpCircle },
 ]
 
@@ -40,6 +42,7 @@ const ALL_NAV = [
   { label: "nav_ai_consultant", to: "/ai-consultant", icon: BrainCircuit },
   { label: "nav_about", to: "/about", icon: Info },
   { label: "nav_how_it_works", to: "/how-it-works", icon: Activity },
+  { label: "nav_blogs", to: "/blogs", icon: BookOpen },
   { label: "nav_help_center", to: "/contact", icon: HelpCircle },
 ]
 
@@ -81,6 +84,15 @@ export default function PublicLayout() {
       wishlistStore.setItems(ids)
     }
   }, [wishlistData])
+
+  const { data: therapistProfile } = useQuery({
+    queryKey: ["therapist", "me"],
+    queryFn: getMyTherapistProfile,
+    enabled: isAuthenticated,
+    retry: false
+  })
+
+  const isTherapist = !!therapistProfile?.data || !!therapistProfile
 
   useEffect(() => {
     setMobileOpen(false)
@@ -247,9 +259,14 @@ export default function PublicLayout() {
                         <Settings className="w-4 h-4" /> {t('seller_dashboard')}
                       </Link>
                     )}
-                    {(getRoleName(user?.role) === "ADMIN" || getRoleName(user?.role) === "EDITOR") && (
+                    {(getRoleName(user?.role) === "ADMIN" || getRoleName(user?.role) === "EDITOR" || getRoleName(user?.role) === "SUPERADMIN") && (
                       <Link to="/admin" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
                         <ShieldCheck className="w-4 h-4" /> {t('admin_panel')}
+                      </Link>
+                    )}
+                    {isTherapist && (
+                      <Link to="/expert" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-emerald-600 hover:bg-emerald-50 transition-colors">
+                        <Activity className="w-4 h-4" /> {t('expert_panel')}
                       </Link>
                     )}
                     <div className="border-t border-neutral-50 mt-1 pt-1">
@@ -302,7 +319,7 @@ export default function PublicLayout() {
 
             {/* Language Switcher — Mobile Drawer */}
             <div className="p-4 border-b border-neutral-100 bg-neutral-50/50">
-              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2 px-1">{t('select_language', 'Language')}</div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2 px-1">{t('select_language')}</div>
               <LanguageSwitcher />
             </div>
 
@@ -353,7 +370,7 @@ export default function PublicLayout() {
                 className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-muted-foreground hover:bg-neutral-50 hover:text-[#1a1c1e] transition-colors"
               >
                 <ShoppingCart className="w-5 h-5" />
-                {t('cart.title', 'Cart')}
+                {t('cart.title')}
                 {cartCount > 0 && <span className="ml-auto bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-full">{cartCount}</span>}
               </Link>
               {isAuthenticated && (
@@ -397,7 +414,7 @@ export default function PublicLayout() {
             <ul className="space-y-3 font-medium text-muted-foreground">
               <li><Link to="/" className="hover:text-primary transition-colors">{t('home')}</Link></li>
               <li><Link to="/about" className="hover:text-primary transition-colors">{t('footer.links.about')}</Link></li>
-              <li><Link to="/how-it-works" className="hover:text-primary transition-colors">{t('nav_how_it_works', 'How It Works')}</Link></li>
+              <li><Link to="/how-it-works" className="hover:text-primary transition-colors">{t('nav_how_it_works')}</Link></li>
               <li><Link to="/contact" className="hover:text-primary transition-colors">{t('footer.links.help')}</Link></li>
             </ul>
           </div>

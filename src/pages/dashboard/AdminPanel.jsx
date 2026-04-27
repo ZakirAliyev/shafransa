@@ -13,10 +13,11 @@ import { Input } from "../../components/ui/Input"
 import { Link } from "react-router-dom"
 import {
   Users, Package, Leaf, LayoutGrid, Activity, Zap, Loader2,
-  ShieldCheck, Trash2, Plus, Globe, Server, CheckCircle2, ArrowRight, UploadCloud
+  ShieldCheck, Trash2, Plus, Globe, Server, CheckCircle2, ArrowRight, UploadCloud, BookOpen, Eye, EyeOff
 } from "lucide-react"
 import TranslationTabs from "../../components/shared/TranslationTabs"
 import { toast } from "../../store/useToastStore"
+import { getBlogs, createBlog, updateBlog, deleteBlog } from "../../services/blog.service"
 
 const TABS = [
   { id: "overview",   label: "Overview",   icon: Activity },
@@ -26,6 +27,7 @@ const TABS = [
   { id: "categories", label: "Categories", icon: LayoutGrid },
   { id: "therapists", label: "Therapists", icon: Users },
   { id: "sessions",   label: "Sessions",   icon: Activity },
+  { id: "blogs",      label: "Blogs",      icon: BookOpen },
 ]
 
 export default function AdminPanel({ tab = "overview" }) {
@@ -84,10 +86,17 @@ export default function AdminPanel({ tab = "overview" }) {
     enabled: activeTab === "therapists"
   })
 
+  const { data: blogsData, isLoading: loadingBlogs } = useQuery({
+    queryKey: ["admin", "blogs"],
+    queryFn: () => getBlogs(),
+    enabled: activeTab === "blogs"
+  })
+
   const users       = Array.isArray(usersData) ? usersData : []
   const products    = Array.isArray(productsData) ? productsData : (productsData?.data || [])
-  const plants      = Array.isArray(plantsData) ? plantsData : (plantsData?.data || [])
+  const plants      = Array.isArray(plantsData) ? (Array.isArray(plantsData[0]?.data) ? plantsData[0].data : (plantsData?.data?.data || plantsData?.data || [])) : (plantsData?.data?.data || plantsData?.data || [])
   const categories  = Array.isArray(categoriesData) ? categoriesData : (categoriesData?.data || [])
+  const blogs       = Array.isArray(blogsData) ? blogsData : (blogsData?.data || [])
   const isOnline    = healthData?.status === "ok"
 
   // ── Mutations ──
@@ -112,6 +121,14 @@ export default function AdminPanel({ tab = "overview" }) {
     onSuccess: () => {
       queryClient.invalidateQueries(["categories"])
       toast.success(t('admin.categories.deleted', 'Category removed.'))
+    },
+  })
+
+  const { mutate: deleteBlogMutation } = useMutation({
+    mutationFn: (id) => deleteBlog(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["admin", "blogs"])
+      toast.success(t('admin.blogs.deleted', 'Article removed.'))
     },
   })
 
@@ -208,13 +225,13 @@ export default function AdminPanel({ tab = "overview" }) {
 
   // Plant Form
   const initialPlantTranslations = {
-    az: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "" },
-    en: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "" },
-    ru: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "" },
-    tr: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "" }
+    az: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "", usageForms: [], references: [] },
+    en: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "", usageForms: [], references: [] },
+    ru: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "", usageForms: [], references: [] },
+    tr: { name: "", localName: "", shortSummary: "", description: "", benefits: "", usage: "", dosage: "", sideEffects: "", contraindications: "", drugInteractions: "", pregnancyWarnings: "", continent: "", country: "", region: "", terroir: "", wildCultivated: "", climate: "", evidenceGrade: "", activeCompounds: "", chemotype: "", usedIn: "", notes: "", generalSafety: "", pregnancy: "", allergy: "", dosageCaution: "", medicalConditions: "", usageForms: [], references: [] }
   }
   const [plantTranslations, setPlantTranslations] = useState(initialPlantTranslations)
-  const [plantMisc, setPlantMisc] = useState({ scientificName: "" })
+  const [plantMisc, setPlantMisc] = useState({ scientificName: "", slug: "" })
   const [plantImage, setPlantImage] = useState(null)
   const [plantGallery, setPlantGallery] = useState([])
   const [plantPreviews, setPlantPreviews] = useState({ main: null, gallery: [] })
@@ -223,9 +240,10 @@ export default function AdminPanel({ tab = "overview" }) {
   const handleEditPlant = (plant) => {
     setEditingPlantId(plant.id)
     setPlantMisc({
-      scientificName: plant.scientificName || ""
+      scientificName: plant.scientificName || "",
+      slug: plant.slug || ""
     })
-    setPlantPreviews({ main: plant.image, gallery: [] })
+    setPlantPreviews({ main: plant.image, gallery: plant.gallery || [] })
     
     // Create new translations object from existing data
     const newTrans = { ...initialPlantTranslations }
@@ -243,7 +261,9 @@ export default function AdminPanel({ tab = "overview" }) {
   const { mutate: createPlantMutation, isPending: creatingPlant } = useMutation({
     mutationFn: () => {
       const form = new FormData()
-      form.append("scientificName", plantMisc.scientificName)
+      form.append("scientificName", plantMisc.scientificName || "")
+      if (plantMisc.slug) form.append("slug", plantMisc.slug)
+      
       if (plantImage) form.append("ImageFile", plantImage)
       
       plantGallery.forEach(file => {
@@ -277,7 +297,9 @@ export default function AdminPanel({ tab = "overview" }) {
   const { mutate: updatePlantMutation, isPending: updatingPlant } = useMutation({
     mutationFn: () => {
       const form = new FormData()
-      form.append("scientificName", plantMisc.scientificName)
+      form.append("scientificName", plantMisc.scientificName || "")
+      if (plantMisc.slug) form.append("slug", plantMisc.slug)
+      
       if (plantImage) form.append("NewImageFile", plantImage)
       
       plantGallery.forEach(file => {
@@ -307,6 +329,104 @@ export default function AdminPanel({ tab = "overview" }) {
       setEditingPlantId(null)
       toast.success(t('admin.plants.updated', 'Plant entry updated!'))
     },
+  })
+
+  // Blog Form
+  const initialBlogTranslations = {
+    az: { title: "", description: "" },
+    en: { title: "", description: "" },
+    tr: { title: "", description: "" },
+    ru: { title: "", description: "" },
+  }
+  const [blogTranslations, setBlogTranslations] = useState(initialBlogTranslations)
+  const [blogMisc, setBlogMisc] = useState({ author: "", videoUrl: "" })
+  const [blogGallery, setBlogGallery] = useState([])
+  const [blogGalleryPreviews, setBlogGalleryPreviews] = useState([])
+  const [editingBlogId, setEditingBlogId] = useState(null)
+
+  const handleEditBlog = (blog) => {
+    setEditingBlogId(blog.id)
+    setBlogMisc({
+      author: blog.author || "",
+      videoUrl: blog.videoUrl || ""
+    })
+    setBlogGalleryPreviews(blog.gallery || [])
+    
+    const newTrans = { ...initialBlogTranslations }
+    blog.translations?.forEach(t => {
+      if (newTrans[t.language]) {
+        newTrans[t.language] = { ...t }
+      }
+    })
+    setBlogTranslations(newTrans)
+    window.scrollTo({ top: 300, behavior: 'smooth' })
+  }
+
+  const { mutate: createBlogMutation, isPending: creatingBlog } = useMutation({
+    mutationFn: () => {
+      const form = new FormData()
+      form.append("Author", blogMisc.author)
+      form.append("VideoUrl", blogMisc.videoUrl || "")
+
+      blogGallery.forEach(file => {
+        form.append("GalleryFiles", file)
+      })
+
+      const transArray = Object.entries(blogTranslations).map(([lang, fields]) => ({
+        language: lang,
+        ...fields
+      })).filter(t => t.title.trim())
+
+      transArray.forEach(tr => {
+        form.append("translationJson", JSON.stringify(tr))
+      })
+
+      return api.post("/blogs", form, {
+        headers: { "Content-Type": "multipart/form-data" }
+      })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["admin", "blogs"])
+      setBlogTranslations(initialBlogTranslations)
+      setBlogMisc({ author: "", videoUrl: "" })
+      setBlogGallery([])
+      setBlogGalleryPreviews([])
+      toast.success(t('admin.blogs.created', 'Article published!'))
+    }
+  })
+
+  const { mutate: updateBlogMutation, isPending: updatingBlog } = useMutation({
+    mutationFn: () => {
+      const form = new FormData()
+      form.append("Author", blogMisc.author)
+      form.append("VideoUrl", blogMisc.videoUrl || "")
+
+      blogGallery.forEach(file => {
+        form.append("NewGalleryFiles", file)
+      })
+
+      const transArray = Object.entries(blogTranslations).map(([lang, fields]) => ({
+        language: lang,
+        ...fields
+      })).filter(t => t.title.trim())
+
+      transArray.forEach(tr => {
+        form.append("translationJson", JSON.stringify(tr))
+      })
+
+      return api.put(`/blogs/${editingBlogId}`, form, {
+        headers: { "Content-Type": "multipart/form-data" }
+      })
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["admin", "blogs"])
+      setEditingBlogId(null)
+      setBlogTranslations(initialBlogTranslations)
+      setBlogMisc({ author: "", videoUrl: "" })
+      setBlogGallery([])
+      setBlogGalleryPreviews([])
+      toast.success(t('admin.blogs.updated', 'Article updated!'))
+    }
   })
 
   const requests = Array.isArray(therapistRequests) ? therapistRequests : (therapistRequests?.data || [])
@@ -531,9 +651,15 @@ export default function AdminPanel({ tab = "overview" }) {
                       className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
                     />
                     <textarea
-                      placeholder={t('admin.plants.placeholder_pregnancy', "Pregnancy Warnings")}
+                      placeholder={t('admin.plants.placeholder_pregnancy', "Pregnancy Warnings (Clinical)")}
                       value={plantTranslations[activeLang].pregnancy}
                       onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], pregnancy: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_pregnancy_warnings', "Additional Pregnancy Alerts")}
+                      value={plantTranslations[activeLang].pregnancyWarnings}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], pregnancyWarnings: e.target.value } })}
                       className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
                     />
                     <textarea
@@ -543,7 +669,13 @@ export default function AdminPanel({ tab = "overview" }) {
                       className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
                     />
                     <textarea
-                      placeholder={t('admin.plants.placeholder_medical_conditions', "Medical Conditions")}
+                      placeholder={t('admin.plants.placeholder_dosage_caution', "Dosage Caution / Overdose")}
+                      value={plantTranslations[activeLang].dosageCaution}
+                      onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], dosageCaution: e.target.value } })}
+                      className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
+                    />
+                    <textarea
+                      placeholder={t('admin.plants.placeholder_medical_conditions', "Medical Conditions to Avoid")}
                       value={plantTranslations[activeLang].medicalConditions}
                       onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], medicalConditions: e.target.value } })}
                       className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
@@ -560,6 +692,106 @@ export default function AdminPanel({ tab = "overview" }) {
                       onChange={(e) => setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], notes: e.target.value } })}
                       className="w-full min-h-[80px] p-3 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-teal-500/50 outline-none"
                     />
+
+                    {/* Usage Forms */}
+                    <div className="md:col-span-2 mt-4 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-teal-400">{t('admin.plants.sections.usage_forms', 'Usage Forms')}</h3>
+                        <Button 
+                          size="sm" 
+                          onClick={() => {
+                            const newForms = [...(plantTranslations[activeLang].usageForms || []), { name: "", description: "" }]
+                            setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], usageForms: newForms } })
+                          }}
+                          className="bg-teal-500/10 text-teal-400 hover:bg-teal-500/20 h-8"
+                        >
+                          <Plus className="w-3 h-3 mr-1" /> {t('common.add', 'Add')}
+                        </Button>
+                      </div>
+                      {(plantTranslations[activeLang].usageForms || []).map((form, idx) => (
+                        <div key={idx} className="grid grid-cols-[1fr_2fr_auto] gap-3 items-start p-4 rounded-xl bg-white/5 border border-white/5">
+                          <Input 
+                            placeholder="Name (e.g. Tincture)" 
+                            value={form.name} 
+                            onChange={(e) => {
+                              const newForms = [...plantTranslations[activeLang].usageForms]
+                              newForms[idx].name = e.target.value
+                              setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], usageForms: newForms } })
+                            }}
+                            className="bg-white/5 border-white/10 text-white"
+                          />
+                          <textarea 
+                            placeholder="Usage instructions..." 
+                            value={form.description} 
+                            onChange={(e) => {
+                              const newForms = [...plantTranslations[activeLang].usageForms]
+                              newForms[idx].description = e.target.value
+                              setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], usageForms: newForms } })
+                            }}
+                            className="w-full min-h-[40px] p-3 rounded-lg bg-white/5 border border-white/10 text-white text-xs outline-none"
+                          />
+                          <button 
+                            onClick={() => {
+                              const newForms = plantTranslations[activeLang].usageForms.filter((_, i) => i !== idx)
+                              setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], usageForms: newForms } })
+                            }}
+                            className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* References */}
+                    <div className="md:col-span-2 mt-4 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-teal-400">{t('admin.plants.sections.references', 'Scientific References')}</h3>
+                        <Button 
+                          size="sm" 
+                          onClick={() => {
+                            const newRefs = [...(plantTranslations[activeLang].references || []), { description: "", link: "" }]
+                            setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], references: newRefs } })
+                          }}
+                          className="bg-teal-500/10 text-teal-400 hover:bg-teal-500/20 h-8"
+                        >
+                          <Plus className="w-3 h-3 mr-1" /> {t('common.add', 'Add')}
+                        </Button>
+                      </div>
+                      {(plantTranslations[activeLang].references || []).map((ref, idx) => (
+                        <div key={idx} className="grid grid-cols-[2fr_1fr_auto] gap-3 items-start p-4 rounded-xl bg-white/5 border border-white/5">
+                          <textarea 
+                            placeholder="Journal description..." 
+                            value={ref.description} 
+                            onChange={(e) => {
+                              const newRefs = [...plantTranslations[activeLang].references]
+                              newRefs[idx].description = e.target.value
+                              setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], references: newRefs } })
+                            }}
+                            className="w-full min-h-[40px] p-3 rounded-lg bg-white/5 border border-white/10 text-white text-xs outline-none"
+                          />
+                          <Input 
+                            placeholder="URL (optional)" 
+                            value={ref.link} 
+                            onChange={(e) => {
+                              const newRefs = [...plantTranslations[activeLang].references]
+                              newRefs[idx].link = e.target.value
+                              setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], references: newRefs } })
+                            }}
+                            className="bg-white/5 border-white/10 text-white"
+                          />
+                          <button 
+                            onClick={() => {
+                              const newRefs = plantTranslations[activeLang].references.filter((_, i) => i !== idx)
+                              setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], references: newRefs } })
+                            }}
+                            className="p-2 text-rose-500 hover:bg-rose-500/10 rounded-lg"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   {/* Habitat & Scientific */}
@@ -631,36 +863,76 @@ export default function AdminPanel({ tab = "overview" }) {
               
               <div className="grid md:grid-cols-2 gap-6 mt-8 pt-8 border-t border-white/5">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-4">
-                    <div className="w-20 h-20 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
-                      {plantPreviews.main ? <img src={plantPreviews.main} className="w-full h-full object-cover" /> : <UploadCloud className="w-8 h-8 text-white/10" />}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.scientific', "Scientific Name")}</label>
+                      <Input
+                        placeholder="e.g. Crocus sativus"
+                        value={plantMisc.scientificName}
+                        onChange={(e) => setPlantMisc({ ...plantMisc, scientificName: e.target.value })}
+                        className="bg-white/5 border-white/10 text-white h-11 italic"
+                      />
                     </div>
-                    <div className="flex-1 space-y-2">
-                       <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.main_image', 'Central Specimen Media')}</label>
-                       <Input
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.slug', "URL Slug")}</label>
+                      <Input
+                        placeholder="e.g. crocus-sativus"
+                        value={plantMisc.slug}
+                        onChange={(e) => setPlantMisc({ ...plantMisc, slug: e.target.value })}
+                        className="bg-white/5 border-white/10 text-white h-11"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.main_image', 'Central Specimen Media')}</label>
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 overflow-hidden shrink-0">
+                          {plantPreviews.main ? <img src={plantPreviews.main} className="w-full h-full object-cover" /> : <UploadCloud className="w-5 h-5 text-white/10" />}
+                        </div>
+                        <Input
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
-                             const file = e.target.files?.[0];
-                             if (file) {
-                                setPlantImage(file);
-                                setPlantPreviews(prev => ({ ...prev, main: URL.createObjectURL(file) }));
-                             }
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setPlantImage(file);
+                              setPlantPreviews(prev => ({ ...prev, main: URL.createObjectURL(file) }));
+                            }
                           }}
                           className="bg-white/5 border-white/10 text-white h-11 cursor-pointer"
-                       />
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.field_gallery', 'Habitat Gallery')}</label>
+                      <div className="flex flex-wrap gap-2">
+                         {plantPreviews.gallery.map((img, i) => (
+                           <div key={i} className="w-10 h-10 rounded-lg overflow-hidden border border-white/10">
+                              <img src={img} className="w-full h-full object-cover" />
+                           </div>
+                         ))}
+                         <label className="w-10 h-10 rounded-lg bg-white/5 border border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:bg-white/10">
+                            <Plus className="w-4 h-4 text-white/20" />
+                            <input 
+                              type="file" 
+                              multiple 
+                              className="hidden" 
+                              onChange={(e) => {
+                                const files = Array.from(e.target.files || [])
+                                setPlantGallery(prev => [...prev, ...files])
+                                setPlantPreviews(prev => ({ 
+                                  ...prev, 
+                                  gallery: [...prev.gallery, ...files.map(f => URL.createObjectURL(f))] 
+                                }))
+                              }}
+                            />
+                         </label>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="space-y-4">
-                  <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.scientific', "Scientific Name")}</label>
-                  <Input
-                    placeholder="..."
-                    value={plantMisc.scientificName}
-                    onChange={(e) => setPlantMisc({ ...plantMisc, scientificName: e.target.value })}
-                    className="bg-white/5 border-white/10 text-white h-11"
-                  />
                   
                   <div className="flex gap-2">
                     {editingPlantId && (
@@ -1007,6 +1279,178 @@ export default function AdminPanel({ tab = "overview" }) {
               </div>
            </CardContent>
         </Card>
+      )}
+      {activeTab === "blogs" && (
+        <div className="space-y-8">
+          <Card className="bg-[#09090b] border-white/5">
+            <CardHeader className="p-6 border-b border-white/5">
+              <CardTitle className="text-lg font-display font-bold text-white flex items-center gap-2">
+                <Plus className="w-5 h-5 text-primary" /> {editingBlogId ? t('admin.blogs.edit', 'Edit Article') : t('admin.blogs.create', 'Draft New Article')}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="grid lg:grid-cols-2 gap-8">
+                <div className="space-y-6">
+                  <TranslationTabs activeLang={activeLang} onLangChange={setActiveLang}>
+                    <div className="space-y-4 pt-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.blogs.field_title', 'Article Title')}</label>
+                        <Input
+                          placeholder="Nature's Pharmacy..."
+                          value={blogTranslations[activeLang].title}
+                          onChange={(e) => setBlogTranslations({
+                            ...blogTranslations,
+                            [activeLang]: { ...blogTranslations[activeLang], title: e.target.value }
+                          })}
+                          className="bg-white/5 border-white/10 text-white h-12"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.blogs.field_description', 'Description / Content')}</label>
+                        <textarea
+                          placeholder="Article content..."
+                          value={blogTranslations[activeLang].description}
+                          onChange={(e) => setBlogTranslations({
+                            ...blogTranslations,
+                            [activeLang]: { ...blogTranslations[activeLang], description: e.target.value }
+                          })}
+                          className="w-full min-h-[300px] p-4 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:ring-1 focus:ring-primary/50 outline-none"
+                        />
+                      </div>
+                    </div>
+                  </TranslationTabs>
+                </div>
+
+                <div className="space-y-6">
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.blogs.field_author', 'Author')}</label>
+                      <Input
+                        placeholder="Dr. Zakir Aliyev"
+                        value={blogMisc.author}
+                        onChange={(e) => setBlogMisc({ ...blogMisc, author: e.target.value })}
+                        className="bg-white/5 border-white/10 text-white h-12"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.blogs.field_video', 'Video URL')}</label>
+                      <Input
+                        placeholder="https://youtube.com/..."
+                        value={blogMisc.videoUrl}
+                        onChange={(e) => setBlogMisc({ ...blogMisc, videoUrl: e.target.value })}
+                        className="bg-white/5 border-white/10 text-white h-12"
+                      />
+                    </div>
+                  </div>
+
+
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.blogs.field_gallery', 'Gallery Images')}</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {blogGalleryPreviews.map((p, i) => (
+                        <div key={i} className="aspect-square rounded-lg bg-white/5 border border-white/10 overflow-hidden relative group">
+                          <img src={typeof p === 'string' ? p : URL.createObjectURL(p)} className="w-full h-full object-cover" alt="" />
+                          <button 
+                            onClick={() => {
+                              const newG = [...blogGallery]
+                              const newP = [...blogGalleryPreviews]
+                              newG.splice(i, 1)
+                              newP.splice(i, 1)
+                              setBlogGallery(newG)
+                              setBlogGalleryPreviews(newP)
+                            }}
+                            className="absolute inset-0 bg-rose-500/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Trash2 className="w-4 h-4 text-white" />
+                          </button>
+                        </div>
+                      ))}
+                      <label className="aspect-square rounded-lg bg-white/5 border border-dashed border-white/10 flex flex-col items-center justify-center cursor-pointer hover:bg-white/10 transition-colors">
+                        <Plus className="w-4 h-4 text-white/20" />
+                        <input
+                          type="file"
+                          multiple
+                          className="hidden"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            setBlogGallery([...blogGallery, ...files]);
+                            setBlogGalleryPreviews([...blogGalleryPreviews, ...files]);
+                          }}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-2 pt-4">
+                    {editingBlogId && (
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setEditingBlogId(null)
+                          setBlogTranslations(initialBlogTranslations)
+                          setBlogMisc({ author: "", videoUrl: "" })
+                          setBlogGallery([])
+                          setBlogGalleryPreviews([])
+                        }}
+                        className="flex-1 border-white/10 text-white hover:bg-white/5 h-12"
+                      >
+                        {t('common.cancel', 'Cancel')}
+                      </Button>
+                    )}
+                    <Button
+                      onClick={() => editingBlogId ? updateBlogMutation() : createBlogMutation()}
+                      disabled={!blogTranslations.az.title || creatingBlog || updatingBlog}
+                      className="flex-[2] bg-primary text-white font-bold h-12"
+                    >
+                      {creatingBlog || updatingBlog ? <Loader2 className="w-4 h-4 animate-spin" /> : (editingBlogId ? t('common.save', 'Update Article') : t('admin.blogs.publish', 'Publish Article'))}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-[#09090b] border-white/5">
+            <CardHeader className="p-8 border-b border-white/5">
+              <CardTitle className="text-xl font-display font-bold text-white">{t('admin.blogs.list_title', 'Editorial Archives')}</CardTitle>
+            </CardHeader>
+            <CardContent className="p-8">
+              {loadingBlogs ? (
+                <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-white/20" /></div>
+              ) : blogs.length === 0 ? (
+                <p className="text-center text-white/30 py-16 font-bold">{t('admin.blogs.empty_list', 'No articles found in archives.')}</p>
+              ) : (
+                <div className="grid gap-4">
+                  {blogs.map((b) => (
+                    <div key={b.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5 hover:border-primary/20 transition-colors">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 rounded-xl bg-white/5 overflow-hidden flex-shrink-0">
+                          {b.image && <img src={b.image} className="w-full h-full object-cover" alt="" />}
+                        </div>
+                        <div>
+                          <div className="font-bold text-white">{b.title}</div>
+                          <div className="text-xs text-white/30 mt-1">{b.author} • {new Date(b.createdAt).toLocaleDateString()}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Link to={`/blog/${b.id}`} className="p-2 rounded-lg hover:bg-white/10 text-white/40">
+                           <ArrowRight className="w-4 h-4" />
+                        </Link>
+                        <button onClick={() => handleEditBlog(b)} className="p-2 rounded-lg hover:bg-white/10 text-white/50">
+                          <Globe className="w-4 h-4" />
+                        </button>
+                        <button onClick={() => deleteBlogMutation(b.id)} className="p-2 rounded-lg hover:bg-rose-500/10 text-rose-400">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       )}
     </div>
   )
