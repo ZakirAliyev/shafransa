@@ -94,7 +94,7 @@ export default function AdminPanel({ tab = "overview" }) {
 
   const users       = Array.isArray(usersData) ? usersData : []
   const products    = Array.isArray(productsData) ? productsData : (productsData?.data || [])
-  const plants      = Array.isArray(plantsData) ? (Array.isArray(plantsData[0]?.data) ? plantsData[0].data : (plantsData?.data?.data || plantsData?.data || [])) : (plantsData?.data?.data || plantsData?.data || [])
+  const plants      = Array.isArray(plantsData) ? plantsData : (plantsData?.data || [])
   const categories  = Array.isArray(categoriesData) ? categoriesData : (categoriesData?.data || [])
   const blogs       = Array.isArray(blogsData) ? blogsData : (blogsData?.data || [])
   const isOnline    = healthData?.status === "ok"
@@ -178,9 +178,7 @@ export default function AdminPanel({ tab = "overview" }) {
         form.append("translationJson", JSON.stringify(tr))
       })
 
-      return api.post("/categories", form, {
-        headers: { "Content-Type": "multipart/form-data" }
-      })
+      return api.post("/categories", form)
     },
     onSuccess: () => { 
       queryClient.invalidateQueries(["categories"])
@@ -208,9 +206,7 @@ export default function AdminPanel({ tab = "overview" }) {
         form.append("translationJson", JSON.stringify(tr))
       })
 
-      return api.put(`/categories/${editingCategoryId}`, form, {
-        headers: { "Content-Type": "multipart/form-data" }
-      })
+      return api.put(`/categories/${editingCategoryId}`, form)
     },
     onSuccess: () => { 
       queryClient.invalidateQueries(["categories"])
@@ -279,9 +275,7 @@ export default function AdminPanel({ tab = "overview" }) {
         form.append("translationJson", JSON.stringify(tr))
       })
 
-      return api.post("/plants", form, {
-        headers: { "Content-Type": "multipart/form-data" }
-      })
+      return api.post("/plants", form)
     },
     onSuccess: () => { 
       queryClient.invalidateQueries(["plants", {}])
@@ -315,9 +309,7 @@ export default function AdminPanel({ tab = "overview" }) {
         form.append("translationJson", JSON.stringify(tr))
       })
 
-      return api.put(`/plants/${editingPlantId}`, form, {
-        headers: { "Content-Type": "multipart/form-data" }
-      })
+      return api.put(`/plants/${editingPlantId}`, form)
     },
     onSuccess: () => { 
       queryClient.invalidateQueries(["plants", {}])
@@ -381,9 +373,7 @@ export default function AdminPanel({ tab = "overview" }) {
         form.append("translationJson", JSON.stringify(tr))
       })
 
-      return api.post("/blogs", form, {
-        headers: { "Content-Type": "multipart/form-data" }
-      })
+      return api.post("/blogs", form)
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["admin", "blogs"])
@@ -414,9 +404,7 @@ export default function AdminPanel({ tab = "overview" }) {
         form.append("translationJson", JSON.stringify(tr))
       })
 
-      return api.put(`/blogs/${editingBlogId}`, form, {
-        headers: { "Content-Type": "multipart/form-data" }
-      })
+      return api.put(`/blogs/${editingBlogId}`, form)
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["admin", "blogs"])

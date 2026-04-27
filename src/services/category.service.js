@@ -6,11 +6,6 @@ export const getCategories = async () => {
 }
 
 export const createCategory = async (data) => {
-  if (data instanceof FormData) {
-    return await api.post("/categories", data, {
-      headers: { "Content-Type": "multipart/form-data" }
-    })
-  }
   return await api.post("/categories", data)
 }
 

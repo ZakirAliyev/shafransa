@@ -31,11 +31,7 @@ export const getMyTherapistProfile = async () => {
 };
 
 export const updateMyProfile = async (data) => {
-    return api.put("/therapists/me", data, {
-        headers: {
-            "Content-Type": "multipart/form-data"
-        }
-    });
+    return api.put("/therapists/me", data);
 };
 
 // Admin Endpoints

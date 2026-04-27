@@ -9,21 +9,11 @@ export const getBlog = async (id) => {
 }
 
 export const createBlog = async (data) => {
-  const isFormData = data instanceof FormData;
-  return await api.post("/blogs", data, {
-    headers: {
-      "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-    },
-  })
+  return await api.post("/blogs", data)
 }
 
 export const updateBlog = async (id, data) => {
-  const isFormData = data instanceof FormData;
-  return await api.put(`/blogs/${id}`, data, {
-    headers: {
-      "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-    },
-  })
+  return await api.put(`/blogs/${id}`, data)
 }
 
 export const deleteBlog = async (id) => {

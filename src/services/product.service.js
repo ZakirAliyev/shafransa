@@ -90,21 +90,11 @@ export const getSellerProducts = async () => {
 }
 
 export const createProduct = async (data) => {
-  const isFormData = data instanceof FormData;
-  return await api.post("/products", data, {
-    headers: {
-      "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-    },
-  })
+  return await api.post("/products", data)
 }
 
 export const updateProduct = async (id, data) => {
-  const isFormData = data instanceof FormData;
-  return await api.put(`/products/${id}`, data, {
-    headers: {
-      "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-    },
-  })
+  return await api.put(`/products/${id}`, data)
 }
 
 export const deleteProduct = async (id) => {

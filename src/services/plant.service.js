@@ -49,21 +49,11 @@ export const getPlant = async (id) => {
 }
 
 export const createPlant = async (data) => {
-  const isFormData = data instanceof FormData;
-  return await api.post("/plants", data, {
-    headers: {
-      "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-    },
-  })
+  return await api.post("/plants", data)
 }
 
 export const updatePlant = async (id, data) => {
-  const isFormData = data instanceof FormData;
-  return await api.put(`/plants/${id}`, data, {
-    headers: {
-      "Content-Type": isFormData ? "multipart/form-data" : "application/json",
-    },
-  })
+  return await api.put(`/plants/${id}`, data)
 }
 
 export const deletePlant = async (id) => {

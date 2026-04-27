@@ -20,6 +20,14 @@ api.interceptors.request.use(
         config.headers.Authorization = `Bearer ${token}`;
       }
 
+      // Remove Content-Type so Axios/browser can set boundary for multipart overrides
+      if (config.data instanceof FormData) {
+        delete config.headers["Content-Type"];
+        if (config.headers.common) {
+          delete config.headers.common["Content-Type"];
+        }
+      }
+
       const lang = localStorage.getItem("lang") || "az";
       config.headers["Accept-Language"] = lang;
 
