@@ -315,7 +315,7 @@ export default function AIConsultant() {
                 <ShieldCheck className="w-12 h-12 text-primary mx-auto" />
                 <div className="space-y-2">
                   <p className="text-xl font-display font-bold">{t('ai.save_vault_title', 'Save your protocol to your health vault')}</p>
-                  <p className="text-sm text-white/50 leading-relaxed font-medium max-w-md mx-auto">{t('ai.save_vault_desc', 'Create a free account to save recommendations, track your progress, and receive personalized insights.')}</p>
+                  <p className="text-sm text-white/50 leading-relaxed font-medium max-w-md mx-auto">{t('ai.save_vault_desc', 'Create a free account to save recommendations, track your progress, and receive personalized blog updates.')}</p>
                 </div>
                 <Link to="/register" className="inline-flex items-center gap-2 px-10 py-4 rounded-full bg-primary text-white font-bold text-[11px] uppercase tracking-widest shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all">
                   {t('ai.create_account', 'Create Free Account')} <ArrowRight className="w-4 h-4" />

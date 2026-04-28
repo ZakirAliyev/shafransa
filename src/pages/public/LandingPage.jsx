@@ -117,7 +117,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 2.5 LATEST INSIGHTS (BLOG) */}
+      {/* 2.5 LATEST BLOGS */}
       <section className="w-full py-32 px-4 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-end mb-16">
@@ -126,7 +126,7 @@ export default function LandingPage() {
                 {t('landing.blog.badge', 'Knowledge Hub')}
               </Badge>
               <h2 className="text-4xl md:text-5xl font-display font-bold tracking-tight text-[#1a1c1e]">
-                {t('landing.blog.title', 'Clinical Insights & Protocols')}
+                {t('landing.blog.title', 'Clinical Blogs & Protocols')}
               </h2>
             </div>
             <Link to="/blogs" className="hidden md:flex items-center gap-2 text-primary font-bold group">
@@ -182,7 +182,7 @@ export default function LandingPage() {
           </div>
 
           <Link to="/blogs" className="md:hidden flex items-center justify-center gap-2 text-primary font-bold mt-12 py-4 border border-primary/20 rounded-2xl">
-             {t('landing.blog.view_all', 'Explore All Insights')}
+             {t('landing.blog.view_all', 'Explore All Blogs')}
           </Link>
         </div>
       </section>

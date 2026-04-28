@@ -30,7 +30,7 @@ export default function BlogListingPage() {
               {t('blog.title', 'The Protocol Hub')}
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              {t('blog.subtitle', 'Scientific insights, traditional protocols, and modern wellness research from the Shafransa editorial team.')}
+              {t('blog.subtitle', 'Scientific blog posts, traditional protocols, and modern wellness research from the Shafransa editorial team.')}
             </p>
           </div>
         </div>

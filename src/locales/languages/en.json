@@ -45,7 +45,7 @@
   },
   "blog": {
     "badge": "Knowledge Hub",
-    "title": "Shafransa Insights",
+    "title": "Shafransa Blogs",
     "subtitle": "Deep dives into physiotherapy, herbal medicine, and holistic wellness protocols.",
     "loading": "Curating articles...",
     "empty": "New protocols are being drafted. Check back soon.",
@@ -217,7 +217,7 @@
   },
   "blog": {
     "badge": "Knowledge Hub",
-    "title": "Shafransa Insights",
+    "title": "Shafransa Blogs",
     "subtitle": "Deep dives into physiotherapy, herbal medicine, and holistic wellness protocols.",
     "loading": "Curating articles...",
     "empty": "New protocols are being drafted. Check back soon.",
@@ -589,7 +589,7 @@
     "start_over": "Start Over",
     "browse_marketplace": "Browse Related Products",
     "save_vault_title": "Save your protocol to your health vault",
-    "save_vault_desc": "Create a free account to save recommendations, track your progress, and receive personalized insights.",
+    "save_vault_desc": "Create a free account to save recommendations, track your progress, and receive personalized blog updates.",
     "create_account": "Create Free Account",
     "steps": {
       "symptoms": {
