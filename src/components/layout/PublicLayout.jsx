@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Outlet, Link, useLocation, useNavigate } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { useAuthStore } from "../../store/useAuthStore"
 import { getRoleName } from "../../constants/roles"
@@ -23,6 +23,7 @@ const PRIMARY_NAV = [
   { label: "nav_marketplace", to: "/marketplace" },
   { label: "nav_encyclopedia", to: "/herbs" },
   { label: "nav_therapists", to: "/therapists" },
+  { label: "nav_blogs", to: "/blogs" },
 ]
 
 // Secondary links go in the bars/more dropdown on desktop
@@ -30,7 +31,6 @@ const MORE_NAV = [
   { label: "nav_ai_consultant", to: "/ai-consultant", icon: BrainCircuit },
   { label: "nav_about", to: "/about", icon: Info },
   { label: "nav_how_it_works", to: "/how-it-works", icon: Activity },
-  { label: "nav_blogs", to: "/blogs", icon: BookOpen },
   { label: "nav_help_center", to: "/contact", icon: HelpCircle },
 ]
 
@@ -57,6 +57,7 @@ export default function PublicLayout() {
   const { isAuthenticated, logout, user } = useAuthStore()
   const location = useLocation()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const wishlistStore = useWishlistStore()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
@@ -114,8 +115,12 @@ export default function PublicLayout() {
 
   const handleLogout = () => {
     logout()
+    queryClient.clear()
     navigate("/")
   }
+
+  const userRole = getRoleName(user?.role)
+  const dashboardPath = userRole === "THERAPIST" ? "/expert" : "/user"
 
   return (
     <div className="flex min-h-screen flex-col bg-[#fafafa] text-foreground font-sans">
@@ -200,7 +205,7 @@ export default function PublicLayout() {
 
             {/* Wishlist */}
             <Link
-              to={isAuthenticated ? "/user/wishlist" : "/login"}
+              to={isAuthenticated ? dashboardPath + "/wishlist" : "/login"}
               className="relative p-2 rounded-full hover:bg-neutral-100 transition-colors text-muted-foreground hover:text-[#1a1c1e]"
               aria-label="Wishlist"
             >
@@ -243,22 +248,22 @@ export default function PublicLayout() {
                         const userRole = getRoleName(user?.role);
                         return (
                           <>
-                            <div className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${userRole === "ADMIN" || userRole === "EDITOR" ? "text-rose-500" : userRole === "SELLER" ? "text-blue-500" : "text-primary"}`}>{userRole}</div>
+                            <div className={`text-[10px] font-bold uppercase tracking-widest mt-1 ${userRole === "ADMIN" || userRole === "SUPERADMIN" ? "text-rose-500" : userRole === "THERAPIST" ? "text-emerald-500" : "text-primary"}`}>{userRole}</div>
                           </>
                         );
                       })()}
                     </div>
-                    {USER_MENU.map((item) => (
+                    {[
+                      { label: "my_profile", to: dashboardPath, icon: User },
+                      { label: "my_orders", to: dashboardPath + "/orders", icon: Package },
+                      { label: "my_wishlist", to: dashboardPath + "/wishlist", icon: Heart },
+                    ].map((item) => (
                       <Link key={item.to} to={item.to} className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-muted-foreground hover:text-[#1a1c1e] hover:bg-neutral-50 transition-colors">
                         <item.icon className="w-4 h-4" />
                         {t(item.label)}
                       </Link>
                     ))}
-                    {(getRoleName(user?.role) === "SELLER") && (
-                      <Link to="/seller" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors">
-                        <Settings className="w-4 h-4" /> {t('seller_dashboard')}
-                      </Link>
-                    )}
+
                     {(getRoleName(user?.role) === "ADMIN" || getRoleName(user?.role) === "EDITOR" || getRoleName(user?.role) === "SUPERADMIN") && (
                       <Link to="/admin" className="flex items-center gap-3 px-4 py-2.5 text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors">
                         <ShieldCheck className="w-4 h-4" /> {t('admin_panel')}

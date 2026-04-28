@@ -18,6 +18,8 @@ import {
 import TranslationTabs from "../../components/shared/TranslationTabs"
 import { toast } from "../../store/useToastStore"
 import { getBlogs, createBlog, updateBlog, deleteBlog } from "../../services/blog.service"
+import { REQUEST_STATUS } from "../../constants/enums"
+import { approveRequest, rejectRequest, updateMenuStatus } from "../../services/therapist.service"
 
 const TABS = [
   { id: "overview",   label: "Overview",   icon: Activity },
@@ -1151,7 +1153,7 @@ export default function AdminPanel({ tab = "overview" }) {
                             <tr>
                                <th className="px-6 py-4">Therapist</th>
                                <th className="px-6 py-4">Specialization</th>
-                               <th className="px-6 py-4">Experience</th>
+                               <th className="px-6 py-4">License</th>
                                <th className="px-6 py-4 text-right">Actions</th>
                             </tr>
                          </thead>
@@ -1159,11 +1161,11 @@ export default function AdminPanel({ tab = "overview" }) {
                             {requests.map((req) => (
                                <tr key={req.id} className="hover:bg-white/[0.02] transition-colors group">
                                   <td className="px-6 py-5">
-                                     <div className="font-bold text-white">{req.fullName}</div>
-                                     <div className="text-[10px] text-white/30">{req.phone}</div>
+                                     <div className="font-bold text-white">{req.therapist?.user?.fullName || "No Name"}</div>
+                                     <div className="text-[10px] text-white/30">{req.therapist?.phoneNumber || req.therapist?.email}</div>
                                   </td>
-                                  <td className="px-6 py-5 text-white/60">{req.specialization}</td>
-                                  <td className="px-6 py-5 text-white/60">{req.experienceYears} Years</td>
+                                  <td className="px-6 py-5 text-white/60">{req.therapist?.specialization || "-"}</td>
+                                  <td className="px-6 py-5 text-white/60">{req.therapist?.licenseNumber || "N/A"}</td>
                                   <td className="px-6 py-5 text-right">
                                      <div className="flex justify-end gap-2">
                                         <Button 
@@ -1218,11 +1220,11 @@ export default function AdminPanel({ tab = "overview" }) {
                         <div key={therapist.id} className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.03] border border-white/5">
                            <div className="flex items-center gap-4">
                               <div className="w-12 h-12 rounded-xl bg-white/5 overflow-hidden flex-shrink-0">
-                                 {therapist.avatar && <img src={therapist.avatar} className="w-full h-full object-cover" alt="" />}
+                                 {therapist.user?.avatar && <img src={therapist.user.avatar} className="w-full h-full object-cover" alt="" />}
                               </div>
                               <div>
-                                 <div className="font-bold text-white">{therapist.fullName}</div>
-                                 <div className="text-xs text-white/30 mt-0.5">{therapist.specialization} • {therapist.rating} ⭐</div>
+                                 <div className="font-bold text-white">{therapist.user?.fullName}</div>
+                                 <div className="text-xs text-white/30 mt-0.5">{therapist.specialization || "General"} • {therapist.rating || 0} ⭐</div>
                               </div>
                            </div>
                            <div className="flex items-center gap-3">

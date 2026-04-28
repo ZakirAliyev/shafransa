@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, Outlet, Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
+import { useQueryClient } from "@tanstack/react-query";
+import { getRoleName } from "../../constants/roles";
 import { 
   User, 
   ShoppingBag, 
@@ -11,15 +13,29 @@ import {
   Settings,
   Bell,
   Search,
-  Leaf
+  Leaf,
+  Activity
 } from "lucide-react";
 import { Button } from "../ui/Button";
 
 export default function UserLayout() {
   const { user, logout } = useAuthStore();
   const location = useLocation();
+  const queryClient = useQueryClient();
 
-  const links = [
+  const handleLogout = () => {
+    logout();
+    queryClient.clear();
+  };
+
+  const userRole = getRoleName(user?.role);
+  const isTherapist = userRole === "THERAPIST";
+  const basePath = isTherapist ? "/expert" : "/user";
+
+  const links = isTherapist ? [
+    { name: "Expert Overview", to: "/expert", icon: Activity },
+    { name: "Clinical Settings", to: "/expert/settings", icon: Settings },
+  ] : [
     { name: "Overview", to: "/user", icon: LayoutDashboard },
     { name: "Order History", to: "/user/orders", icon: ShoppingBag },
     { name: "Saved Protocols", to: "/user/saved", icon: Bookmark },
@@ -68,12 +84,12 @@ export default function UserLayout() {
                  {user?.fullName?.charAt(0)}
               </div>
               <div className="flex-1 min-w-0">
-                 <p className="text-sm font-bold text-[#1a1c1e] truncate">{user?.fullName}</p>
-                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Verified Member</p>
+                  <p className="text-sm font-bold text-[#1a1c1e] truncate">{user?.fullName}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{isTherapist ? "Verified Therapist" : "Verified Member"}</p>
               </div>
            </div>
            <button
-             onClick={logout}
+             onClick={handleLogout}
              className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-bold text-red-500 hover:bg-red-50 transition-colors"
            >
              <LogOut className="h-5 w-5" />

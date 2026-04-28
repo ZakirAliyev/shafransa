@@ -13,8 +13,8 @@ export default function AuthGuard({ children, allowedRoles }) {
   if (allowedRoles) {
     const userRole = getRoleName(user.role);
     if (!allowedRoles.includes(userRole)) {
-      if (userRole === "ADMIN" || userRole === "EDITOR") return <Navigate to="/admin" replace />;
-      if (userRole === "SELLER") return <Navigate to="/seller" replace />;
+      if (userRole === "SUPERADMIN" || userRole === "ADMIN") return <Navigate to="/admin" replace />;
+      if (userRole === "THERAPIST") return <Navigate to="/expert" replace />;
       return <Navigate to="/user" replace />;
     }
   }

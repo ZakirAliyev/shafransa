@@ -1,14 +1,16 @@
-import React, { useState } from "react"
+import React, { useState, useMemo, useEffect } from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { getMyTherapistSessions, confirmSessionAsTherapist, rejectSessionAsTherapist, completeSession, setWorkingHours } from "../../services/therapySession.service"
 import { getMyTherapistProfile, updateMyProfile } from "../../services/therapist.service"
+import { Modal, ModalHeader, ModalTitle, ModalDescription, ModalFooter } from "../../components/ui/Modal"
+import { SESSION_STATUS, getSessionStatusLabel } from "../../constants/enums"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card"
 import { Button } from "../../components/ui/Button"
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/ui/Avatar"
 import { Badge } from "../../components/ui/Badge"
 import { Input } from "../../components/ui/Input"
-import { Calendar, Video, Clock, DollarSign, Loader2, CheckCircle2, XCircle, PlayCircle, Settings, ShieldCheck, CheckCircle } from "lucide-react"
+import { Calendar, Video, Clock, DollarSign, Loader2, CheckCircle2, XCircle, PlayCircle, Settings, ShieldCheck, CheckCircle, Star } from "lucide-react"
 import { toast } from "../../store/useToastStore"
 
 export default function ExpertPanel() {
@@ -16,57 +18,6 @@ export default function ExpertPanel() {
   const queryClient = useQueryClient()
   const [activeTab, setActiveTab] = useState("sessions")
   const [isConfiguringHours, setIsConfiguringHours] = useState(false)
-  const [workingHours, setWorkingHoursInput] = useState("")
-
-  const { data: sessionsResponse, isLoading } = useQuery({
-    queryKey: ["therapistSessions"],
-    queryFn: getMyTherapistSessions
-  })
-
-  // Backend returns result.data
-  const sessions = sessionsResponse?.data || []
-  
-  const { mutate: confirmMutation } = useMutation({
-    mutationFn: ({ id, meetingLink }) => confirmSessionAsTherapist(id, { meetingLink }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["therapistSessions"])
-      toast.success(t('expert.session_confirmed', 'Session confirmed!'))
-    }
-  })
-
-  const { mutate: rejectMutation } = useMutation({
-    mutationFn: (id) => rejectSessionAsTherapist(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["therapistSessions"])
-      toast.info(t('expert.session_rejected', 'Session rejected.'))
-    }
-  })
-
-  const { mutate: completeMutation } = useMutation({
-    mutationFn: (id) => completeSession(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["therapistSessions"])
-      toast.success(t('expert.session_completed', 'Session marked as completed!'))
-    }
-  })
-
-  const { mutate: saveHours, isPending: savingHours } = useMutation({
-    mutationFn: () => setWorkingHours({ 
-      Hours: workingHours.split(',').map(s => s.trim()).filter(Boolean) 
-    }),
-    onSuccess: () => {
-      toast.success(t('expert.hours_updated', 'Working hours updated!'))
-      setIsConfiguringHours(false)
-    }
-  })
-
-  const { data: therapistProfile, isLoading: loadingProfile } = useQuery({
-    queryKey: ["therapist", "me"],
-    queryFn: getMyTherapistProfile
-  })
-
-  const therapist = therapistProfile?.data || therapistProfile || {}
-
   const [profileForm, setProfileForm] = useState({
     fullName: "",
     specialization: "",
@@ -83,7 +34,82 @@ export default function ExpertPanel() {
     certificates: []
   })
 
-  React.useEffect(() => {
+  const [selectedHours, setSelectedHours] = useState([])
+  const [sessionActionModal, setSessionActionModal] = useState({
+    isOpen: false,
+    type: null, // 'confirm' | 'reject'
+    session: null,
+    link: ""
+  })
+
+  const duration = profileForm.sessionDurationInMinutes || 60;
+  const HOURS_OPTIONS = useMemo(() => {
+    const slots = [];
+    const startHour = 8;
+    const endHour = 22;
+    let current = new Date();
+    current.setHours(startHour, 0, 0, 0);
+    
+    const end = new Date();
+    end.setHours(endHour, 0, 0, 0);
+    
+    while (current <= end) {
+      slots.push(current.toLocaleTimeString("az-AZ", { hour: '2-digit', minute: '2-digit', hour12: false }));
+      current = new Date(current.getTime() + duration * 60000);
+    }
+    return slots;
+  }, [duration]);
+
+  const { data: sessionsResponse, isLoading, refetch: refetchSessions } = useQuery({
+    queryKey: ["therapistSessions"],
+    queryFn: getMyTherapistSessions
+  })
+
+  // api.js unwraps response.data.data directly
+  const sessions = Array.isArray(sessionsResponse) ? sessionsResponse : sessionsResponse?.data || []
+  
+  const { mutate: confirmMutation } = useMutation({
+    mutationFn: ({ id, meetingLink }) => confirmSessionAsTherapist(id, { meetingLink }),
+    onSuccess: () => {
+      refetchSessions()
+      toast.success(t('expert.session_confirmed', 'Session confirmed!'))
+    }
+  })
+
+  const { mutate: rejectMutation } = useMutation({
+    mutationFn: (id) => rejectSessionAsTherapist(id),
+    onSuccess: () => {
+      refetchSessions()
+      toast.info(t('expert.session_rejected', 'Session rejected.'))
+    }
+  })
+
+  const { mutate: completeMutation } = useMutation({
+    mutationFn: (id) => completeSession(id),
+    onSuccess: () => {
+      refetchSessions()
+      toast.success(t('expert.session_completed', 'Session marked as completed!'))
+    }
+  })
+
+  const { mutate: saveHours, isPending: savingHours } = useMutation({
+    mutationFn: () => setWorkingHours({ 
+      Hours: selectedHours
+    }),
+    onSuccess: () => {
+      toast.success(t('expert.hours_updated', 'Working hours updated!'))
+      setIsConfiguringHours(false)
+    }
+  })
+
+  const { data: therapistProfile, isLoading: loadingProfile } = useQuery({
+    queryKey: ["therapist", "me"],
+    queryFn: getMyTherapistProfile
+  })
+
+  const therapist = therapistProfile?.data || therapistProfile || {}
+
+  useEffect(() => {
     if (therapist) {
       setProfileForm({
         fullName: therapist.user?.fullName || therapist.fullName || "",
@@ -94,6 +120,9 @@ export default function ExpertPanel() {
         offlinePrice: therapist.offlinePrice || 0,
         sessionDurationInMinutes: therapist.sessionDurationInMinutes || 60
       })
+      if (therapist.workingHours) {
+        setSelectedHours(therapist.workingHours.map(wh => wh.hour))
+      }
     }
   }, [therapistProfile])
 
@@ -120,11 +149,11 @@ export default function ExpertPanel() {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case 0: return <Badge className="bg-orange-50 text-orange-600 border-orange-200">PENDING</Badge>
-      case 1: return <Badge className="bg-blue-50 text-blue-600 border-blue-200">WAITING FOR USER</Badge>
-      case 2: return <Badge className="bg-emerald-50 text-emerald-600 border-emerald-200">CONFIRMED</Badge>
-      case 3: return <Badge className="bg-purple-50 text-purple-600 border-purple-200">COMPLETED</Badge>
-      case 4: return <Badge className="bg-rose-50 text-rose-600 border-rose-200">CANCELLED</Badge>
+      case SESSION_STATUS.PENDING: return <Badge className="bg-orange-50 text-orange-600 border-orange-200">PENDING</Badge>
+      case SESSION_STATUS.THERAPIST_CONFIRMED: return <Badge className="bg-blue-50 text-blue-600 border-blue-200">WAITING FOR USER</Badge>
+      case SESSION_STATUS.CONFIRMED: return <Badge className="bg-emerald-50 text-emerald-600 border-emerald-200">CONFIRMED</Badge>
+      case SESSION_STATUS.COMPLETED: return <Badge className="bg-purple-50 text-purple-600 border-purple-200">COMPLETED</Badge>
+      case SESSION_STATUS.CANCELLED: return <Badge className="bg-rose-50 text-rose-600 border-rose-200">CANCELLED</Badge>
       default: return <Badge>{status}</Badge>
     }
   }
@@ -300,32 +329,60 @@ export default function ExpertPanel() {
         <>
 
       {isConfiguringHours && (
-        <Card className="border-primary/20 bg-primary/[0.02]">
-           <CardHeader>
-              <CardTitle className="text-lg font-bold">{t('expert.hours_title', 'Configure Availability')}</CardTitle>
-              <CardDescription>{t('expert.hours_desc', 'Enter available session start times (comma separated, e.g. 10:00, 12:00, 15:00)')}</CardDescription>
+        <Card className="border-primary/20 bg-primary/[0.02] animate-in fade-in zoom-in duration-300">
+           <CardHeader className="pb-4">
+              <CardTitle className="text-xl font-bold flex items-center gap-2">
+                 <Clock className="w-5 h-5 text-primary" /> {t('expert.hours_title', 'Clinical Working Hours')}
+              </CardTitle>
+              <CardDescription>{t('expert.hours_desc', 'Select the time slots when you are available for clinical consultations.')}</CardDescription>
            </CardHeader>
-           <CardContent className="space-y-4">
-              <Input 
-                 placeholder="09:00, 11:00, 14:00, 16:00" 
-                 value={workingHours}
-                 onChange={e => setWorkingHoursInput(e.target.value)}
-                 className="h-12 rounded-xl bg-white"
-              />
+           <CardContent className="space-y-6">
+              <div className="flex gap-2 mb-4">
+                 <Button 
+                   variant="outline" 
+                   size="sm" 
+                   className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg"
+                   onClick={() => setSelectedHours(HOURS_OPTIONS)}
+                 >
+                   Select All
+                 </Button>
+                 <Button 
+                   variant="outline" 
+                   size="sm" 
+                   className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg text-rose-500 hover:text-rose-600"
+                   onClick={() => setSelectedHours([])}
+                 >
+                   Clear All
+                 </Button>
+              </div>
+
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-3">
+                 {HOURS_OPTIONS.map((hour) => {
+                    const isSelected = selectedHours.includes(hour);
+                    return (
+                       <button
+                          key={hour}
+                          type="button"
+                          onClick={() => {
+                             if (isSelected) setSelectedHours(selectedHours.filter(h => h !== hour))
+                             else setSelectedHours([...selectedHours, hour])
+                          }}
+                          className={`h-12 rounded-xl border font-bold text-sm transition-all flex items-center justify-center ${
+                             isSelected 
+                                ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-[1.02]" 
+                                : "bg-white text-muted-foreground border-neutral-200 hover:border-primary/40 hover:bg-neutral-50"
+                          }`}
+                       >
+                          {hour}
+                       </button>
+                    )
+                 })}
+              </div>
               
-              {therapist.workingHours?.length > 0 && (
-                 <div className="flex flex-wrap gap-2 pt-2">
-                    {therapist.workingHours.map((wh, idx) => (
-                       <Badge key={idx} variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-100">
-                          {wh.hour}
-                       </Badge>
-                    ))}
-                 </div>
-              )}
-              <div className="flex justify-end gap-3">
-                 <Button variant="ghost" onClick={() => setIsConfiguringHours(false)}>{t('common.cancel', 'Cancel')}</Button>
-                 <Button disabled={savingHours} onClick={() => saveHours()}>
-                   {savingHours ? <Loader2 className="animate-spin h-4 w-4" /> : t('common.save', 'Save Schema')}
+              <div className="flex justify-end gap-3 pt-6 border-t border-neutral-100">
+                 <Button variant="ghost" className="rounded-xl font-bold" onClick={() => setIsConfiguringHours(false)}>{t('common.cancel', 'Cancel')}</Button>
+                 <Button disabled={savingHours} className="rounded-xl font-bold px-8 shadow-xl shadow-primary/20" onClick={() => saveHours()}>
+                    {savingHours ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : t('common.save', 'Save Schema')}
                  </Button>
               </div>
            </CardContent>
@@ -339,7 +396,9 @@ export default function ExpertPanel() {
             <Clock className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-display font-bold text-[#1a1c1e]">{sessions.filter(s => s.status === 0).length}</div>
+            <div className="text-3xl font-display font-bold text-[#1a1c1e]">
+              {sessions.filter(s => s.status === SESSION_STATUS.PENDING).length}
+            </div>
             <p className="text-xs font-medium text-muted-foreground/60 mt-1">{t('expert.stats.pending_desc', 'Awaiting clinical confirmation')}</p>
           </CardContent>
         </Card>
@@ -349,7 +408,9 @@ export default function ExpertPanel() {
             <Video className="h-4 w-4 text-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-display font-bold text-[#1a1c1e]">{sessions.filter(s => s.status === 1).length}</div>
+            <div className="text-3xl font-display font-bold text-[#1a1c1e]">
+              {sessions.filter(s => s.status === SESSION_STATUS.CONFIRMED || s.status === SESSION_STATUS.THERAPIST_CONFIRMED).length}
+            </div>
             <p className="text-xs font-medium text-muted-foreground/60 mt-1">{t('expert.stats.active_desc', 'Scheduled clinical encounters')}</p>
           </CardContent>
         </Card>
@@ -359,7 +420,12 @@ export default function ExpertPanel() {
             <DollarSign className="h-4 w-4 text-emerald-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-display font-bold text-[#1a1c1e]">${(sessions.filter(s => s.status === 4).length * 45).toFixed(2)}</div>
+            <div className="text-3xl font-display font-bold text-[#1a1c1e]">
+              ₼{sessions
+                .filter(s => s.status === SESSION_STATUS.COMPLETED)
+                .reduce((sum, s) => sum + (s.price || 0), 0)
+                .toFixed(2)}
+            </div>
             <p className="text-xs font-medium text-muted-foreground/60 mt-1">{t('expert.stats.revenue_desc', 'Verified session settlements')}</p>
           </CardContent>
         </Card>
@@ -402,25 +468,26 @@ export default function ExpertPanel() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 pt-4 lg:pt-0 border-t lg:border-none border-neutral-50">
-                    {s.status === 0 && (
+                    {s.status === SESSION_STATUS.PENDING && (
                       <>
-                        <Button variant="outline" className="rounded-xl h-10 px-6 font-bold border-red-100 text-red-500 hover:bg-red-50" onClick={() => rejectMutation(s.id)}>
+                        <Button 
+                          variant="outline" 
+                          className="rounded-xl h-10 px-6 font-bold border-red-100 text-red-500 hover:bg-red-50" 
+                          onClick={() => setSessionActionModal({ isOpen: true, type: 'reject', session: s, link: "" })}
+                        >
                           <XCircle className="w-4 h-4 mr-2" /> {t('common.reject', 'Reject')}
                         </Button>
-                        <Button className="rounded-xl h-10 px-6 font-bold" onClick={() => {
-                          const link = prompt("Enter Meeting Link (Zoom/Google Meet):", "https://meet.google.com/...");
-                          if (link) confirmMutation({ id: s.id, meetingLink: link });
-                        }}>
+                        <Button className="rounded-xl h-10 px-6 font-bold" onClick={() => setSessionActionModal({ isOpen: true, type: 'confirm', session: s, link: "" })}>
                           <CheckCircle2 className="w-4 h-4 mr-2" /> {t('common.confirm', 'Confirm')}
                         </Button>
                       </>
                     )}
-                    {s.status === 1 && (
+                    {s.status === SESSION_STATUS.THERAPIST_CONFIRMED && (
                        <p className="text-[10px] font-bold text-blue-500/60 uppercase tracking-widest bg-blue-50 px-4 py-2.5 rounded-xl border border-blue-100">
                           {t('expert.waiting_user', 'Waiting for patient confirmation')}
                        </p>
                     )}
-                    {s.status === 2 && (
+                    {s.status === SESSION_STATUS.CONFIRMED && (
                       <>
                         {s.meetingLink && (
                           <Button variant="outline" className="rounded-xl h-10 px-6 font-bold border-emerald-100 text-emerald-600 hover:bg-emerald-50" onClick={() => window.open(s.meetingLink, '_blank')}>
@@ -432,6 +499,19 @@ export default function ExpertPanel() {
                         </Button>
                       </>
                     )}
+                    {s.status === SESSION_STATUS.COMPLETED && s.rating && (
+                       <div className="flex flex-col items-end gap-1">
+                          <div className="flex items-center gap-1 text-amber-500">
+                             <Star className="h-3.5 w-3.5 fill-current" />
+                             <span className="text-sm font-bold text-stone-900">{s.rating}</span>
+                          </div>
+                          {s.review && (
+                             <p className="text-[11px] text-stone-500 italic max-w-[200px] text-right" title={s.review}>
+                                "{s.review}"
+                             </p>
+                          )}
+                       </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -441,6 +521,61 @@ export default function ExpertPanel() {
       </Card>
       </>
       )}
+
+      {/* Session Action Modal */}
+      <Modal 
+        isOpen={sessionActionModal.isOpen} 
+        onClose={() => setSessionActionModal({ ...sessionActionModal, isOpen: false })}
+      >
+        <ModalHeader>
+          <ModalTitle>
+            {sessionActionModal.type === 'confirm' ? t('expert.confirm_session_title', 'Confirm Session') : t('expert.reject_session_title', 'Reject Session')}
+          </ModalTitle>
+          <ModalDescription>
+            {sessionActionModal.type === 'confirm' 
+              ? t('expert.confirm_session_desc', 'Are you sure you want to confirm this session?') 
+              : t('expert.reject_session_desc', 'Are you sure you want to reject this session? This action cannot be undone.')}
+          </ModalDescription>
+        </ModalHeader>
+
+        {sessionActionModal.type === 'confirm' && sessionActionModal.session?.isOnline && (
+          <div className="py-4 space-y-2">
+            <label className="text-sm font-medium text-stone-700">
+              {t('expert.meeting_link_label', 'Meeting Link (Optional)')}
+            </label>
+            <Input 
+              placeholder="https://zoom.us/j/..." 
+              value={sessionActionModal.link}
+              onChange={(e) => setSessionActionModal({ ...sessionActionModal, link: e.target.value })}
+            />
+            <p className="text-[11px] text-stone-500">
+              {t('expert.link_hint', 'Leave empty to use auto-generated Jitsi link.')}
+            </p>
+          </div>
+        )}
+
+        <ModalFooter className="mt-6">
+          <Button variant="outline" onClick={() => setSessionActionModal({ ...sessionActionModal, isOpen: false })}>
+            {t('common.cancel', 'Cancel')}
+          </Button>
+          <Button 
+            className={sessionActionModal.type === 'reject' ? "bg-red-600 hover:bg-red-700 text-white" : "bg-emerald-600 hover:bg-emerald-700 text-white"}
+            onClick={() => {
+              if (sessionActionModal.type === 'confirm') {
+                confirmMutation({ 
+                  id: sessionActionModal.session.id, 
+                  meetingLink: sessionActionModal.link || null 
+                });
+              } else {
+                rejectMutation(sessionActionModal.session.id);
+              }
+              setSessionActionModal({ ...sessionActionModal, isOpen: false });
+            }}
+          >
+            {sessionActionModal.type === 'confirm' ? t('common.confirm', 'Confirm') : t('common.reject', 'Reject')}
+          </Button>
+        </ModalFooter>
+      </Modal>
     </div>
   )
 }

@@ -67,8 +67,8 @@ const normalizeTherapist = (therapist) => {
       user.avatar ||
       user.Avatar ||
       "",
-    rating: Number(therapist?.rating || therapist?.Rating || 4.9),
-    reviewsCount: therapist?.reviewsCount || therapist?.reviewCount || therapist?.ReviewCount || 12,
+    rating: Number(therapist?.rating || therapist?.Rating || 0),
+    reviewsCount: Number(therapist?.reviewsCount || therapist?.reviewCount || therapist?.ReviewCount || 0),
     onlinePrice: therapist?.onlinePrice || therapist?.OnlinePrice || 0,
     offlinePrice: therapist?.offlinePrice || therapist?.OfflinePrice || 0,
     sessionDurationInMinutes: therapist?.sessionDurationInMinutes || therapist?.SessionDurationInMinutes || 60,
@@ -242,11 +242,11 @@ function TherapistCard({ therapist, t }) {
 
           <div className="space-y-3 pt-4 border-t border-neutral-50">
             <div className="flex items-center justify-between">
-               <div className="flex items-center gap-1.5 text-xs font-bold text-[#1a1c1e]">
-                  <Star className="w-3.5 h-3.5 text-amber-400 fill-current" />
-                  {therapist.rating?.toFixed(1) || "4.9"}
-                  <span className="text-muted-foreground/40 font-medium">({therapist.reviewsCount || "12"})</span>
-               </div>
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#1a1c1e]">
+                  <Star className={`w-3.5 h-3.5 ${therapist.rating > 0 ? "text-amber-400 fill-current" : "text-neutral-200"}`} />
+                  {therapist.rating > 0 ? therapist.rating.toFixed(1) : "—"}
+                  <span className="text-muted-foreground/40 font-medium">({therapist.reviewsCount || "0"})</span>
+                </div>
                <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-600 flex items-center gap-1">
                   <DollarSign className="w-3 h-3" /> ₼{therapist.onlinePrice}
                </div>

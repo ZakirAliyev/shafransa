@@ -23,8 +23,8 @@ export default function LoginPage() {
     if (isAuthenticated && user) {
       const role = getRoleName(user?.role)
       console.log("🔐 Login successful! User role:", role)
-      if (role === "ADMIN" || role === "EDITOR") navigate("/admin")
-      else if (role === "SELLER") navigate("/seller")
+      if (role === "SUPERADMIN" || role === "ADMIN") navigate("/admin")
+      else if (role === "THERAPIST") navigate("/expert")
       else navigate("/user")
     }
   }, [isAuthenticated, user, navigate])

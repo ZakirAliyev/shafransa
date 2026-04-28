@@ -96,7 +96,7 @@ export const ROUTES = [
   // ── USER AREA ── /user/*
   {
     path: "/user",
-    element: <UserLayout />,
+    element: <AuthGuard allowedRoles={["MEMBER", "THERAPIST", "ADMIN", "SUPERADMIN"]}><UserLayout /></AuthGuard>,
     errorElement: <GlobalError />,
     children: [
       { index: true, element: <UserProfile tab="profile" /> },
@@ -110,7 +110,7 @@ export const ROUTES = [
   // ── SELLER AREA ── /seller/*
   {
     path: "/seller",
-    element: <SellerLayout />,
+    element: <AuthGuard allowedRoles={["ADMIN", "SUPERADMIN"]}><SellerLayout /></AuthGuard>,
     errorElement: <GlobalError />,
     children: [
       { index: true,          element: <SellerPanel tab="overview" /> },
@@ -123,7 +123,7 @@ export const ROUTES = [
   // ── EXPERT AREA ── /expert/*
   {
     path: "/expert",
-    element: <UserLayout />, 
+    element: <AuthGuard allowedRoles={["THERAPIST"]}><UserLayout /></AuthGuard>, 
     errorElement: <GlobalError />,
     children: [
       { index: true, element: <ExpertPanel /> },
@@ -133,7 +133,7 @@ export const ROUTES = [
   // ── ADMIN AREA ── /admin/*
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: <AuthGuard allowedRoles={["ADMIN", "SUPERADMIN"]}><AdminLayout /></AuthGuard>,
     errorElement: <GlobalError />,
     children: [
       { index: true,       element: <AdminPanel tab="overview" /> },

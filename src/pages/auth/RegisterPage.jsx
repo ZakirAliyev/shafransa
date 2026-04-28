@@ -11,7 +11,7 @@ import { toast } from "../../store/useToastStore"
 export default function RegisterPage() {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
-  const [role, setRole] = useState("MEMBER")
+  const role = 3
   const [fullName, setFullName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -53,29 +53,6 @@ export default function RegisterPage() {
               <CardDescription className="text-sm font-medium">{t('auth.new_membership_desc', 'Select your portal and provide your identification.')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-8 p-10 pt-0">
-              {/* Role Selection Blocks */}
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setRole("MEMBER")}
-                  className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${role === "MEMBER" ? 'border-primary bg-primary/5' : 'border-neutral-100 bg-neutral-50 hover:border-neutral-200'}`}
-                >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${role === "MEMBER" ? 'bg-primary text-white' : 'bg-white text-muted-foreground'}`}>
-                    <User className="w-5 h-5" />
-                  </div>
-                  <span className={`text-[10px] font-bold uppercase tracking-widest ${role === "MEMBER" ? 'text-primary' : 'text-muted-foreground'}`}>{t('auth.role_user', 'Consumer')}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole("SELLER")}
-                  className={`p-4 rounded-2xl border-2 transition-all flex flex-col items-center gap-3 ${role === "SELLER" ? 'border-primary bg-primary/5' : 'border-neutral-100 bg-neutral-50 hover:border-neutral-200'}`}
-                >
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${role === "SELLER" ? 'bg-primary text-white' : 'bg-white text-muted-foreground'}`}>
-                    <Store className="w-5 h-5" />
-                  </div>
-                  <span className={`text-[10px] font-bold uppercase tracking-widest ${role === "SELLER" ? 'text-primary' : 'text-muted-foreground'}`}>{t('auth.role_seller', 'Institution')}</span>
-                </button>
-              </div>
 
               <div className="space-y-4">
                 <div className="space-y-2">

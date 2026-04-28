@@ -7,7 +7,7 @@
   "nav_about": "About Us",
   "nav_how_it_works": "How It Works",
   "nav_help_center": "Help Center",
-  "nav_blogs": "Insights",
+  "nav_blogs": "Blogs",
   "my_profile": "My Profile",
   "my_orders": "My Orders",
   "my_wishlist": "My Wishlist",
@@ -166,7 +166,7 @@
     },
     "blog": {
       "badge": "Knowledge Hub",
-      "title": "Clinical Insights & Protocols",
+      "title": "Blogs",
       "view_all": "Explore All"
     }
   },

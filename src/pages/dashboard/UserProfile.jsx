@@ -6,12 +6,14 @@ import { getMyOrders } from "../../services/order.service"
 import { getWishlist } from "../../services/wishlist.service"
 import { getMySessions, cancelSession as cancelSessionService, confirmSessionAsUser, rateSession } from "../../services/therapySession.service"
 import { getMyTherapistProfile, updateMyProfile as updateTherapistProfile } from "../../services/therapist.service"
+import { updateMe } from "../../services/user.service"
 import api from "../../services/api"
+import { SESSION_STATUS, getSessionStatusLabel } from "../../constants/enums"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../../components/ui/Card"
 import { Input } from "../../components/ui/Input"
 import { Button } from "../../components/ui/Button"
 import { Badge } from "../../components/ui/Badge"
-import { Package, ShieldCheck, Loader2, User as UserIcon, Heart, Key, Sparkles, Leaf, Eye, EyeOff, Camera, Trash2, Calendar, Clock, Activity, Video } from "lucide-react"
+import { Package, ShieldCheck, Loader2, User as UserIcon, Heart, Key, Sparkles, Leaf, Eye, EyeOff, Camera, Trash2, Calendar, Clock, Activity, Video, Star } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const LOCAL_AVATAR_KEY = "shafransa_local_profile_avatar"
@@ -218,11 +220,10 @@ export default function UserProfile({ tab = "profile" }) {
       }
 
       try {
-        const updatedUser = await api.put("/user/me", {
+        const updatedUser = await updateMe({
           fullName: data.fullName,
           description: data.description,
           email: data.email,
-          phoneNumber: data.phoneNumber,
           avatar: localAvatar,
         })
 
@@ -646,15 +647,16 @@ export default function UserProfile({ tab = "profile" }) {
                     
                     <div className="flex flex-col items-end justify-between gap-4">
                        <Badge className={`${
-                          session.status === "CONFIRMED" ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
-                          session.status === "PENDING" ? "bg-amber-50 text-amber-600 border-amber-100" :
-                          session.status === "THERAPIST_CONFIRMED" ? "bg-blue-50 text-blue-600 border-blue-100" :
+                          session.status === SESSION_STATUS.CONFIRMED ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
+                          session.status === SESSION_STATUS.PENDING ? "bg-amber-50 text-amber-600 border-amber-100" :
+                          session.status === SESSION_STATUS.THERAPIST_CONFIRMED ? "bg-blue-50 text-blue-600 border-blue-100" :
+                          session.status === SESSION_STATUS.COMPLETED ? "bg-purple-50 text-purple-600 border-purple-100" :
                           "bg-neutral-50 text-neutral-400 border-neutral-100"
                         } font-bold text-[9px] px-3 uppercase tracking-widest`}>
-                          {t(`session.status.${session.status?.toLowerCase()}`, session.status)}
+                          {getSessionStatusLabel(session.status)}
                        </Badge>
 
-                       {session.status === "PENDING" && (
+                       {session.status === SESSION_STATUS.PENDING && (
                          <Button 
                             variant="ghost" 
                             size="sm" 
@@ -669,7 +671,7 @@ export default function UserProfile({ tab = "profile" }) {
                          </Button>
                        )}
 
-                       {session.status === "CONFIRMED" && session.meetingLink && (
+                       {session.status === SESSION_STATUS.CONFIRMED && session.meetingLink && (
                           <Button 
                              size="sm" 
                              className="h-9 px-4 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
@@ -679,16 +681,25 @@ export default function UserProfile({ tab = "profile" }) {
                           </Button>
                        )}
 
-                       {session.status === "COMPLETED" && (
-                          <Button 
-                             size="sm" 
-                             variant="outline"
-                             className="h-9 px-4 rounded-xl font-bold border-emerald-200 text-emerald-700 hover:bg-emerald-50"
-                             onClick={() => setRatingSessionId(session.id)}
-                          >
-                             <Sparkles className="w-4 h-4 mr-2" /> {t('user.rate_session', 'Rate Session')}
-                          </Button>
-                       )}
+                        {session.status === SESSION_STATUS.COMPLETED && (
+                          <div className="flex flex-col items-end gap-2">
+                            {session.rating ? (
+                              <div className="flex items-center gap-1 text-amber-500">
+                                <Star className="w-4 h-4 fill-current" />
+                                <span className="text-sm font-bold text-stone-900">{session.rating}</span>
+                              </div>
+                            ) : (
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="h-9 px-4 rounded-xl font-bold border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                                onClick={() => setRatingSessionId(session.id)}
+                              >
+                                <Sparkles className="w-4 h-4 mr-2" /> {t('user.rate_session', 'Rate Session')}
+                              </Button>
+                            )}
+                          </div>
+                        )}
                     </div>
                   </div>
                 ))}

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, Outlet, Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
+import { useQueryClient } from "@tanstack/react-query";
 import { 
   ShieldAlert, 
   Users, 
@@ -19,6 +20,12 @@ import { Button } from "../ui/Button";
 export default function AdminLayout() {
   const { user, logout } = useAuthStore();
   const location = useLocation();
+  const queryClient = useQueryClient();
+
+  const handleLogout = () => {
+    logout();
+    queryClient.clear();
+  };
 
   const links = [
     { name: "Command Center", to: "/admin", icon: LayoutDashboard },
@@ -75,7 +82,7 @@ export default function AdminLayout() {
               </div>
            </div>
            <button
-             onClick={logout}
+             onClick={handleLogout}
              className="flex w-full items-center space-x-3 rounded-xl px-4 py-3 text-sm font-bold text-rose-500 hover:bg-rose-500/10 transition-colors"
            >
              <LogOut className="h-5 w-5" />

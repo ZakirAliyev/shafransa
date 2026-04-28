@@ -146,7 +146,8 @@ const normalizeTherapist = (therapist) => {
       data.Description ||
       "Fərdi bərpa planı, rahat seans ritmi və diqqətli izləmə ilə sağlam hərəkətə qayıtmağa kömək edir.",
     avatar: getLocalAvatar(userId) || data.avatar || data.Avatar || user.avatar || user.Avatar || "",
-    rating: Number(data.rating || data.Rating || 4.9),
+    rating: Number(data.rating || data.Rating || 0),
+    reviewsCount: Number(data.reviewsCount || data.ReviewsCount || data.reviewCount || 0),
     licenseNumber: localProfile.licenseNumber || data.licenseNumber || data.LicenseNumber || "",
     cv: data.cv || data.CV || "",
     certificates: data.certificates || data.Certificates || [],
@@ -185,27 +186,7 @@ const normalizeAvailability = (availability) => {
 }
 
 const buildFallbackAvailability = (year, month, today) => {
-  const result = {}
-  const fallbackSlots = ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"]
-  const daysInMonth = new Date(year, month, 0).getDate()
-
-  for (let day = 1; day <= daysInMonth; day += 1) {
-    const date = new Date(year, month - 1, day)
-    if (date < today) continue
-
-    const isoDate = toIsoDate(date)
-    result[isoDate] = {
-      date: isoDate,
-      isAvailable: true,
-      slots: fallbackSlots.map((time) => ({
-        raw: time,
-        time,
-        isAvailable: true,
-      })),
-    }
-  }
-
-  return result
+  return {} // No longer providing fake fallback slots
 }
 
 export default function TherapistDetailPage() {
@@ -435,9 +416,9 @@ export default function TherapistDetailPage() {
               <div className="border-r border-stone-200 p-5">
                 <div className="flex items-center gap-1.5 text-amber-500">
                   <Star className="h-4 w-4 fill-current" />
-                  <span className="text-xl font-semibold text-stone-900">{profile.rating.toFixed(1)}</span>
+                  <span className="text-xl font-semibold text-stone-900">{profile.rating > 0 ? profile.rating.toFixed(1) : "—"}</span>
                 </div>
-                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Reytinq</p>
+              
               </div>
               <div className="border-r border-stone-200 p-5">
                 <div className="text-xl font-semibold text-stone-900">{profile.sessionDurationInMinutes}</div>
@@ -554,7 +535,7 @@ export default function TherapistDetailPage() {
               <div>
                 <h2 className="text-lg font-semibold text-stone-900">Seans bron et</h2>
                 <p className="mt-1 text-sm text-stone-500">
-                  {usingFallbackAvailability ? "Uyğun test saatlarından birini seç" : "Tarixi və uyğun saatı seç"}
+                  {t('therapists.select_date_time', 'Tarixi və uyğun saatı seçin')}
                 </p>
               </div>
               <div className="rounded-md bg-emerald-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
@@ -704,10 +685,8 @@ export default function TherapistDetailPage() {
               )}
             </Button>
 
-            <p className="mt-4 rounded-md bg-amber-50 p-3 text-xs leading-5 text-amber-900">
-              {usingFallbackAvailability
-                ? "Backend boş qayıdanda test üçün hazır saatlar göstərilir."
-                : "Müraciət göndərildikdən sonra seans terapevt tərəfindən təsdiqlənir."}
+            <p className="mt-4 rounded-md bg-stone-50 border border-stone-100 p-3 text-[10px] font-bold uppercase tracking-widest text-stone-400">
+              {t('therapists.booking_disclaimer', 'Müraciət göndərildikdən sonra seans terapevt tərəfindən təsdiqlənməlidir.')}
             </p>
           </div>
         </aside>

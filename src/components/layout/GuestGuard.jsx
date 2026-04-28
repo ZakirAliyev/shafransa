@@ -8,8 +8,8 @@ export default function GuestGuard({ children }) {
 
   if (isAuthenticated && user) {
     const role = getRoleName(user.role);
-    if (role === "ADMIN" || role === "EDITOR") return <Navigate to="/admin" replace />;
-    if (role === "SELLER") return <Navigate to="/seller" replace />;
+    if (role === "SUPERADMIN" || role === "ADMIN") return <Navigate to="/admin" replace />;
+    if (role === "THERAPIST") return <Navigate to="/expert" replace />;
     return <Navigate to="/user" replace />;
   }
 

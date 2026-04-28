@@ -39,6 +39,7 @@ export default function TherapistRegisterPage() {
     mutationFn: (data) => {
       // Backend expects JSON for /Therapists/register
       return registerAsTherapist({
+        fullName: data.fullName,
         email: data.email,
         password: data.password,
         phoneNumber: data.phoneNumber,

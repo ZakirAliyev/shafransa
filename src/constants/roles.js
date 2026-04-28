@@ -3,35 +3,44 @@
  * Backend sends roles as enum values (integers)
  * 
  * Backend Role Enum (C#):
- * 0 = Admin
- * 1 = Editor
- * 2 = Seller
+ * 0 = SuperAdmin
+ * 1 = Admin
+ * 2 = Therapist
  * 3 = Member
  */
 
 export const ROLE_MAP = {
-  0: "ADMIN",      // System Administrator
-  1: "EDITOR",     // Content Editor
-  2: "SELLER",     // Seller/Institution
-  3: "MEMBER",     // Regular User/Consumer
+  0: "SUPERADMIN",
+  1: "ADMIN",
+  2: "THERAPIST",
+  3: "MEMBER",
 };
 
 export const ROLE_NAMES = {
+  SUPERADMIN: "SUPERADMIN",
   ADMIN: "ADMIN",
-  EDITOR: "EDITOR",
-  SELLER: "SELLER",
+  THERAPIST: "THERAPIST",
   MEMBER: "MEMBER",
 };
 
 /**
  * Convert numeric role ID or string role to standard role name
  * @param {number|string} role - Role ID from backend or role name
- * @returns {string} Normalized role name (ADMIN, EDITOR, SELLER, or MEMBER)
+ * @returns {string} Normalized role name
  */
 export const getRoleName = (role) => {
+  if (role === null || role === undefined) return "MEMBER";
+
   // If it's already a string, normalize to uppercase
   if (typeof role === "string") {
-    return role.toUpperCase();
+    const upper = role.toUpperCase();
+    // Handle cases where backend might send "SuperAdmin" instead of 0
+    if (Object.values(ROLE_NAMES).includes(upper)) return upper;
+    
+    // Check if it's a numeric string
+    if (!isNaN(Number(role))) return ROLE_MAP[Number(role)] || "MEMBER";
+    
+    return upper;
   }
   
   // If it's a number, map it
@@ -39,7 +48,6 @@ export const getRoleName = (role) => {
     return ROLE_MAP[role] || "MEMBER";
   }
   
-  // Fallback
   return "MEMBER";
 };
 
