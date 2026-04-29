@@ -10,7 +10,7 @@ const EVIDENCE_GRADES = ["A", "B", "C", "D"]
 const CONTINENTS = ["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]
 
 export default function EncyclopediaIndexPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const [searchInput, setSearchInput] = useState(searchParams.get("search") || "")
   const [debouncedSearch, setDebouncedSearch] = useState(searchInput)
@@ -39,9 +39,28 @@ export default function EncyclopediaIndexPage() {
     queryFn: () => getPlants(queryParams),
   })
 
+  const currentLang = i18n.language || 'az'
+
   // The interceptor unwraps {statusCode, message, data} → returns raw backend payload
-  // Plants endpoint returns a plain array directly
-  const herbList = Array.isArray(plants) ? plants : (plants?.data || []);
+  const herbList = React.useMemo(() => {
+    const raw = Array.isArray(plants) ? plants : (plants?.data || []);
+    return raw.map(plant => {
+      if (!plant.translations || !Array.isArray(plant.translations)) return plant
+      const translation = plant.translations.find(t => t.language === currentLang)
+      if (!translation) return plant
+
+      const merged = { ...plant }
+      Object.keys(translation).forEach(key => {
+        const val = translation[key]
+        const isValid = Array.isArray(val) ? val.length > 0 : (val !== null && val !== undefined && val !== "")
+        if (isValid) {
+          merged[key] = val
+        }
+      })
+      return merged
+    })
+  }, [plants, currentLang])
+
   const filtered = herbList.filter(p => {
     if (activeGrade && p.evidenceGrade !== activeGrade) return false
     if (activeContinent && p.continent !== activeContinent) return false
