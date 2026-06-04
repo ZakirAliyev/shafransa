@@ -3,7 +3,6 @@ import { useAuthStore } from "../store/useAuthStore";
 
 const api = axios.create({
   baseURL: "https://api.shafransa.com/api",  // ✅ ALWAYS production API
-  timeout: 30000,
 
   headers: {
     "Content-Type": "application/json",
