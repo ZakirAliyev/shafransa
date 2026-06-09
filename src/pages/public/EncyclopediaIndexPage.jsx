@@ -85,11 +85,11 @@ export default function EncyclopediaIndexPage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 text-xs font-bold uppercase tracking-widest text-white/60 mb-2">
             <Leaf className="w-3.5 h-3.5" /> {t('encyclopedia.badge', 'Botanical Encyclopedia')}
           </div>
-          <h1 className="text-5xl lg:text-7xl font-display font-bold tracking-tight leading-none">
+          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-display font-bold tracking-tight leading-none">
             {t('encyclopedia.title_p1', 'Herbal')}<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">{t('encyclopedia.title_p2', 'Knowledge Base')}</span>
           </h1>
-          <p className="text-lg text-white/50 font-medium max-w-xl mx-auto">
+          <p className="text-base sm:text-lg text-white/50 font-medium max-w-xl mx-auto">
             {t('encyclopedia.subtitle', 'Clinical-grade botanical intelligence. Research, evidence grades, active compounds, and safety profiles.')}
           </p>
 
@@ -111,15 +111,15 @@ export default function EncyclopediaIndexPage() {
           </div>
 
           {/* Stats */}
-          <div className="flex items-center justify-center gap-8 pt-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-4 max-w-lg mx-auto">
             {[
               { label: t('encyclopedia.stats.herbs', 'Herbs Catalogued'), value: herbList.length || "..." },
               { label: t('encyclopedia.stats.research', 'Research Articles'), value: "1,240+" },
               { label: t('encyclopedia.stats.compounds', 'Compounds Tracked'), value: "850+" },
             ].map((s) => (
               <div key={s.label} className="text-center">
-                <div className="text-2xl font-display font-bold text-white">{s.value}</div>
-                <div className="text-xs font-bold uppercase tracking-widest text-white/30 mt-1">{s.label}</div>
+                <div className="text-xl sm:text-2xl font-display font-bold text-white">{s.value}</div>
+                <div className="text-[9px] sm:text-xs font-bold uppercase tracking-widest text-white/30 mt-1">{s.label}</div>
               </div>
             ))}
           </div>
@@ -130,10 +130,10 @@ export default function EncyclopediaIndexPage() {
       <div className="max-w-7xl mx-auto py-12 px-4 lg:px-8">
 
         {/* Filter bar */}
-        <div className="flex flex-wrap items-start gap-4 md:gap-10 mb-8">
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2">{t('encyclopedia.filters.grade', 'Evidence Grade')}</div>
-            <div className="flex gap-2">
+        <div className="flex flex-col md:flex-row md:items-end gap-6 mb-8 bg-white p-6 rounded-3xl border border-neutral-100 shadow-sm">
+          <div className="space-y-2">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('encyclopedia.filters.grade', 'Evidence Grade')}</div>
+            <div className="flex flex-wrap gap-2">
               {EVIDENCE_GRADES.map((g) => (
                 <button
                   key={g}
@@ -150,14 +150,14 @@ export default function EncyclopediaIndexPage() {
             </div>
           </div>
 
-          <div>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 mb-2">{t('encyclopedia.filters.continent', 'Continent')}</div>
+          <div className="space-y-2 flex-1">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('encyclopedia.filters.continent', 'Continent')}</div>
             <div className="flex flex-wrap gap-2">
               {CONTINENTS.map((c) => (
                 <button
                   key={c}
                   onClick={() => updateParam("continent", activeContinent === c ? "" : c)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold border transition-colors ${
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors ${
                     activeContinent === c
                       ? "bg-[#1a1c1e] text-white border-[#1a1c1e]"
                       : "border-neutral-200 text-muted-foreground hover:border-neutral-400"
@@ -170,10 +170,10 @@ export default function EncyclopediaIndexPage() {
           </div>
 
           {hasFilters && (
-            <div className="ml-auto self-end">
+            <div className="w-full md:w-auto md:ml-auto">
               <button
                 onClick={() => { setSearchInput(""); setSearchParams({}); }}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-rose-200 bg-rose-50 text-rose-600 text-sm font-bold hover:bg-rose-100 transition-colors"
+                className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-rose-200 bg-rose-50 text-rose-600 text-xs font-bold hover:bg-rose-100 transition-colors"
               >
                 <X className="w-3.5 h-3.5" /> {t('common.reset_filters', 'Reset Filters')}
               </button>
@@ -203,7 +203,7 @@ export default function EncyclopediaIndexPage() {
             <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/50 mb-6">
               {filtered.length} {filtered.length === 1 ? t('encyclopedia.entry_count_single', 'entry') : t('encyclopedia.entry_count_plural', 'entries')} {t('encyclopedia.found', 'found')}
             </div>
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((herb) => (
                 <Link key={herb.id} to={`/herb/${herb.id}`} className="group block">
                   <div className="rounded-3xl overflow-hidden border border-neutral-100 bg-white hover:shadow-2xl hover:shadow-black/8 hover:border-emerald-200 transition-all duration-500">
@@ -237,10 +237,10 @@ export default function EncyclopediaIndexPage() {
                     {/* Info */}
                     <div className="p-5 space-y-3">
                       <div>
-                        <div className="flex items-center gap-2 mb-1">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
                           {herb.continent && (
-                            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/50 flex items-center gap-1">
-                              <MapPin className="w-2.5 h-2.5" /> {t(`encyclopedia.continents.${herb.continent.toLowerCase().replace(/\s+/g, '_')}`, herb.continent)}
+                            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/50 flex items-center gap-1 flex-wrap">
+                              <MapPin className="w-2.5 h-2.5 shrink-0" /> {t(`encyclopedia.continents.${herb.continent.toLowerCase().replace(/\s+/g, '_')}`, herb.continent)}
                             </span>
                           )}
                         </div>
@@ -257,9 +257,9 @@ export default function EncyclopediaIndexPage() {
                       </p>
 
                       {herb.activeCompounds && (
-                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 uppercase tracking-widest">
-                          <FlaskConical className="w-3 h-3" />
-                          <span className="truncate">{herb.activeCompounds}</span>
+                        <div className="flex items-start gap-1.5 text-[10px] font-bold text-emerald-600 uppercase tracking-widest flex-wrap">
+                          <FlaskConical className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                          <span className="break-words flex-1 min-w-0">{herb.activeCompounds}</span>
                         </div>
                       )}
 

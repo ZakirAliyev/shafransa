@@ -5,17 +5,45 @@ import { useParams, Link } from "react-router-dom"
 import { getBlog } from "../../services/blog.service"
 import { Badge } from "../../components/ui/Badge"
 import { Calendar, Clock, User, Share2, ArrowLeft, Loader2, BookOpen, Play } from "lucide-react"
+import { MOCK_BLOGS } from "../../data/mockBlogs"
 
 export default function BlogDetailPage() {
   const { id } = useParams()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const isMock = id?.startsWith("mock-blog")
 
   const { data: blogResponse, isLoading } = useQuery({
     queryKey: ["blog", id],
     queryFn: () => getBlog(id),
+    enabled: !isMock,
   })
 
-  const blog = blogResponse?.data || blogResponse
+  const currentLang = i18n.language || 'az'
+
+  const blog = React.useMemo(() => {
+    if (isMock) {
+      const mockBlog = MOCK_BLOGS.find(b => b.id === id)
+      if (!mockBlog) return null
+      const trans = mockBlog.translations?.find(t => t.language === currentLang) || mockBlog.translations?.[0]
+      return {
+        ...mockBlog,
+        title: trans?.title || mockBlog.title,
+        description: trans?.description || mockBlog.description,
+        category: trans?.category || mockBlog.category
+      }
+    }
+
+    const rawBlog = blogResponse?.data || blogResponse
+    if (!rawBlog) return null
+
+    const trans = rawBlog.translations?.find(t => t.language === currentLang) || rawBlog.translations?.[0]
+    return {
+      ...rawBlog,
+      title: trans?.title || rawBlog.title,
+      description: trans?.description || rawBlog.description,
+      category: trans?.category || rawBlog.category
+    }
+  }, [blogResponse, id, currentLang, isMock])
 
   if (isLoading) {
     return (
@@ -43,35 +71,35 @@ export default function BlogDetailPage() {
   return (
     <article className="min-h-screen bg-white pb-24">
       {/* Header Section */}
-      <header className="relative pt-32 pb-20 overflow-hidden">
+      <header className="relative pt-4 pb-4 overflow-hidden">
         <div className="container mx-auto px-6 relative z-10">
           <Link to="/blogs" className="inline-flex items-center gap-2 text-primary font-bold text-sm mb-12 hover:-translate-x-1 transition-transform">
              <ArrowLeft className="w-4 h-4" /> {t('blog.back', 'Back to Hub')}
           </Link>
           
           <div className="max-w-4xl">
-            <div className="flex flex-wrap items-center gap-4 mb-8">
+             <div className="flex flex-wrap items-center gap-4 mb-8">
                <Badge className="bg-primary/10 text-primary border-primary/20 font-bold uppercase tracking-widest text-[10px] px-3">
                   {blog.category || t('blog.wellness', 'Wellness')}
                </Badge>
                <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                  <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {new Date(blog.createdAt).toLocaleDateString()}</span>
-                  <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> 5 min read</span>
+                  <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {new Date(blog.createdAt).toLocaleDateString(currentLang, { year: 'numeric', month: 'numeric', day: 'numeric' })}</span>
+                  <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {t('blog.min_read', { count: 5 })}</span>
                </div>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-display font-bold text-[#1a1c1e] tracking-tight leading-[1.1] mb-10">
+            <h1 className="text-4xl md:text-6xl font-display font-bold text-[#1a1c1e] tracking-tight leading-[1.1] mb-4">
               {blog.title}
             </h1>
             
             <div className="flex items-center justify-between border-y border-neutral-100 py-6">
                <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-neutral-100 flex items-center justify-center text-primary font-bold text-lg">
-                     {blog.author?.charAt(0) || 'S'}
+                     {blog.author?.charAt(0) || t('blog.author_default', 'S').charAt(0)}
                   </div>
                   <div>
-                     <p className="text-sm font-bold text-[#1a1c1e]">{blog.author || 'Shafransa Editorial'}</p>
-                     <p className="text-xs text-muted-foreground font-medium">Health & Wellness Expert</p>
+                     <p className="text-sm font-bold text-[#1a1c1e]">{blog.author || t('blog.author_default', 'Shafransa Editorial')}</p>
+                     <p className="text-xs text-muted-foreground font-medium">{t('blog.author_role', 'Health & Wellness Expert')}</p>
                   </div>
                </div>
                
@@ -135,12 +163,12 @@ export default function BlogDetailPage() {
           <footer className="mt-20 pt-10 border-t border-neutral-100">
              <div className="bg-neutral-50 rounded-3xl p-10 flex flex-col md:flex-row items-center gap-10">
                 <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center text-primary text-4xl font-display font-bold shrink-0 shadow-sm">
-                   S
+                   {blog.author?.charAt(0) || t('blog.author_default', 'S').charAt(0)}
                 </div>
                 <div>
                    <h4 className="text-xl font-display font-bold text-[#1a1c1e] mb-2">{t('blog.about_author', 'About Shafransa Editorial')}</h4>
                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      Our editorial team consists of certified physiotherapists and herbalists dedicated to bringing you the most accurate and up-to-date health protocols based on both traditional wisdom and modern evidence.
+                      {t('blog.author_bio', 'Our editorial team consists of certified physiotherapists and herbalists dedicated to bringing you the most accurate and up-to-date health protocols based on both traditional wisdom and modern evidence.')}
                    </p>
                 </div>
              </div>

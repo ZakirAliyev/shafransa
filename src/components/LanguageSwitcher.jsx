@@ -10,7 +10,7 @@ const languages = [
   { code: 'tr', name: 'Türkçe', flag: '🇹🇷' },
 ];
 
-export default function LanguageSwitcher() {
+export default function LanguageSwitcher({ isTransparent }) {
   const { t, i18n } = useTranslation();
   const { language, changeLanguage } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +37,11 @@ export default function LanguageSwitcher() {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-2 rounded-full bg-neutral-100 hover:bg-neutral-200 transition-colors text-sm font-medium text-muted-foreground hover:text-[#1a1c1e]"
+        className={`flex items-center gap-2 px-3 py-2 rounded-full transition-colors text-sm font-medium ${
+          isTransparent
+            ? 'bg-white/10 hover:bg-white/20 text-white'
+            : 'bg-neutral-100 hover:bg-neutral-200 text-muted-foreground hover:text-[#1a1c1e]'
+        }`}
       >
         <Globe className="w-4 h-4" />
         <span className="hidden sm:inline">{currentLanguage.name}</span>

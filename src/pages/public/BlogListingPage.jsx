@@ -1,36 +1,51 @@
 import React from "react"
-import { useQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
-import { getBlogs } from "../../services/blog.service"
 import { Card, CardContent } from "../../components/ui/Card"
 import { Badge } from "../../components/ui/Badge"
 import { Calendar, Clock, ArrowRight, BookOpen, Loader2 } from "lucide-react"
+import { MOCK_BLOGS } from "../../data/mockBlogs"
+
 
 export default function BlogListingPage() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
-  const { data: blogsResponse, isLoading } = useQuery({
-    queryKey: ["blogs"],
-    queryFn: () => getBlogs(),
-  })
+  const isLoading = false
+  const currentLang = i18n.language || 'az'
 
-  const blogs = blogsResponse?.data?.data || blogsResponse?.data || []
+  const blogs = React.useMemo(() => {
+    const allBlogs = MOCK_BLOGS.slice(0, 9)
+
+    return allBlogs.map(blog => {
+      const trans = blog.translations?.find(t => t.language === currentLang) || blog.translations?.[0]
+      return {
+        ...blog,
+        title: trans?.title || blog.title,
+        description: trans?.description || blog.description,
+        category: trans?.category || blog.category
+      }
+    })
+  }, [currentLang])
+
+  const stripHtml = (html) => {
+    if (!html) return ""
+    return html.replace(/<[^>]*>/g, "")
+  }
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
       {/* Hero Header */}
-      <header className="pt-32 pb-20 bg-white border-b border-neutral-100">
+      <header className="pt-4 pb-4 bg-white border-b border-neutral-100">
         <div className="container mx-auto px-6">
           <div className="max-w-3xl">
             <Badge className="bg-primary/10 text-primary border-primary/20 font-bold uppercase tracking-widest text-[10px] px-3 mb-6">
                {t('blog.badge', 'Research & Education')}
             </Badge>
             <h1 className="text-4xl md:text-6xl font-display font-bold text-[#1a1c1e] tracking-tight leading-[1.1] mb-6">
-              {t('blog.title', 'The Protocol Hub')}
+               {t('blog.title', 'Shafransa Blogs')}
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {t('blog.subtitle', 'Scientific blog posts, traditional protocols, and modern wellness research from the Shafransa editorial team.')}
+            <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+               {t('blog.subtitle', 'Deep dives into physiotherapy, herbal medicine, and holistic wellness protocols.')}
             </p>
           </div>
         </div>
@@ -80,7 +95,7 @@ export default function BlogListingPage() {
                   <CardContent className="p-0 flex-1 flex flex-col">
                     <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-primary mb-3">
                        <span className="flex items-center gap-1.5">
-                          <Calendar className="w-3 h-3" /> {new Date(blog.createdAt).toLocaleDateString()}
+                          <Calendar className="w-3 h-3" /> {new Date(blog.createdAt).toLocaleDateString(currentLang, { year: 'numeric', month: 'numeric', day: 'numeric' })}
                        </span>
                        <span className="flex items-center gap-1.5">
                           <Clock className="w-3 h-3" /> {t('blog.min_read', { count: 5 })}
@@ -92,7 +107,7 @@ export default function BlogListingPage() {
                     </h3>
                     
                     <p className="text-muted-foreground text-sm line-clamp-3 mb-6 flex-1">
-                      {blog.description}
+                      {stripHtml(blog.description)}
                     </p>
                     
                     <div className="pt-6 border-t border-neutral-100 flex items-center justify-between">

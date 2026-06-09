@@ -54,7 +54,9 @@ export default function ExpertPanel() {
     end.setHours(endHour, 0, 0, 0);
     
     while (current <= end) {
-      slots.push(current.toLocaleTimeString("az-AZ", { hour: '2-digit', minute: '2-digit', hour12: false }));
+      const hh = current.getHours().toString().padStart(2, '0');
+      const mm = current.getMinutes().toString().padStart(2, '0');
+      slots.push(`${hh}:${mm}`);
       current = new Date(current.getTime() + duration * 60000);
     }
     return slots;
@@ -97,6 +99,8 @@ export default function ExpertPanel() {
       Hours: selectedHours
     }),
     onSuccess: () => {
+      const localKey = `therapist_hours_${therapist.id || 'me'}`;
+      localStorage.setItem(localKey, JSON.stringify(selectedHours));
       toast.success(t('expert.hours_updated', 'Working hours updated!'))
       setIsConfiguringHours(false)
     }
@@ -120,7 +124,16 @@ export default function ExpertPanel() {
         offlinePrice: therapist.offlinePrice || 0,
         sessionDurationInMinutes: therapist.sessionDurationInMinutes || 60
       })
-      if (therapist.workingHours) {
+      
+      const localKey = `therapist_hours_${therapist.id || 'me'}`;
+      const cached = localStorage.getItem(localKey);
+      if (cached) {
+        try {
+          setSelectedHours(JSON.parse(cached));
+        } catch (e) {
+          console.error(e);
+        }
+      } else if (therapist.workingHours) {
         setSelectedHours(therapist.workingHours.map(wh => wh.hour))
       }
     }
@@ -149,11 +162,11 @@ export default function ExpertPanel() {
 
   const getStatusBadge = (status) => {
     switch (status) {
-      case SESSION_STATUS.PENDING: return <Badge className="bg-orange-50 text-orange-600 border-orange-200">PENDING</Badge>
-      case SESSION_STATUS.THERAPIST_CONFIRMED: return <Badge className="bg-blue-50 text-blue-600 border-blue-200">WAITING FOR USER</Badge>
-      case SESSION_STATUS.CONFIRMED: return <Badge className="bg-emerald-50 text-emerald-600 border-emerald-200">CONFIRMED</Badge>
-      case SESSION_STATUS.COMPLETED: return <Badge className="bg-purple-50 text-purple-600 border-purple-200">COMPLETED</Badge>
-      case SESSION_STATUS.CANCELLED: return <Badge className="bg-rose-50 text-rose-600 border-rose-200">CANCELLED</Badge>
+      case SESSION_STATUS.PENDING: return <Badge className="bg-orange-50 text-orange-600 border-orange-200">{t('session.status.pending', 'PENDING')}</Badge>
+      case SESSION_STATUS.THERAPIST_CONFIRMED: return <Badge className="bg-blue-50 text-blue-600 border-blue-200">{t('session.status.therapist_confirmed', 'WAITING FOR USER')}</Badge>
+      case SESSION_STATUS.CONFIRMED: return <Badge className="bg-emerald-50 text-emerald-600 border-emerald-200">{t('session.status.confirmed', 'CONFIRMED')}</Badge>
+      case SESSION_STATUS.COMPLETED: return <Badge className="bg-purple-50 text-purple-600 border-purple-200">{t('session.status.completed', 'COMPLETED')}</Badge>
+      case SESSION_STATUS.CANCELLED: return <Badge className="bg-rose-50 text-rose-600 border-rose-200">{t('session.status.cancelled', 'CANCELLED')}</Badge>
       default: return <Badge>{status}</Badge>
     }
   }
@@ -169,15 +182,85 @@ export default function ExpertPanel() {
           <Button 
             variant={activeTab === "settings" ? "default" : "outline"} 
             className="rounded-xl font-bold h-11" 
-            onClick={() => setActiveTab(activeTab === "settings" ? "sessions" : "settings")}
+            onClick={() => {
+              setActiveTab(activeTab === "settings" ? "sessions" : "settings");
+              setIsConfiguringHours(false);
+            }}
           >
             <Settings className="mr-2 h-4 w-4" /> {t('expert.profile_settings', 'Profile Settings')}
           </Button>
-          <Button variant="outline" className="rounded-xl font-bold h-11" onClick={() => setIsConfiguringHours(!isConfiguringHours)}>
+          <Button 
+            variant={isConfiguringHours ? "default" : "outline"} 
+            className="rounded-xl font-bold h-11" 
+            onClick={() => setIsConfiguringHours(!isConfiguringHours)}
+          >
             <Clock className="mr-2 h-4 w-4" /> {t('expert.configure_hours', 'Work Schema')}
           </Button>
         </div>
       </div>
+
+
+
+      {isConfiguringHours && (
+         <Card className="border-primary/20 bg-primary/[0.02] animate-in fade-in zoom-in duration-300">
+            <CardHeader className="pb-4">
+               <CardTitle className="text-xl font-bold flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-primary" /> {t('expert.hours_title', 'Clinical Working Hours')}
+               </CardTitle>
+               <CardDescription>{t('expert.hours_desc', 'Select the time slots when you are available for clinical consultations.')}</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+               <div className="flex gap-2 mb-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg"
+                    onClick={() => setSelectedHours(HOURS_OPTIONS)}
+                  >
+                    {t('expert.select_all', 'Select All')}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg text-rose-500 hover:text-rose-600"
+                    onClick={() => setSelectedHours([])}
+                  >
+                    {t('expert.clear_all', 'Clear All')}
+                  </Button>
+               </div>
+
+               <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-3">
+                  {HOURS_OPTIONS.map((hour) => {
+                     const isSelected = selectedHours.includes(hour);
+                     return (
+                        <button
+                           key={hour}
+                           type="button"
+                           onClick={() => {
+                              if (isSelected) setSelectedHours(selectedHours.filter(h => h !== hour))
+                              else setSelectedHours([...selectedHours, hour])
+                           }}
+                           className={`h-12 rounded-xl border font-bold text-sm transition-all flex items-center justify-center ${
+                              isSelected 
+                                 ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-[1.02]" 
+                                 : "bg-white text-muted-foreground border-neutral-200 hover:border-primary/40 hover:bg-neutral-50"
+                           }`}
+                        >
+                           {hour}
+                        </button>
+                     )
+                  })}
+               </div>
+               
+               <div className="flex justify-end gap-3 pt-6 border-t border-neutral-100">
+                  <Button variant="ghost" className="rounded-xl font-bold" onClick={() => setIsConfiguringHours(false)}>{t('common.cancel', 'Cancel')}</Button>
+                  <Button disabled={savingHours} className="rounded-xl font-bold px-8 shadow-xl shadow-primary/20" onClick={() => saveHours()}>
+                     {savingHours ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : t('common.save', 'Save Schema')}
+                  </Button>
+               </div>
+            </CardContent>
+         </Card>
+      )}
 
       {activeTab === "settings" && (
         <div className="grid lg:grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -328,66 +411,6 @@ export default function ExpertPanel() {
       {activeTab === "sessions" && (
         <>
 
-      {isConfiguringHours && (
-        <Card className="border-primary/20 bg-primary/[0.02] animate-in fade-in zoom-in duration-300">
-           <CardHeader className="pb-4">
-              <CardTitle className="text-xl font-bold flex items-center gap-2">
-                 <Clock className="w-5 h-5 text-primary" /> {t('expert.hours_title', 'Clinical Working Hours')}
-              </CardTitle>
-              <CardDescription>{t('expert.hours_desc', 'Select the time slots when you are available for clinical consultations.')}</CardDescription>
-           </CardHeader>
-           <CardContent className="space-y-6">
-              <div className="flex gap-2 mb-4">
-                 <Button 
-                   variant="outline" 
-                   size="sm" 
-                   className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg"
-                   onClick={() => setSelectedHours(HOURS_OPTIONS)}
-                 >
-                   Select All
-                 </Button>
-                 <Button 
-                   variant="outline" 
-                   size="sm" 
-                   className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg text-rose-500 hover:text-rose-600"
-                   onClick={() => setSelectedHours([])}
-                 >
-                   Clear All
-                 </Button>
-              </div>
-
-              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 gap-3">
-                 {HOURS_OPTIONS.map((hour) => {
-                    const isSelected = selectedHours.includes(hour);
-                    return (
-                       <button
-                          key={hour}
-                          type="button"
-                          onClick={() => {
-                             if (isSelected) setSelectedHours(selectedHours.filter(h => h !== hour))
-                             else setSelectedHours([...selectedHours, hour])
-                          }}
-                          className={`h-12 rounded-xl border font-bold text-sm transition-all flex items-center justify-center ${
-                             isSelected 
-                                ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-[1.02]" 
-                                : "bg-white text-muted-foreground border-neutral-200 hover:border-primary/40 hover:bg-neutral-50"
-                          }`}
-                       >
-                          {hour}
-                       </button>
-                    )
-                 })}
-              </div>
-              
-              <div className="flex justify-end gap-3 pt-6 border-t border-neutral-100">
-                 <Button variant="ghost" className="rounded-xl font-bold" onClick={() => setIsConfiguringHours(false)}>{t('common.cancel', 'Cancel')}</Button>
-                 <Button disabled={savingHours} className="rounded-xl font-bold px-8 shadow-xl shadow-primary/20" onClick={() => saveHours()}>
-                    {savingHours ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : t('common.save', 'Save Schema')}
-                 </Button>
-              </div>
-           </CardContent>
-        </Card>
-      )}
 
       <div className="grid gap-6 md:grid-cols-3">
         <Card className="premium-card p-2">

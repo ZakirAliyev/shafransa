@@ -21,7 +21,7 @@ const ContactPage = () => {
   return (
     <div className="min-h-screen bg-[#fafafa]">
       {/* ── HERO ── */}
-      <section className="pt-32 pb-20 bg-white border-b border-neutral-100">
+      <section className="pt-4 pb-4 bg-white border-b border-neutral-100">
         <div className="max-w-7xl mx-auto px-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 text-primary text-[10px] font-bold uppercase tracking-widest mb-6 border border-primary/10">
             <FaEnvelope className="w-3 h-3" />

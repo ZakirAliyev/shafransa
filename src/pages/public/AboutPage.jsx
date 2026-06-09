@@ -11,7 +11,7 @@ const AboutPage = () => {
   return (
     <div className="min-h-screen bg-[#fafafa]">
       {/* ── HERO SECTION ── */}
-      <section className="relative pt-32 pb-20 overflow-hidden bg-white border-b border-neutral-100">
+      <section className="relative pt-4 pb-4 overflow-hidden bg-white border-b border-neutral-100">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none opacity-[0.03]">
           <img src={logo} className="w-[600px] h-auto grayscale opacity-10 absolute -top-40 -left-60" alt="" />
         </div>

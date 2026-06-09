@@ -671,6 +671,40 @@ export default function UserProfile({ tab = "profile" }) {
                          </Button>
                        )}
 
+                       {session.status === SESSION_STATUS.THERAPIST_CONFIRMED && (
+                          <div className="flex gap-2">
+                            <Button 
+                               variant="ghost" 
+                               size="sm" 
+                               className="h-9 px-4 rounded-xl font-bold text-rose-500 hover:bg-rose-50"
+                               onClick={() => {
+                                  if (window.confirm(t('common.confirm_cancel', 'Are you sure you want to cancel this session?'))) {
+                                     cancelSessionService(session.id).then(() => {
+                                        queryClient.invalidateQueries(["sessions", "my"])
+                                        toast.info(t('session.cancelled', 'Session cancelled.'))
+                                     })
+                                   }
+                               }}
+                            >
+                               {t('common.cancel', 'Cancel')}
+                            </Button>
+                            <Button 
+                               size="sm" 
+                               className="h-9 px-4 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
+                               onClick={() => {
+                                  confirmSessionAsUser(session.id).then(() => {
+                                     queryClient.invalidateQueries(["sessions", "my"])
+                                     toast.success(t('session.confirmed', 'Session confirmed successfully!'))
+                                  }).catch(err => {
+                                     toast.error(err?.message || 'Failed to confirm session')
+                                  })
+                               }}
+                            >
+                               {t('common.confirm', 'Confirm')}
+                            </Button>
+                          </div>
+                       )}
+
                        {session.status === SESSION_STATUS.CONFIRMED && session.meetingLink && (
                           <Button 
                              size="sm" 

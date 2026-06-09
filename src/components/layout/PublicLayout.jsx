@@ -95,6 +95,29 @@ export default function PublicLayout() {
 
   const isTherapist = !!therapistProfile?.data || !!therapistProfile
 
+  const [isScrolled, setIsScrolled] = useState(false)
+  const isHomepage = location.pathname === "/"
+  const isTransparent = isHomepage && !isScrolled
+
+  useEffect(() => {
+    if (!isHomepage) {
+      setIsScrolled(true)
+      return
+    }
+
+    const handleScroll = () => {
+      if (window.scrollY > 40) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    handleScroll()
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [isHomepage])
+
   useEffect(() => {
     setMobileOpen(false)
     setUserMenuOpen(false)
@@ -126,7 +149,7 @@ export default function PublicLayout() {
     <div className="flex min-h-screen flex-col bg-[#fafafa] text-foreground font-sans">
       
       {/* ── HEADER ── */}
-      <header className="sticky top-0 z-[100] w-full border-b border-neutral-200/50 bg-white/90 backdrop-blur-xl">
+      <header className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${isTransparent ? 'bg-gradient-to-b from-black/25 to-transparent backdrop-blur-none' : 'bg-white/90 backdrop-blur-xl shadow-sm'}`}>
         <div className="max-w-7xl mx-auto flex h-[64px] items-center justify-between gap-4 px-4">
 
           {/* Logo */}
@@ -146,7 +169,9 @@ export default function PublicLayout() {
                 to={link.to}
                 className={`px-3.5 py-2 rounded-lg text-sm font-semibold transition-colors ${isActive(link.to)
                   ? "text-primary bg-primary/5"
-                  : "text-muted-foreground hover:text-[#1a1c1e] hover:bg-neutral-100"
+                  : isTransparent
+                    ? "text-white/80 hover:text-white hover:bg-white/10"
+                    : "text-muted-foreground hover:text-[#1a1c1e] hover:bg-neutral-100"
                   }`}
               >
                 {t(link.label)}
@@ -159,7 +184,9 @@ export default function PublicLayout() {
                 onClick={() => setMoreMenuOpen(v => !v)}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${isMoreActive || moreMenuOpen
                   ? "text-primary bg-primary/5"
-                  : "text-muted-foreground hover:text-[#1a1c1e] hover:bg-neutral-100"
+                  : isTransparent
+                    ? "text-white/80 hover:text-white hover:bg-white/10"
+                    : "text-muted-foreground hover:text-[#1a1c1e] hover:bg-neutral-100"
                   }`}
                 aria-label="More pages"
               >
@@ -192,13 +219,17 @@ export default function PublicLayout() {
           <div className="flex items-center gap-1.5 ml-auto">
             {/* Language Switcher — Desktop only */}
             <div className="hidden lg:block">
-              <LanguageSwitcher />
+              <LanguageSwitcher isTransparent={isTransparent} />
             </div>
 
             {/* Search */}
             <Link
               to="/marketplace"
-              className="hidden md:flex items-center gap-2 px-3 py-2 rounded-full bg-neutral-100 hover:bg-neutral-200 text-sm text-muted-foreground font-medium transition-colors"
+              className={`hidden md:flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-colors ${
+                isTransparent
+                  ? "bg-white/10 hover:bg-white/20 text-white/80 hover:text-white"
+                  : "bg-neutral-100 hover:bg-neutral-200 text-muted-foreground hover:text-[#1a1c1e]"
+              }`}
             >
               <Search className="w-4 h-4" /> <span className="hidden xl:inline">{t('search_herbs')}</span>
             </Link>
@@ -206,7 +237,11 @@ export default function PublicLayout() {
             {/* Wishlist */}
             <Link
               to={isAuthenticated ? dashboardPath + "/wishlist" : "/login"}
-              className="relative p-2 rounded-full hover:bg-neutral-100 transition-colors text-muted-foreground hover:text-[#1a1c1e]"
+              className={`relative p-2 rounded-full transition-colors ${
+                isTransparent
+                  ? "hover:bg-white/10 text-white/80 hover:text-white"
+                  : "hover:bg-neutral-100 text-muted-foreground hover:text-[#1a1c1e]"
+              }`}
               aria-label="Wishlist"
             >
               <Heart className="w-5 h-5" />
@@ -215,7 +250,11 @@ export default function PublicLayout() {
             {/* Cart */}
             <Link
               to="/cart"
-              className="relative p-2 rounded-full hover:bg-neutral-100 transition-colors text-muted-foreground hover:text-[#1a1c1e]"
+              className={`relative p-2 rounded-full transition-colors ${
+                isTransparent
+                  ? "hover:bg-white/10 text-white/80 hover:text-white"
+                  : "hover:bg-neutral-100 text-muted-foreground hover:text-[#1a1c1e]"
+              }`}
               aria-label="Cart"
             >
               <ShoppingCart className="w-5 h-5" />
@@ -231,12 +270,16 @@ export default function PublicLayout() {
               <div className="relative" ref={userMenuRef}>
                 <button
                   onClick={() => setUserMenuOpen(v => !v)}
-                  className="flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 transition-colors"
+                  className={`flex items-center gap-2 pl-3 pr-2 py-1.5 rounded-full transition-colors ${
+                    isTransparent
+                      ? "bg-white/10 hover:bg-white/20"
+                      : "bg-neutral-100 hover:bg-neutral-200"
+                  }`}
                 >
                   <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
                     {user?.fullName?.charAt(0)}
                   </div>
-                  <ChevronDown className={`w-3.5 h-3.5 text-muted-foreground transition-transform ${userMenuOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isTransparent ? "text-white/80" : "text-muted-foreground"} ${userMenuOpen ? "rotate-180" : ""}`} />
                 </button>
 
                 {userMenuOpen && (
@@ -284,7 +327,11 @@ export default function PublicLayout() {
               </div>
             ) : (
               <div className="hidden sm:flex items-center gap-2">
-                <Link to="/login" className="px-4 py-2 rounded-full text-sm font-bold text-muted-foreground hover:text-[#1a1c1e] hover:bg-neutral-100 transition-colors">
+                <Link to="/login" className={`px-4 py-2 rounded-full text-sm font-bold transition-colors ${
+                  isTransparent
+                    ? "text-white/80 hover:text-white hover:bg-white/10"
+                    : "text-muted-foreground hover:text-[#1a1c1e] hover:bg-neutral-100"
+                }`}>
                   {t('sign_in')}
                 </Link>
                 <Link to="/register" className="px-4 py-2 rounded-full text-sm font-bold bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary/90 transition-colors">
@@ -296,7 +343,11 @@ export default function PublicLayout() {
             {/* Mobile burger */}
             <button
               onClick={() => setMobileOpen(v => !v)}
-              className="lg:hidden p-2 rounded-full hover:bg-neutral-100 text-muted-foreground hover:text-[#1a1c1e] transition-colors"
+              className={`lg:hidden p-2 rounded-full transition-colors ${
+                isTransparent
+                  ? "hover:bg-white/10 text-white/80 hover:text-white"
+                  : "hover:bg-neutral-100 text-muted-foreground hover:text-[#1a1c1e]"
+              }`}
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -392,7 +443,7 @@ export default function PublicLayout() {
       )}
 
       {/* ── MAIN CONTENT ── */}
-      <main className="flex-1">
+      <main className={`flex-1 ${isHomepage ? "" : "pt-16"}`}>
         <ScrollToTop />
         <Outlet />
       </main>

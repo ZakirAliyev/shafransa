@@ -20,56 +20,82 @@ import {
 } from "lucide-react";
 import { Badge } from "../../components/ui/Badge";
 import { useQuery } from "@tanstack/react-query";
-import { getBlogs } from "../../services/blog.service";
+import { MOCK_BLOGS } from "../../data/mockBlogs";
+
+import heroVideo from "../../assets/heroVideo.mp4"
 
 export default function LandingPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language || 'az';
 
-  const { data: blogsResponse, isLoading } = useQuery({
-    queryKey: ["blogs", "latest"],
-    queryFn: () => getBlogs(),
-  })
+  const isLoading = false;
 
-  const blogs = blogsResponse?.data?.data || blogsResponse?.data || []
+  const blogs = React.useMemo(() => {
+    const allBlogs = MOCK_BLOGS.slice(0, 3);
+    return allBlogs.map(blog => {
+      const trans = blog.translations?.find(t => t.language === currentLang) || blog.translations?.[0];
+      return {
+        ...blog,
+        title: trans?.title || blog.title,
+        description: trans?.description || blog.description,
+        category: trans?.category || blog.category
+      };
+    });
+  }, [currentLang]);
+
+  const stripHtml = (html) => {
+    if (!html) return "";
+    return html.replace(/<[^>]*>/g, "");
+  };
 
   return (
     <div className="flex flex-col items-center justify-center w-full selection:bg-primary/20 bg-[#fafafa]">
 
       {/* 1. HERO SECTION */}
-      <section className="w-full relative min-h-[90vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden p-8">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] -z-10 animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[50%] bg-blue-500/5 rounded-full blur-[100px] -z-10"></div>
+      <section className="w-full relative min-h-screen md:h-screen flex flex-col items-center justify-center text-center px-4 pt-24 pb-16 md:py-0 overflow-hidden z-0">
+        {/* Background Video */}
+        <video
+          src={heroVideo}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover -z-20"
+        />
 
-        <div className="max-w-5xl mx-auto space-y-10 animate-fade-in-up">
-          <h1 className="text-6xl md:text-8xl font-display font-bold tracking-tight text-[#1a1c1e] leading-[1.05]">
+        {/* Dark overlay for contrast and premium aesthetic */}
+        <div className="absolute inset-0 bg-black/45 backdrop-blur-[1px] -z-10"></div>
+
+        <div className="max-w-5xl mx-auto space-y-6 md:space-y-10 animate-fade-in-up z-10">
+          <h1 className="text-3xl sm:text-4xl md:text-8xl font-display font-semibold tracking-tight text-white leading-[1.1] md:leading-[1.05]">
             {t('landing.hero.title_part1', 'Botanical Medicine')} <br />
             <span className="text-primary italic font-medium">{t('landing.hero.title_part2', 'Reimagined')}</span> {t('landing.hero.title_part3', 'by AI.')}
           </h1>
 
-          <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto font-normal">
+          <p className="text-base sm:text-lg md:text-2xl text-white/80 leading-relaxed max-w-2xl mx-auto font-normal">
             {t('landing.hero.subtitle', "The world's first clinical-grade botanical ecosystem. Real-time safety analysis, lab-verified transparency, and genomic-backed health protocols.")}
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-5 pt-8">
-            <Button size="lg" className="rounded-full h-16 px-10 text-lg font-semibold shadow-xl shadow-primary/20 btn-hover group shrink-0 whitespace-nowrap" asChild>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 md:pt-8">
+            <Button size="lg" className="rounded-full h-14 sm:h-16 px-8 sm:px-10 text-base sm:text-lg font-semibold shadow-xl shadow-primary/20 btn-hover group shrink-0 whitespace-nowrap bg-primary text-white hover:bg-primary/95" asChild>
               <Link to="/register" className="flex items-center">
                 {t('landing.cta.protocol', 'Start My Protocol')} <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
-            <Button size="lg" variant="ghost" className="rounded-full h-16 px-10 text-lg font-semibold hover:bg-black/5 shrink-0 whitespace-nowrap" asChild>
+            <Button size="lg" variant="ghost" className="rounded-full h-14 sm:h-16 px-8 sm:px-10 text-base sm:text-lg font-semibold text-white hover:bg-white/10 hover:text-white shrink-0 whitespace-nowrap" asChild>
               <Link to="/marketplace">
                 {t('landing.cta.marketplace', 'Explore The Marketplace')}
               </Link>
             </Button>
           </div>
 
-          <div className="pt-20 flex flex-col items-center space-y-6">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted-foreground/60">{t('landing.social.trusted', 'Trusted by clinical researchers globally')}</p>
-            <div className="flex flex-wrap items-center justify-center gap-12 opacity-40 grayscale contrast-125">
-              <div className="font-display font-bold text-2xl tracking-tighter italic">BioNature</div>
-              <div className="font-display font-bold text-2xl tracking-tighter">GenomicLabs</div>
-              <div className="font-display font-bold text-2xl tracking-tighter">EuroBotanics</div>
-              <div className="font-display font-bold text-2xl tracking-tighter italic">HelixHealth</div>
+          <div className="pt-10 md:pt-20 flex flex-col items-center space-y-4 md:space-y-6">
+            <p className="text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] text-white/60">{t('landing.social.trusted', 'Trusted by clinical researchers globally')}</p>
+            <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-12 text-white opacity-40 grayscale contrast-125">
+              <div className="font-display font-bold text-lg sm:text-2xl tracking-tighter italic">BioNature</div>
+              <div className="font-display font-bold text-lg sm:text-2xl tracking-tighter">GenomicLabs</div>
+              <div className="font-display font-bold text-lg sm:text-2xl tracking-tighter">EuroBotanics</div>
+              <div className="font-display font-bold text-lg sm:text-2xl tracking-tighter italic">HelixHealth</div>
             </div>
           </div>
         </div>
@@ -101,7 +127,6 @@ export default function LandingPage() {
                 <h3 className="text-3xl font-display font-bold">{t('landing.ai.title', 'The Shafransa AI Core™')}</h3>
                 <p className="text-muted-foreground text-lg max-w-md">{t('landing.ai.text', 'Our neural network analyzes your genetics, existing prescriptions, and symptoms to build a protocol that is safe, effective, and deeply personal.')}</p>
               </div>
-              <div className="absolute right-[-10%] bottom-[-5%] w-[60%] h-[70%] bg-gradient-to-br from-primary/5 to-primary/20 rounded-t-3xl border-t border-l border-primary/10 group-hover:translate-y-[-10px] transition-transform duration-700"></div>
             </div>
 
             <div className="premium-card p-10 h-[500px] flex flex-col justify-between bg-[#1a1c1e] text-white border-none">
@@ -149,10 +174,10 @@ export default function LandingPage() {
                 <Link key={blog.id} to={`/blog/${blog.id}`} className="group cursor-pointer">
                   <div className="aspect-[16/10] rounded-3xl overflow-hidden mb-6 bg-neutral-100 relative">
                     {blog.images?.[0] ? (
-                      <img 
-                        src={blog.images[0]} 
-                        alt={blog.title} 
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                      <img
+                        src={blog.images[0]}
+                        alt={blog.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center">
@@ -162,15 +187,15 @@ export default function LandingPage() {
                     <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   </div>
                   <div className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-widest text-primary mb-3">
-                     <span>{t('blog.min_read', { count: 5 })}</span>
-                     <span className="w-1 h-1 rounded-full bg-neutral-200"></span>
-                     <span className="text-muted-foreground">{t('common.protocol', 'PROTOCOL')}</span>
+                    <span>{t('blog.min_read', { count: 5 })}</span>
+                    <span className="w-1 h-1 rounded-full bg-neutral-200"></span>
+                    <span className="text-muted-foreground">{t('common.protocol', 'PROTOCOL')}</span>
                   </div>
                   <h3 className="text-xl font-display font-bold text-[#1a1c1e] mb-3 group-hover:text-primary transition-colors line-clamp-2 leading-tight">
-                     {blog.title}
+                    {blog.title}
                   </h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">
-                     {blog.description}
+                    {stripHtml(blog.description)}
                   </p>
                 </Link>
               ))
@@ -182,7 +207,7 @@ export default function LandingPage() {
           </div>
 
           <Link to="/blogs" className="md:hidden flex items-center justify-center gap-2 text-primary font-bold mt-12 py-4 border border-primary/20 rounded-2xl">
-             {t('landing.blog.view_all', 'Explore All Blogs')}
+            {t('landing.blog.view_all', 'Explore All Blogs')}
           </Link>
         </div>
       </section>
@@ -193,7 +218,7 @@ export default function LandingPage() {
           <div className="space-y-12">
             <header className="space-y-4">
               <h4 className="text-primary font-bold uppercase tracking-[0.2em] text-sm">{t('landing.marketplace.badge', 'Clinical Marketplace')}</h4>
-              <h2 className="text-4xl md:text-5xl font-display font-bold tracking-tight text-[#1a1c1e]">{t('landing.marketplace.title', 'Transparent supply chains from soil to bottle.')}</h2>
+              <h2 className="text-4xl md:text-5xl font-display font-bold tracking-tight text-[#1a1c1e]">{t('landing.marketplace.title', 'Verified botanical purity from native soil to clinical wellness.')}</h2>
             </header>
 
             <div className="space-y-10">

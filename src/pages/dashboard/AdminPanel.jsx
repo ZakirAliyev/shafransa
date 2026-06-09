@@ -233,6 +233,7 @@ export default function AdminPanel({ tab = "overview" }) {
   const [plantImage, setPlantImage] = useState(null)
   const [plantGallery, setPlantGallery] = useState([])
   const [plantPreviews, setPlantPreviews] = useState({ main: null, gallery: [] })
+  const [plantDeletedGalleryUrls, setPlantDeletedGalleryUrls] = useState([])
   const [editingPlantId, setEditingPlantId] = useState(null)
 
   const handleEditPlant = (plant) => {
@@ -242,6 +243,7 @@ export default function AdminPanel({ tab = "overview" }) {
       slug: plant.slug || ""
     })
     setPlantPreviews({ main: plant.image, gallery: plant.gallery || [] })
+    setPlantDeletedGalleryUrls([])
     
     // Create new translations object from existing data
     const newTrans = { ...initialPlantTranslations }
@@ -302,6 +304,10 @@ export default function AdminPanel({ tab = "overview" }) {
         form.append("NewGalleryFiles", file)
       })
 
+      plantDeletedGalleryUrls.forEach(url => {
+        form.append("DeleteGalleryUrls", url)
+      })
+
       const transArray = Object.entries(plantTranslations).map(([lang, fields]) => ({
         language: lang,
         ...fields
@@ -320,6 +326,7 @@ export default function AdminPanel({ tab = "overview" }) {
       setPlantImage(null)
       setPlantGallery([])
       setPlantPreviews({ main: null, gallery: [] })
+      setPlantDeletedGalleryUrls([])
       setEditingPlantId(null)
       toast.success(t('admin.plants.updated', 'Plant entry updated!'))
     },
@@ -336,6 +343,7 @@ export default function AdminPanel({ tab = "overview" }) {
   const [blogMisc, setBlogMisc] = useState({ author: "", videoUrl: "" })
   const [blogGallery, setBlogGallery] = useState([])
   const [blogGalleryPreviews, setBlogGalleryPreviews] = useState([])
+  const [blogDeletedGalleryUrls, setBlogDeletedGalleryUrls] = useState([])
   const [editingBlogId, setEditingBlogId] = useState(null)
 
   const handleEditBlog = (blog) => {
@@ -345,6 +353,7 @@ export default function AdminPanel({ tab = "overview" }) {
       videoUrl: blog.videoUrl || ""
     })
     setBlogGalleryPreviews(blog.gallery || [])
+    setBlogDeletedGalleryUrls([])
     
     const newTrans = { ...initialBlogTranslations }
     blog.translations?.forEach(t => {
@@ -397,6 +406,10 @@ export default function AdminPanel({ tab = "overview" }) {
         form.append("NewGalleryFiles", file)
       })
 
+      blogDeletedGalleryUrls.forEach(url => {
+        form.append("DeleteGalleryUrls", url)
+      })
+
       const transArray = Object.entries(blogTranslations).map(([lang, fields]) => ({
         language: lang,
         ...fields
@@ -415,6 +428,7 @@ export default function AdminPanel({ tab = "overview" }) {
       setBlogMisc({ author: "", videoUrl: "" })
       setBlogGallery([])
       setBlogGalleryPreviews([])
+      setBlogDeletedGalleryUrls([])
       toast.success(t('admin.blogs.updated', 'Article updated!'))
     }
   })
@@ -878,10 +892,27 @@ export default function AdminPanel({ tab = "overview" }) {
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.main_image', 'Central Specimen Media')}</label>
                       <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 overflow-hidden shrink-0">
-                          {plantPreviews.main ? <img src={plantPreviews.main} className="w-full h-full object-cover" /> : <UploadCloud className="w-5 h-5 text-white/10" />}
+                        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 overflow-hidden shrink-0 relative group">
+                          {plantPreviews.main ? (
+                            <>
+                              <img src={plantPreviews.main} className="w-full h-full object-cover" />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setPlantImage(null);
+                                  setPlantPreviews(prev => ({ ...prev, main: null }));
+                                }}
+                                className="absolute inset-0 bg-rose-500/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Trash2 className="w-4 h-4 text-white" />
+                              </button>
+                            </>
+                          ) : (
+                            <UploadCloud className="w-5 h-5 text-white/10" />
+                          )}
                         </div>
                         <Input
+                          key={plantPreviews.main ? 'has-image' : 'no-image'}
                           type="file"
                           accept="image/*"
                           onChange={(e) => {
@@ -900,13 +931,31 @@ export default function AdminPanel({ tab = "overview" }) {
                       <label className="text-[10px] font-bold uppercase tracking-widest text-white/30">{t('admin.plants.field_gallery', 'Habitat Gallery')}</label>
                       <div className="flex flex-wrap gap-2">
                          {plantPreviews.gallery.map((img, i) => (
-                           <div key={i} className="w-10 h-10 rounded-lg overflow-hidden border border-white/10">
-                              <img src={img} className="w-full h-full object-cover" />
+                           <div key={i} className="w-10 h-10 rounded-lg overflow-hidden border border-white/10 relative group">
+                              <img src={typeof img === 'string' ? img : URL.createObjectURL(img)} className="w-full h-full object-cover" />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const imgToRemove = plantPreviews.gallery[i];
+                                  if (typeof imgToRemove === 'string') {
+                                    setPlantDeletedGalleryUrls(prev => [...prev, imgToRemove]);
+                                  } else {
+                                    setPlantGallery(prev => prev.filter(f => f !== imgToRemove));
+                                  }
+                                  const newGalleryPreviews = [...plantPreviews.gallery];
+                                  newGalleryPreviews.splice(i, 1);
+                                  setPlantPreviews(prev => ({ ...prev, gallery: newGalleryPreviews }));
+                                }}
+                                className="absolute inset-0 bg-rose-500/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Trash2 className="w-3.5 h-3.5 text-white" />
+                              </button>
                            </div>
                          ))}
                          <label className="w-10 h-10 rounded-lg bg-white/5 border border-dashed border-white/20 flex items-center justify-center cursor-pointer hover:bg-white/10">
                             <Plus className="w-4 h-4 text-white/20" />
                             <input 
+                              key={plantPreviews.gallery.length}
                               type="file" 
                               multiple 
                               className="hidden" 
@@ -915,7 +964,7 @@ export default function AdminPanel({ tab = "overview" }) {
                                 setPlantGallery(prev => [...prev, ...files])
                                 setPlantPreviews(prev => ({ 
                                   ...prev, 
-                                  gallery: [...prev.gallery, ...files.map(f => URL.createObjectURL(f))] 
+                                  gallery: [...prev.gallery, ...files] 
                                 }))
                               }}
                             />
@@ -1151,10 +1200,10 @@ export default function AdminPanel({ tab = "overview" }) {
                       <table className="w-full text-sm text-left border-collapse">
                          <thead className="text-[10px] font-bold uppercase tracking-widest text-white/30 border-b border-white/5">
                             <tr>
-                               <th className="px-6 py-4">Therapist</th>
-                               <th className="px-6 py-4">Specialization</th>
-                               <th className="px-6 py-4">License</th>
-                               <th className="px-6 py-4 text-right">Actions</th>
+                               <th className="px-6 py-4">{t('admin.therapists.table_therapist', 'Therapist')}</th>
+                               <th className="px-6 py-4">{t('admin.therapists.table_specialization', 'Specialization')}</th>
+                               <th className="px-6 py-4">{t('admin.therapists.table_license', 'License')}</th>
+                               <th className="px-6 py-4 text-right">{t('admin.therapists.table_actions', 'Actions')}</th>
                             </tr>
                          </thead>
                          <tbody className="divide-y divide-white/[0.02]">
@@ -1175,24 +1224,24 @@ export default function AdminPanel({ tab = "overview" }) {
                                               await api.post(`/therapists/requests/${req.id}/approve`)
                                               queryClient.invalidateQueries(["admin", "therapist-requests"])
                                               queryClient.invalidateQueries(["admin", "therapists"])
-                                              toast.success("Therapist approved!")
+                                              toast.success(t('admin.therapists.approved_toast', 'Therapist approved!'))
                                            }}
                                         >
-                                           Approve
+                                           {t('admin.therapists.approve_button', 'Approve')}
                                         </Button>
                                         <Button 
                                            size="sm" 
                                            variant="destructive"
                                            onClick={async () => {
-                                              const reason = prompt("Enter rejection reason:")
+                                              const reason = prompt(t('admin.therapists.reject_reason_prompt', 'Enter rejection reason:'))
                                               if (reason) {
                                                  await api.post(`/therapists/requests/${req.id}/reject`, { reason })
                                                  queryClient.invalidateQueries(["admin", "therapist-requests"])
-                                                 toast.info("Request rejected.")
+                                                 toast.info(t('admin.therapists.rejected_toast', 'Request rejected.'))
                                               }
                                            }}
                                         >
-                                           Reject
+                                           {t('admin.therapists.reject_button', 'Reject')}
                                         </Button>
                                      </div>
                                   </td>
@@ -1341,13 +1390,17 @@ export default function AdminPanel({ tab = "overview" }) {
                         <div key={i} className="aspect-square rounded-lg bg-white/5 border border-white/10 overflow-hidden relative group">
                           <img src={typeof p === 'string' ? p : URL.createObjectURL(p)} className="w-full h-full object-cover" alt="" />
                           <button 
+                            type="button"
                             onClick={() => {
-                              const newG = [...blogGallery]
-                              const newP = [...blogGalleryPreviews]
-                              newG.splice(i, 1)
-                              newP.splice(i, 1)
-                              setBlogGallery(newG)
-                              setBlogGalleryPreviews(newP)
+                              const imgToRemove = blogGalleryPreviews[i];
+                              if (typeof imgToRemove === 'string') {
+                                setBlogDeletedGalleryUrls(prev => [...prev, imgToRemove]);
+                              } else {
+                                setBlogGallery(prev => prev.filter(f => f !== imgToRemove));
+                              }
+                              const newP = [...blogGalleryPreviews];
+                              newP.splice(i, 1);
+                              setBlogGalleryPreviews(newP);
                             }}
                             className="absolute inset-0 bg-rose-500/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                           >

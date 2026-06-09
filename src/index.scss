@@ -110,15 +110,16 @@
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  @apply bg-emerald-500/5;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/30 transition-colors;
+  @apply bg-primary/35 rounded-full border-[2.5px] border-transparent bg-clip-padding hover:bg-primary/65 transition-colors;
 }
 
 /* ── Animations ── */

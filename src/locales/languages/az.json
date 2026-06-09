@@ -79,7 +79,7 @@
     },
     "marketplace": {
       "badge": "Klinik Market",
-      "title": "Torpaqdan butulkaya qədər şəffaf tədarük zənciri."
+      "title": "Doğma torpaqdan klinik rifaha qədər tam şəffaf tədarük."
     },
     "features": {
       "global": {
@@ -180,7 +180,10 @@
     "empty": "Yeni protokollar hazırlanır. Tezliklə yenidən yoxlayın.",
     "read_more": "Protokolu oxu",
     "min_read": "{{count}} dəq mütaliə",
-    "author_default": "Shafransa Komandası"
+    "author_default": "Shafransa Komandası",
+    "about_author": "Shafransa Redaksiyası Haqqında",
+    "author_role": "Sağlamlıq və Rifah Eksperti",
+    "author_bio": "Redaksiya heyətimiz həm ənənəvi hikmətə, həm də müasir elmi sübutlara əsaslanan ən dəqiq və aktual sağlamlıq protokolları sizə təqdim etmək üçün çalışan sertifikatlaşdırılmış fizioterapevt və herbalistlərdən ibarətdir."
   },
   "cart": {
     "title": "Səbət"
@@ -212,6 +215,7 @@
       "default": "Klinik Monoqrafiya"
     },
     "local_name": "Yerli ad",
+    "scientific_name": "Elmi adı",
     "meta": {
       "terroir": "Teruar",
       "cultivation": "Becərilmə",
@@ -228,8 +232,13 @@
       "contraindications": "Əks göstərişlər",
       "side_effects": "Yan Təsirlər",
       "drug_interactions": "Dərman Qarşılıqlı Təsirləri",
-      "pregnancy_warnings": "Hamiləlik və Əmizdirmə Xəbərdarlıqları",
-      "formulations": "Təsdiqlənmiş Formalar"
+      "pregnancy_warnings": "Hamiləlik və Süd vermə Xəbərdarlıqları",
+      "formulations": "Təsdiqlənmiş Formalar",
+      "general_safety": "Klinik Təhlükəsizlik İcmalı",
+      "pregnancy_clinical": "Hamiləlik və Süd vermə",
+      "allergy_warnings": "Potensial Allergen Xəbərdarlıqları",
+      "clinical_conditions": "Həssas Tibbi Vəziyyətlər",
+      "dosage_caution": "Doza Ehtiyatı"
     },
     "products_found": "{{count}} Məhsul tapıldı",
     "no_products": "Kommersiya məhsulu yoxdur",
@@ -628,7 +637,7 @@
     "count_label": "Mütəxəssis Tapıldı",
     "error": "Mütəxəssisləri yükləmək mümkün olmadı",
     "no_results": "Mütəxəssis tapılmadı",
-    "no_results_sub": "Axtarış sözünü dəyişməyə və ya filtrləri təmizləməyə çalışın.",
+    "no_results_sub": "Axtarış sözünü dəyişməyə və ya filtrləri təmizləmeye çalışın.",
     "default_specialty": "Fizioterapevt",
     "no_description": "Sağlamlığınız və bərpanız üçün fədakarlıqla çalışan ixtisaslı mütəxəssis.",
     "book_now": "Seans Sifariş Et",
@@ -640,8 +649,8 @@
     "about": "Klinik Abstrakt",
     "select_time": "Klinik Saatlar",
     "confirm_booking": "Sifarişi Təsdiqlə",
-    "booking_success": "Seans sifarişi uğurla göndərildi!",
-    "booking_error": "Seans sifariş etmək mümkün olmadı",
+    "booking_success": "Seans müraciətiniz göndərildi!",
+    "booking_error": "Seansı bron etmək alınmadı",
     "register_title": "Shafransa Peşəkar Şəbəkəsinə Qoşulun.",
     "register_form_title": "Peşəkar Manifest",
     "register_form_desc": "Yoxlama üçün klinik məlumatlarınızı təqdim edin.",
@@ -649,7 +658,48 @@
     "label_experience": "Təcrübə İli",
     "label_phone": "Əlaqə Telefonu",
     "label_description": "Peşəkar Bio / Klinik Yanaşma",
-    "submit_application": "Klinik Manifesti Göndər"
+    "submit_application": "Klinik Manifesti Göndər",
+    "loading_profile": "Mütəxəssis məlumatları yüklənir",
+    "not_found": "Terapevt tapılmadı",
+    "not_found_desc": "Bu profil silinmiş və ya artıq menyuda göstərilmir.",
+    "back_to_list": "Siyahıya qayıt",
+    "verified_badge": "Təsdiqli",
+    "license": "Lisenziya",
+    "minutes_label": "Dəqiqə",
+    "price_label": "Qiymət",
+    "approach_title": "Müalicə yanaşması",
+    "approach_subtitle": "Sakit, ölçülə bilən və davamlı bərpa planı",
+    "steps": {
+      "evaluation": "Qiymətləndirmə",
+      "evaluation_desc": "İlk görüşdə şikayət, hərəkət və gündəlik rutin analiz olunur.",
+      "plan": "Plan",
+      "plan_desc": "Seanslar real qrafikə uyğun ardıcıllıqla qurulur.",
+      "tracking": "İzləmə",
+      "tracking_desc": "Proqres sadə tapşırıqlar və növbəti addımlarla davam edir."
+    },
+    "docs_title": "Sertifikatlar və sənədlər",
+    "docs_subtitle": "Profilə əlavə olunan rəsmi materiallar",
+    "cv_file": "CV faylı",
+    "certificate_prefix": "Sertifikat",
+    "no_docs": "Bu profil üçün sənəd hələ əlavə edilməyib.",
+    "contact_info": "Əlaqə məlumatları",
+    "no_email": "Email göstərilməyib",
+    "no_phone": "Telefon göstərilməyib",
+    "book_session": "Seansı bron et",
+    "mins_short": "dəq",
+    "online_label": "Onlayn",
+    "offline_label": "Əyani",
+    "checking_slots": "Boş saatlar yoxlanılır",
+    "slots_title": "Saatlar",
+    "next_available_date": "Ən yaxın boş tarix",
+    "no_slots_month": "Bu ay üçün boş vaxt görünmür. Növbəti ayı yoxla.",
+    "no_slots_day": "Bu tarix üçün boş saat qalmayıb.",
+    "select_date_time": "Tarixi və uyğun saatı seçin",
+    "booking_disclaimer": "Müraciət göndərildikdən sonra seans terapevt tərəfindən təsdiqlənməlidir.",
+    "pick_time": "Tarix və saat seçin",
+    "label_license": "Lisenziya nömrəsi",
+    "label_password": "Şifrə (hesabınız üçün)",
+    "bio_placeholder": "Klinik təcrübənizi və terapevtik yanaşmanızı ətraflı qeyd edin..."
   },
   "session": {
     "status": {
@@ -657,15 +707,27 @@
       "confirmed": "Təsdiqləndi",
       "completed": "Tamamlandı",
       "cancelled": "Ləğv edildi",
-      "rejected": "Rədd edildi"
-    }
+      "rejected": "Rədd edildi",
+      "therapist_confirmed": "İstifadəçi təsdiqi gözlənilir"
+    },
+    "cancelled": "Seans ləğv edildi.",
+    "confirmed": "Seans uğurla təsdiqləndi!"
   },
   "admin": {
     "therapists": {
       "requests": "Fizioterapevt Təsdiq Müraciətləri",
       "list": "Təsdiqlənmiş Fizioterapevtler",
       "no_requests": "Gözləyən müraciət yoxdur.",
-      "no_therapists": "Fizioterapevt tapılmadı."
+      "no_therapists": "Fizioterapevt tapılmadı.",
+      "table_therapist": "Terapevt",
+      "table_specialization": "İxtisaslaşma",
+      "table_license": "Lisenziya",
+      "table_actions": "Əməliyyatlar",
+      "approved_toast": "Fizioterapevt təsdiqləndi!",
+      "approve_button": "Təsdiqlə",
+      "reject_reason_prompt": "Rədd etmə səbəbini daxil edin:",
+      "rejected_toast": "Müraciət rədd edildi.",
+      "reject_button": "Rədd et"
     },
     "tabs": {
       "overview": "Xülasə",
@@ -676,5 +738,75 @@
       "therapists": "Terapevtlər",
       "sessions": "Seanslar"
     }
+  },
+  "expert": {
+    "title": "Mütəxəssis Paneli",
+    "subtitle": "Klinik seansları və pasiyent protokollarını idarə edin.",
+    "profile_settings": "Profil Ayarları",
+    "configure_hours": "İş Sxemi",
+    "hours_updated": "İş saatları yeniləndi!",
+    "profile_updated": "Profil uğurla yeniləndi!",
+    "session_confirmed": "Seans təsdiqləndi!",
+    "session_rejected": "Seans rədd edildi.",
+    "session_completed": "Seans tamamlanmış kimi qeyd edildi!",
+    "profile": {
+      "title": "Peşəkar Profil",
+      "desc": "Klinik kimliyinizi, ixtisasınızı və seans detallarınızı yeniləyin."
+    },
+    "field": {
+      "fullname": "Tam Adı",
+      "specialization": "İxtisaslaşma",
+      "phone": "Əlaqə Nömrəsi",
+      "duration": "Seans Müddəti (Dəq)",
+      "online_price": "Onlayn Seans Qiyməti",
+      "offline_price": "Əyani Seans Qiyməti",
+      "bio": "Peşəkar Bio"
+    },
+    "bio_placeholder": "Klinik təcrübənizi və terapevtik yanaşmanızı ətraflı qeyd edin...",
+    "docs": {
+      "title": "Klinik Sənədlər",
+      "desc": "Təsdiq sənədləri və sertifikatlar.",
+      "cv": "Curriculum Vitae (CV)",
+      "avatar": "Profil Şəkli",
+      "certs": "Klinik Sertifikatlar",
+      "privacy": "* Bütün tibbi sənədlər şifrələnir və təhlükəsiz saxlanılır.",
+      "not_uploaded": "Yüklənməyib",
+      "staged": "staged",
+      "verified_assets": "təsdiqlənmiş sənəd"
+    },
+    "revenue": {
+      "title": "Klinik Hesablaşmalar",
+      "total": "Ümumi Gəlir",
+      "view_history": "Əməliyyat Tarixçəsi"
+    },
+    "hours_title": "Klinik İş Saatları",
+    "hours_desc": "Klinik konsultasiyalar üçün uyğun olduğunuz vaxtları seçin.",
+    "stats": {
+      "pending": "Gözləyən Sorğular",
+      "pending_desc": "Təsdiq gözləyən müraciətlər",
+      "active": "Aktiv Protokol",
+      "active_desc": "Planlaşdırılmış seanslar",
+      "revenue": "Qazanılan Gəlir",
+      "revenue_desc": "Tamamlanmış seansların ödənişi"
+    },
+    "sessions": {
+      "title": "Klinik Seanslar",
+      "subtitle": "Pasiyent siyahısı ilə real vaxtda sinxronizasiya."
+    },
+    "syncing": "Siyahı sinxronizasiya olunur...",
+    "no_sessions": "Aktiv seans tapılmadı.",
+    "link_pending": "Link Gözlənilir",
+    "waiting_user": "İstifadəçinin təsdiqi gözlənilir",
+    "join": "Seansa Qoşul",
+    "mark_complete": "Seansı Tamamla",
+    "confirm_session_title": "Seansı Təsdiqlə",
+    "reject_session_title": "Seansı Rədd Et",
+    "confirm_session_desc": "Bu seansı təsdiqləmək istədiyinizdən əminsiniz?",
+    "reject_session_desc": "Bu seansı rədd etmək istədiyinizdən əminsiniz? Bu əməliyyat geri qaytarıla bilməz.",
+    "meeting_link_label": "Görüş Linki (Könüllü)",
+    "link_hint": "Avtomatik Jitsi linkindən istifadə etmək üçün boş buraxın.",
+    "select_all": "Hamısını Seç",
+    "clear_all": "Təmizlə",
+    "waiting_user_badge": "İstifadəçi təsdiqi"
   }
 }

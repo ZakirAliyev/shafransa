@@ -78,7 +78,7 @@
     },
     "marketplace": {
       "badge": "Klinik Pazaryeri",
-      "title": "Topraktan şişeye şeffaf tedarik zinciri."
+      "title": "Yerel topraktan klinik sağlığa doğrulanmış botanik saflık."
     },
     "features": {
       "global": {
@@ -179,7 +179,10 @@
     "empty": "Yeni protokoller hazırlanıyor. Yakında tekrar kontrol edin.",
     "read_more": "Protokolü Oku",
     "min_read": "{{count}} dk okuma",
-    "author_default": "Shafransa Ekibi"
+    "author_default": "Shafransa Ekibi",
+    "about_author": "Shafransa Editör Kadrosu Hakkında",
+    "author_role": "Sağlık ve Esenlik Uzmanı",
+    "author_bio": "Editör kadromuz, hem geleneksel bilgeliğe hem de modern bilimsel kanıtlara dayalı en doğru ve güncel sağlık protokollerini size sunmak için çalışan sertifikalı fizyoterapist ve herbalistlerden oluşmaktadır."
   },
   "cart": {
     "title": "Sepet"
@@ -211,6 +214,7 @@
       "default": "Klinik Monograf"
     },
     "local_name": "Yerel ad",
+    "scientific_name": "Bilimsel adı",
     "meta": {
       "terroir": "Teruar",
       "cultivation": "Yetiştirme",
@@ -228,7 +232,12 @@
       "side_effects": "Yan Etkiler",
       "drug_interactions": "İlaç Etkileşimleri",
       "pregnancy_warnings": "Hamilelik ve Emzirme Uyarıları",
-      "formulations": "Onaylı Formülasyonlar"
+      "formulations": "Onaylı Formülasyonlar",
+      "general_safety": "Klinik Güvenlik Genel Bakış",
+      "pregnancy_clinical": "Hamilelik ve Emzirme",
+      "allergy_warnings": "Potansiyel Alerjen Uyarıları",
+      "clinical_conditions": "Hassas Tıbbi Durumlar",
+      "dosage_caution": "Dozaj Uyarısı"
     },
     "products_found": "{{count}} Ürün Bulundu",
     "no_products": "Ticari Ürün Yok",
@@ -612,5 +621,186 @@
     "en": "İngilizce",
     "ru": "Rusça",
     "tr": "Türkçe"
+  },
+  "therapists": {
+    "badge": "Onaylı Uzmanlar",
+    "title_p1": "Sizin",
+    "title_p2": "Fizyoterapistiniz",
+    "subtitle": "İyileşmeniz ve fiziksel sağlığınız için klinik olarak onaylanmış uzmanlarla iletişime geçin.",
+    "search_placeholder": "İsim, uzmanlık alanı veya rahatsızlığa göre arayın...",
+    "count_label": "Uzman Bulundu",
+    "error": "Uzmanlar yüklenirken hata oluştu",
+    "no_results": "Uzman bulunamadı",
+    "no_results_sub": "Arama kelimenizi değiştirmeyi veya filtreleri temizlemeyi deneyin.",
+    "default_specialty": "Fizyoterapist",
+    "no_description": "Sağlığınız ve iyileşmeniz için özveriyle çalışan uzman hekim.",
+    "book_now": "Seans Rezervasyonunu Yap",
+    "booking_title": "Seans Rezervasyonu",
+    "certified": "Shafransa Sertifikalı",
+    "experience": "Deneyim",
+    "patients": "Hastalar",
+    "methods": "Yöntemler",
+    "about": "Klinik Özet",
+    "select_time": "Klinik Saatleri",
+    "confirm_booking": "Rezervasyonu Onayla",
+    "booking_success": "Seans talebiniz başarıyla gönderildi!",
+    "booking_error": "Seans rezervasyonu başarısız oldu",
+    "register_title": "Shafransa Profesyonel Ağına Katılın.",
+    "register_form_title": "Profesyonel Beyan",
+    "register_form_desc": "Doğrulama için klinik bilgilerinizi gönderin.",
+    "label_specialization": "Uzmanlık Alanı",
+    "label_experience": "Deneyim Yılı",
+    "label_phone": "İrtibat Telefonu",
+    "label_description": "Profesyonel Biyografi / Klinik Yaklaşım",
+    "submit_application": "Klinik Beyanı Gönder",
+    "loading_profile": "Uzman bilgileri yükleniyor...",
+    "not_found": "Fizyoterapist bulunamadı",
+    "not_found_desc": "Bu profil silinmiş veya artık menüde gösterilmiyor.",
+    "back_to_list": "Listeye dön",
+    "verified_badge": "Onaylı",
+    "license": "Lisans",
+    "minutes_label": "Dakika",
+    "price_label": "Ücret",
+    "approach_title": "Tedavi Yaklaşımı",
+    "approach_subtitle": "Sakin, ölçülebilir ve sürdürülebilir bir iyileşme planı",
+    "steps": {
+      "evaluation": "Değerlendirme",
+      "evaluation_desc": "İlk seansta şikayetler, hareket kısıtlılıkları ve günlük rutin analiz edilir.",
+      "plan": "Planlama",
+      "plan_desc": "Seanslar gerçek takviminize uygun bir şekilde planlanır.",
+      "tracking": "Takip",
+      "tracking_desc": "İlerleme, basit egzersizler ve sonraki aşamalarla devam eder."
+    },
+    "docs_title": "Sertifikalar ve Belgeler",
+    "docs_subtitle": "Profile eklenen resmi materyaller",
+    "cv_file": "CV Dosyası",
+    "certificate_prefix": "Sertifika",
+    "no_docs": "Bu profil için henüz bir belge eklenmemiş.",
+    "contact_info": "İletişim Bilgileri",
+    "no_email": "E-posta belirtilmemiş",
+    "no_phone": "Telefon belirtilmemiş",
+    "book_session": "Seans Rezervasyonunu Yap",
+    "mins_short": "dk",
+    "online_label": "Çevrimiçi",
+    "offline_label": "Yüz Yüze",
+    "checking_slots": "Müsait saatler kontrol ediliyor...",
+    "slots_title": "Müsait Saatler",
+    "next_available_date": "En yakın müsait tarih",
+    "no_slots_month": "Bu ay için uygun seans bulunamadı. Sonraki ayı kontrol edin.",
+    "no_slots_day": "Bu tarih için uygun seans saati kalmadı.",
+    "select_date_time": "Tarih ve uygun saati seçin",
+    "booking_disclaimer": "Başvuru gönderildikten sonra seansın fizyoterapist tarafından onaylanması gerekir.",
+    "pick_time": "Tarih ve saat seçin",
+    "label_license": "Lisans Numarası",
+    "label_password": "Şifre (hesabınız için)",
+    "bio_placeholder": "Klinik deneyiminizi ve tedavi yaklaşımınızı detaylıca belirtin..."
+  },
+  "session": {
+    "status": {
+      "pending": "Beklemede",
+      "confirmed": "Onaylandı",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi",
+      "rejected": "Reddedildi",
+      "therapist_confirmed": "Hasta onayı bekleniyor"
+    },
+    "cancelled": "Seans iptal edildi.",
+    "confirmed": "Seans başarıyla onaylandı!"
+  },
+  "admin": {
+    "therapists": {
+      "requests": "Fizyoterapist Doğrulama Talepleri",
+      "list": "Onaylı Fizyoterapistler",
+      "no_requests": "Bekleyen talep bulunmamaktadır.",
+      "no_therapists": "Fizyoterapist bulunamadı.",
+      "table_therapist": "Fizyoterapist",
+      "table_specialization": "Uzmanlık Alanı",
+      "table_license": "Lisans",
+      "table_actions": "İşlemler",
+      "approved_toast": "Fizyoterapist onaylandı!",
+      "approve_button": "Onayla",
+      "reject_reason_prompt": "Reddetme nedenini girin:",
+      "rejected_toast": "Talep reddedildi.",
+      "reject_button": "Reddet"
+    },
+    "tabs": {
+      "overview": "Genel Bakış",
+      "users": "Kullanıcılar",
+      "products": "Ürünler",
+      "plants": "Ansiklopedi",
+      "categories": "Kategoriler",
+      "therapists": "Fizyoterapistler",
+      "sessions": "Seanslar"
+    }
+  },
+  "expert": {
+    "title": "Uzman Paneli",
+    "subtitle": "Klinik seansları ve hasta protokollerini yönetin.",
+    "profile_settings": "Profil Ayarları",
+    "configure_hours": "Çalışma Saatleri",
+    "hours_updated": "Çalışma saatleri başarıyla güncellendi!",
+    "profile_updated": "Profil başarıyla güncellendi!",
+    "session_confirmed": "Seans onaylandı!",
+    "session_rejected": "Seans reddedildi.",
+    "session_completed": "Seans tamamlandı olarak işaretlendi!",
+    "profile": {
+      "title": "Profesyonel Profil",
+      "desc": "Klinik kimliğinizi, uzmanlığınızı ve seans detaylarınızı güncelleyin."
+    },
+    "field": {
+      "fullname": "Ad Soyad",
+      "specialization": "Uzmanlık Alanı",
+      "phone": "İletişim Numarası",
+      "duration": "Seans Süresi (Dakika)",
+      "online_price": "Çevrimiçi Seans Ücreti",
+      "offline_price": "Yüz Yüze Seans Ücreti",
+      "bio": "Profesyonel Biyografi"
+    },
+    "bio_placeholder": "Klinik deneyiminizi ve tedavi yaklaşımınızı detaylıca belirtin...",
+    "docs": {
+      "title": "Klinik Belgeler",
+      "desc": "Doğrulama belgeleri ve sertifikalar.",
+      "cv": "Özgeçmiş (CV)",
+      "avatar": "Profil Fotoğrafı",
+      "certs": "Klinik Sertifikalar",
+      "privacy": "* Tüm klinik belgeler şifrelenir ve güvenli bir şekilde saklanır.",
+      "not_uploaded": "Yüklenmedi",
+      "staged": "yüklenmiş",
+      "verified_assets": "onaylanmış belgeler"
+    },
+    "revenue": {
+      "title": "Klinik Hak Edişler",
+      "total": "Toplam Gelir",
+      "view_history": "İşlem Geçmişi"
+    },
+    "hours_title": "Çalışma Saatleri",
+    "hours_desc": "Klinik danışmanlıklar için uygun olduğunuz saatleri seçin.",
+    "stats": {
+      "pending": "Bekleyen Talepler",
+      "pending_desc": "Onay bekleyen başvurular",
+      "active": "Aktif Protokol",
+      "active_desc": "Planlanmış seanslar",
+      "revenue": "Kazanılan Gelir",
+      "revenue_desc": "Tamamlanan seans ödemeleri"
+    },
+    "sessions": {
+      "title": "Klinik Seanslar",
+      "subtitle": "Hasta listesiyle gerçek zamanlı senkronizasyon."
+    },
+    "syncing": "Program senkronize ediliyor...",
+    "no_sessions": "Aktif seans bulunamadı.",
+    "link_pending": "Bağlantı Bekleniyor",
+    "waiting_user": "Hasta onayı bekleniyor",
+    "join": "Seansa Katıl",
+    "mark_complete": "Seansı Tamamla",
+    "confirm_session_title": "Seansı Onayla",
+    "reject_session_title": "Seansı Reddet",
+    "confirm_session_desc": "Bu seansı onaylamak istediğinizden emin misiniz?",
+    "reject_session_desc": "Bu seansı reddetmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    "meeting_link_label": "Toplantı Bağlantısı (İsteğe Bağlı)",
+    "link_hint": "Otomatik Jitsi bağlantısı oluşturmak için boş bırakın.",
+    "select_all": "Tümünü Seç",
+    "clear_all": "Temizle",
+    "waiting_user_badge": "Hasta onayı"
   }
 }

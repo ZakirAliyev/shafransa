@@ -1,5 +1,6 @@
 import api from "./api";
 import { SESSION_STATUS } from "../constants/enums";
+import { MOCK_SESSIONS, MOCK_AVAILABILITY_SUMMARY } from "./mockData";
 
 /**
  * Normalizes a session object from the API.

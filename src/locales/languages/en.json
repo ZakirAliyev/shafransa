@@ -57,7 +57,9 @@
     "wellness": "Wellness",
     "about_author": "About Shafransa Editorial",
     "min_read": "{{count}} min read",
-    "author_default": "Shafransa Team"
+    "author_default": "Shafransa Team",
+    "author_role": "Health & Wellness Expert",
+    "author_bio": "Our editorial team consists of certified physiotherapists and herbalists dedicated to bringing you the most accurate and up-to-date health protocols based on both traditional wisdom and modern evidence."
   },
   "session": {
     "join": "Join",
@@ -122,7 +124,7 @@
     },
     "marketplace": {
       "badge": "Clinical Marketplace",
-      "title": "Transparent supply chains from soil to bottle."
+      "title": "Verified botanical purity from native soil to clinical wellness."
     },
     "features": {
       "global": {
@@ -255,6 +257,7 @@
       "default": "Clinical Monograph"
     },
     "local_name": "Local",
+    "scientific_name": "Scientific name",
     "meta": {
       "terroir": "Terroir",
       "cultivation": "Cultivation",
@@ -272,7 +275,12 @@
       "side_effects": "Side Effects",
       "drug_interactions": "Drug Interactions",
       "pregnancy_warnings": "Pregnancy & Nursing Warnings",
-      "formulations": "Verified Formulations"
+      "formulations": "Verified Formulations",
+      "general_safety": "Clinical Safety Overview",
+      "pregnancy_clinical": "Pregnancy & Nursing",
+      "allergy_warnings": "Potential Allergen Alerts",
+      "clinical_conditions": "Sensitive Medical Conditions",
+      "dosage_caution": "Dosage Caution"
     },
     "products_found": "{{count}} Products Found",
     "no_products": "No Commercial Products",
@@ -656,5 +664,186 @@
     "en": "English",
     "ru": "Russian",
     "tr": "Turkish"
+  },
+  "therapists": {
+    "badge": "Verified Specialists",
+    "title_p1": "Your",
+    "title_p2": "Physiotherapist",
+    "subtitle": "Connect with clinically verified specialists for your recovery and physical wellness.",
+    "search_placeholder": "Search by name, specialty or condition...",
+    "count_label": "Specialists Found",
+    "error": "Failed to load specialists",
+    "no_results": "No specialists found",
+    "no_results_sub": "Try modifying your search query or clearing filters.",
+    "default_specialty": "Physiotherapist",
+    "no_description": "A qualified specialist dedicated to your recovery and physical health.",
+    "book_now": "Book Session",
+    "booking_title": "Book a Session",
+    "certified": "Shafransa Certified",
+    "experience": "Experience",
+    "patients": "Patients",
+    "methods": "Methods",
+    "about": "Clinical Abstract",
+    "select_time": "Clinical Hours",
+    "confirm_booking": "Confirm Booking",
+    "booking_success": "Your session booking has been submitted!",
+    "booking_error": "Failed to book session",
+    "register_title": "Join the Shafransa Professional Network.",
+    "register_form_title": "Professional Manifest",
+    "register_form_desc": "Submit your clinical details for verification.",
+    "label_specialization": "Specialization",
+    "label_experience": "Years of Experience",
+    "label_phone": "Contact Phone",
+    "label_description": "Professional Bio / Clinical Approach",
+    "submit_application": "Submit Clinical Manifest",
+    "loading_profile": "Loading specialist information...",
+    "not_found": "Therapist not found",
+    "not_found_desc": "This profile has been deleted or is no longer shown in the menu.",
+    "back_to_list": "Back to list",
+    "verified_badge": "Verified",
+    "license": "License",
+    "minutes_label": "Minutes",
+    "price_label": "Price",
+    "approach_title": "Therapeutic Approach",
+    "approach_subtitle": "A calm, measurable and continuous recovery plan",
+    "steps": {
+      "evaluation": "Evaluation",
+      "evaluation_desc": "In the first session, your symptoms, movement patterns, and daily routine are analyzed.",
+      "plan": "Plan",
+      "plan_desc": "Sessions are structured in alignment with your actual schedule.",
+      "tracking": "Tracking",
+      "tracking_desc": "Progress continues with simple tasks and next milestones."
+    },
+    "docs_title": "Certificates and Documents",
+    "docs_subtitle": "Official materials attached to the profile",
+    "cv_file": "CV Document",
+    "certificate_prefix": "Certificate",
+    "no_docs": "No documents have been added for this profile yet.",
+    "contact_info": "Contact Information",
+    "no_email": "Email not specified",
+    "no_phone": "Phone not specified",
+    "book_session": "Book Session",
+    "mins_short": "min",
+    "online_label": "Online",
+    "offline_label": "In-Person",
+    "checking_slots": "Checking availability...",
+    "slots_title": "Available Hours",
+    "next_available_date": "Next available date",
+    "no_slots_month": "No availability found for this month. Check next month.",
+    "no_slots_day": "No slots available for this date.",
+    "select_date_time": "Select date and time",
+    "booking_disclaimer": "Once submitted, the session must be confirmed by the therapist.",
+    "pick_time": "Select date and time",
+    "label_license": "License Number",
+    "label_password": "Password (for your account)",
+    "bio_placeholder": "Detail your clinical experience and therapeutic approach..."
+  },
+  "session": {
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "rejected": "Rejected",
+      "therapist_confirmed": "Waiting for patient"
+    },
+    "cancelled": "Session cancelled.",
+    "confirmed": "Session confirmed successfully!"
+  },
+  "admin": {
+    "therapists": {
+      "requests": "Therapist Verification Requests",
+      "list": "Verified Therapists",
+      "no_requests": "No pending requests.",
+      "no_therapists": "No therapists found.",
+      "table_therapist": "Therapist",
+      "table_specialization": "Specialization",
+      "table_license": "License",
+      "table_actions": "Actions",
+      "approved_toast": "Therapist approved!",
+      "approve_button": "Approve",
+      "reject_reason_prompt": "Enter rejection reason:",
+      "rejected_toast": "Request rejected.",
+      "reject_button": "Reject"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "users": "Users",
+      "products": "Products",
+      "plants": "Encyclopedia",
+      "categories": "Categories",
+      "therapists": "Therapists",
+      "sessions": "Sessions"
+    }
+  },
+  "expert": {
+    "title": "Specialist Panel",
+    "subtitle": "Manage clinical sessions and patient protocols.",
+    "profile_settings": "Profile Settings",
+    "configure_hours": "Configure Hours",
+    "hours_updated": "Working hours updated successfully!",
+    "profile_updated": "Profile updated successfully!",
+    "session_confirmed": "Session confirmed!",
+    "session_rejected": "Session rejected.",
+    "session_completed": "Session marked as completed!",
+    "profile": {
+      "title": "Professional Profile",
+      "desc": "Update your clinical identity, specialization, and session details."
+    },
+    "field": {
+      "fullname": "Full Name",
+      "specialization": "Specialization",
+      "phone": "Contact Phone",
+      "duration": "Session Duration (Min)",
+      "online_price": "Online Price",
+      "offline_price": "In-Person Price",
+      "bio": "Professional Bio"
+    },
+    "bio_placeholder": "Detail your clinical experience and therapeutic approach...",
+    "docs": {
+      "title": "Clinical Documents",
+      "desc": "Verification files and certificates.",
+      "cv": "Curriculum Vitae (CV)",
+      "avatar": "Profile Photo",
+      "certs": "Clinical Certificates",
+      "privacy": "* All clinical documents are encrypted and kept confidential.",
+      "not_uploaded": "Not uploaded",
+      "staged": "staged",
+      "verified_assets": "verified assets"
+    },
+    "revenue": {
+      "title": "Clinical Settlements",
+      "total": "Total Revenue",
+      "view_history": "Transaction History"
+    },
+    "hours_title": "Clinical Hours",
+    "hours_desc": "Select the times you are available for clinical consultations.",
+    "stats": {
+      "pending": "Pending Requests",
+      "pending_desc": "Awaiting confirmation",
+      "active": "Active Protocol",
+      "active_desc": "Scheduled sessions",
+      "revenue": "Earned Revenue",
+      "revenue_desc": "Completed session payouts"
+    },
+    "sessions": {
+      "title": "Clinical Sessions",
+      "subtitle": "Real-time sync with patient list."
+    },
+    "syncing": "Syncing schedule...",
+    "no_sessions": "No active sessions found.",
+    "link_pending": "Link Pending",
+    "waiting_user": "Waiting for patient confirmation",
+    "join": "Join Session",
+    "mark_complete": "Mark Completed",
+    "confirm_session_title": "Confirm Session",
+    "reject_session_title": "Reject Session",
+    "confirm_session_desc": "Are you sure you want to confirm this session?",
+    "reject_session_desc": "Are you sure you want to reject this session? This action cannot be undone.",
+    "meeting_link_label": "Meeting Link (Optional)",
+    "link_hint": "Leave blank to automatically use a default Jitsi link.",
+    "select_all": "Select All",
+    "clear_all": "Clear All",
+    "waiting_user_badge": "Waiting for patient"
   }
 }

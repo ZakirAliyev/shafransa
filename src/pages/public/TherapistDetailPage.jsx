@@ -328,7 +328,7 @@ export default function TherapistDetailPage() {
       <div className="min-h-screen bg-stone-50 flex items-center justify-center">
         <div className="flex items-center gap-3 rounded-lg border border-stone-200 bg-white px-5 py-4 shadow-sm">
           <Loader2 className="h-5 w-5 animate-spin text-emerald-600" />
-          <span className="text-sm font-semibold text-stone-700">Mütəxəssis məlumatları yüklənir</span>
+          <span className="text-sm font-semibold text-stone-700">{t('therapists.loading_profile', 'Mütəxəssis məlumatları yüklənir')}</span>
         </div>
       </div>
     )
@@ -339,10 +339,10 @@ export default function TherapistDetailPage() {
       <div className="min-h-screen bg-stone-50 px-4 py-20">
         <div className="mx-auto max-w-xl rounded-lg border border-rose-200 bg-white p-8 text-center shadow-sm">
           <User className="mx-auto mb-4 h-12 w-12 text-rose-400" />
-          <h1 className="text-2xl font-semibold text-stone-900">Terapevt tapılmadı</h1>
-          <p className="mt-2 text-sm text-stone-500">Bu profil silinmiş və ya artıq menyuda göstərilmir.</p>
+          <h1 className="text-2xl font-semibold text-stone-900">{t('therapists.not_found', 'Terapevt tapılmadı')}</h1>
+          <p className="mt-2 text-sm text-stone-500">{t('therapists.not_found_desc', 'Bu profil silinmiş və ya artıq menyuda göstərilmir.')}</p>
           <Button onClick={() => navigate("/therapists")} className="mt-6 bg-emerald-700 text-white hover:bg-emerald-800">
-            Siyahıya qayıt
+            {t('therapists.back_to_list', 'Siyahıya qayıt')}
           </Button>
         </div>
       </div>
@@ -358,7 +358,7 @@ export default function TherapistDetailPage() {
             className="mb-6 inline-flex h-9 items-center gap-2 rounded-md border border-stone-200 bg-white px-3 text-xs font-medium text-stone-600 transition hover:border-emerald-500 hover:text-emerald-700"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Geri qayıt
+            {t('common.back', 'Geri qayıt')}
           </button>
 
           <div className="grid gap-7 lg:grid-cols-[1.35fr_0.65fr] lg:items-end">
@@ -380,7 +380,7 @@ export default function TherapistDetailPage() {
                 )}
                 {profile.isVerified && (
                   <div className="absolute left-3 top-3 rounded-md bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-700 shadow-sm">
-                    Təsdiqli
+                    {t('therapists.verified_badge', 'Təsdiqli')}
                   </div>
                 )}
               </div>
@@ -393,7 +393,7 @@ export default function TherapistDetailPage() {
                   </Badge>
                   {profile.licenseNumber && (
                     <Badge className="rounded-md border-amber-200 bg-amber-50 text-amber-800">
-                      Lisenziya: {profile.licenseNumber}
+                      {t('therapists.license', 'Lisenziya')}: {profile.licenseNumber}
                     </Badge>
                   )}
                 </div>
@@ -422,11 +422,11 @@ export default function TherapistDetailPage() {
               </div>
               <div className="border-r border-stone-200 p-5">
                 <div className="text-xl font-semibold text-stone-900">{profile.sessionDurationInMinutes}</div>
-                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Dəqiqə</p>
+                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">{t('therapists.minutes_label', 'Dəqiqə')}</p>
               </div>
               <div className="p-5">
                 <div className="text-xl font-semibold text-emerald-700">₼{isOnline ? profile.onlinePrice : profile.offlinePrice}</div>
-                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">Qiymət</p>
+                <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-stone-500">{t('therapists.price_label', 'Qiymət')}</p>
               </div>
             </div>
           </div>
@@ -441,8 +441,8 @@ export default function TherapistDetailPage() {
                 <Sparkles className="h-[18px] w-[18px]" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-stone-900">Müalicə yanaşması</h2>
-                <p className="text-sm text-stone-500">Sakit, ölçülə bilən və davamlı bərpa planı</p>
+                <h2 className="text-lg font-semibold text-stone-900">{t('therapists.approach_title', 'Müalicə yanaşması')}</h2>
+                <p className="text-sm text-stone-500">{t('therapists.approach_subtitle', 'Sakit, ölçülə bilən və davamlı bərpa planı')}</p>
               </div>
             </div>
             <p className="text-sm leading-7 text-stone-600">{profile.bio}</p>
@@ -450,9 +450,9 @@ export default function TherapistDetailPage() {
 
           <div className="grid gap-4 md:grid-cols-3">
             {[
-              { icon: Activity, title: "Qiymətləndirmə", text: "İlk görüşdə şikayət, hərəkət və gündəlik rutin analiz olunur." },
-              { icon: Calendar, title: "Plan", text: "Seanslar real qrafikə uyğun ardıcıllıqla qurulur." },
-              { icon: CheckCircle2, title: "İzləmə", text: "Proqres sadə tapşırıqlar və növbəti addımlarla davam edir." },
+              { icon: Activity, title: t('therapists.steps.evaluation', 'Qiymətləndirmə'), text: t('therapists.steps.evaluation_desc', 'İlk görüşdə şikayət, hərəkət və gündəlik rutin analiz olunur.') },
+              { icon: Calendar, title: t('therapists.steps.plan', 'Plan'), text: t('therapists.steps.plan_desc', 'Seanslar real qrafikə uyğun ardıcıllıqla qurulur.') },
+              { icon: CheckCircle2, title: t('therapists.steps.tracking', 'İzləmə'), text: t('therapists.steps.tracking_desc', 'Proqres sadə tapşırıqlar və növbəti addımlarla davam edir.') },
             ].map((item) => (
               <article key={item.title} className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
                 <item.icon className="mb-4 h-5 w-5 text-emerald-700" />
@@ -468,8 +468,8 @@ export default function TherapistDetailPage() {
                 <Award className="h-[18px] w-[18px]" />
               </div>
               <div>
-                <h2 className="text-lg font-semibold text-stone-900">Sertifikatlar və sənədlər</h2>
-                <p className="text-sm text-stone-500">Profilə əlavə olunan rəsmi materiallar</p>
+                <h2 className="text-lg font-semibold text-stone-900">{t('therapists.docs_title', 'Sertifikatlar və sənədlər')}</h2>
+                <p className="text-sm text-stone-500">{t('therapists.docs_subtitle', 'Profilə əlavə olunan rəsmi materiallar')}</p>
               </div>
             </div>
 
@@ -483,13 +483,13 @@ export default function TherapistDetailPage() {
                     className="flex items-center gap-3 rounded-md border border-stone-200 bg-stone-50 p-4 text-sm font-medium text-stone-700 transition hover:border-emerald-400 hover:bg-emerald-50"
                   >
                     <FileText className="h-4 w-4 text-emerald-700" />
-                    CV faylı
+                    {t('therapists.cv_file', 'CV faylı')}
                   </a>
                 )}
 
                 {profile.certificates.map((certificate, index) => {
                   const url = certificate.fileUrl || certificate.FileUrl
-                  const name = certificate.name || certificate.Name || `Sertifikat ${index + 1}`
+                  const name = certificate.name || certificate.Name || `${t('therapists.certificate_prefix', 'Sertifikat')} ${index + 1}`
 
                   return (
                     <a
@@ -507,23 +507,23 @@ export default function TherapistDetailPage() {
               </div>
             ) : (
               <div className="rounded-md border border-dashed border-stone-300 bg-stone-50 p-5 text-sm text-stone-500">
-                Bu profil üçün sənəd hələ əlavə edilməyib.
+                {t('therapists.no_docs', 'Bu profil üçün sənəd hələ əlavə edilməyib.')}
               </div>
             )}
           </section>
 
           <section className="rounded-lg border border-stone-200 bg-white p-6 shadow-sm">
-            <h2 className="text-lg font-semibold text-stone-900">Əlaqə məlumatları</h2>
+            <h2 className="text-lg font-semibold text-stone-900">{t('therapists.contact_info', 'Əlaqə məlumatları')}</h2>
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <div className="flex items-center gap-3 rounded-md border border-stone-200 bg-stone-50 p-4">
                 <Mail className="h-4 w-4 text-emerald-700" />
                 <span className="min-w-0 truncate text-sm font-medium text-stone-700">
-                  {profile.email || "Email göstərilməyib"}
+                  {profile.email || t('therapists.no_email', 'Email göstərilməyib')}
                 </span>
               </div>
               <div className="flex items-center gap-3 rounded-md border border-stone-200 bg-stone-50 p-4">
                 <Phone className="h-4 w-4 text-emerald-700" />
-                <span className="text-sm font-medium text-stone-700">{profile.phone || "Telefon göstərilməyib"}</span>
+                <span className="text-sm font-medium text-stone-700">{profile.phone || t('therapists.no_phone', 'Telefon göstərilməyib')}</span>
               </div>
             </div>
           </section>
@@ -533,13 +533,13 @@ export default function TherapistDetailPage() {
           <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
             <div className="mb-5 flex items-start justify-between gap-3">
               <div>
-                <h2 className="text-lg font-semibold text-stone-900">Seans bron et</h2>
+                <h2 className="text-lg font-semibold text-stone-900">{t('therapists.book_session', 'Seans bron et')}</h2>
                 <p className="mt-1 text-sm text-stone-500">
                   {t('therapists.select_date_time', 'Tarixi və uyğun saatı seçin')}
                 </p>
               </div>
               <div className="rounded-md bg-emerald-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-wide text-emerald-700">
-                {profile.sessionDurationInMinutes} dəq
+                {profile.sessionDurationInMinutes} {t('therapists.mins_short', 'dəq')}
               </div>
             </div>
 
@@ -549,13 +549,13 @@ export default function TherapistDetailPage() {
                   onClick={() => setIsOnline(true)}
                   className={`h-10 rounded-lg text-xs font-bold transition-all ${isOnline ? "bg-white text-[#1a1c1e] shadow-sm" : "text-stone-500 hover:text-stone-700"}`}
                >
-                  Onlayn (₼{profile.onlinePrice})
+                  {t('therapists.online_label', 'Onlayn')} (₼{profile.onlinePrice})
                </button>
                <button 
                   onClick={() => setIsOnline(false)}
                   className={`h-10 rounded-lg text-xs font-bold transition-all ${!isOnline ? "bg-white text-[#1a1c1e] shadow-sm" : "text-stone-500 hover:text-stone-700"}`}
                >
-                  Əyani (₼{profile.offlinePrice})
+                  {t('therapists.offline_label', 'Əyani')} (₼{profile.offlinePrice})
                </button>
             </div>
 
@@ -626,22 +626,22 @@ export default function TherapistDetailPage() {
               {loadingAvailability && (
                 <div className="mt-4 flex items-center gap-2 rounded-md bg-stone-50 px-3 py-3 text-sm font-semibold text-stone-500">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Boş saatlar yoxlanılır
+                  {t('therapists.checking_slots', 'Boş saatlar yoxlanılır')}
                 </div>
               )}
             </div>
 
             <div className="mt-5">
               <div className="mb-3 flex items-center justify-between">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500">Saatlar</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500">{t('therapists.slots_title', 'Saatlar')}</h3>
                 {selectedDate && <span className="text-sm font-medium text-emerald-700">{toDisplayDate(selectedDate)}</span>}
               </div>
 
               {!selectedDate ? (
                 <div className="rounded-md border border-dashed border-stone-300 bg-stone-50 p-4 text-sm leading-6 text-stone-500">
                   {nextAvailableDay
-                    ? `Ən yaxın boş tarix: ${toDisplayDate(nextAvailableDay.date)}`
-                    : "Bu ay üçün boş vaxt görünmür. Növbəti ayı yoxla."}
+                    ? `${t('therapists.next_available_date', 'Ən yaxın boş tarix')}: ${toDisplayDate(nextAvailableDay.date)}`
+                    : t('therapists.no_slots_month', 'Bu ay üçün boş vaxt görünmür. Növbəti ayı yoxla.')}
                 </div>
               ) : selectedSlots.length > 0 ? (
                 <div className="grid grid-cols-3 gap-2">
@@ -662,7 +662,7 @@ export default function TherapistDetailPage() {
                 </div>
               ) : (
                 <div className="rounded-md border border-dashed border-stone-300 bg-stone-50 p-4 text-sm text-stone-500">
-                  Bu tarix üçün boş saat qalmayıb.
+                  {t('therapists.no_slots_day', 'Bu tarix üçün boş saat qalmayıb.')}
                 </div>
               )}
             </div>
@@ -675,12 +675,12 @@ export default function TherapistDetailPage() {
               {booking ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Göndərilir
+                  {t('common.booking_submitting', 'Göndərilir')}
                 </>
               ) : (
                 <>
                   <Clock className="mr-2 h-4 w-4" />
-                  Seansı bron et
+                  {t('therapists.book_session', 'Seansı bron et')}
                 </>
               )}
             </Button>

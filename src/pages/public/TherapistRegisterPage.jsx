@@ -25,6 +25,7 @@ export default function TherapistRegisterPage() {
     fullName: user?.fullName || "",
     specialization: "",
     bio: "",
+    licenseNumber: "",
     phoneNumber: "",
     email: user?.email || "",
     password: "",
@@ -44,7 +45,8 @@ export default function TherapistRegisterPage() {
         password: data.password,
         phoneNumber: data.phoneNumber,
         specialization: data.specialization,
-        bio: data.bio
+        bio: data.bio,
+        licenseNumber: data.licenseNumber
       })
     },
     onSuccess: () => {
@@ -152,17 +154,40 @@ export default function TherapistRegisterPage() {
                        </div>
                     </div>
 
-                    <div className="space-y-2">
-                       <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.label_password', 'Password (for your account)')}</label>
-                       <Input 
-                          type="password"
-                          value={formData.password} 
-                          onChange={(e) => setFormData({...formData, password: e.target.value})}
-                          placeholder="••••••••"
-                          required
-                          className="h-12 bg-neutral-50/50 border-neutral-200"
-                       />
-                    </div>
+                     <div className="grid sm:grid-cols-2 gap-5">
+                        <div className="space-y-2">
+                           <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.label_license', 'License Number')}</label>
+                           <Input 
+                              value={formData.licenseNumber} 
+                              onChange={(e) => setFormData({...formData, licenseNumber: e.target.value})}
+                              placeholder="e.g. AZ-FZ-0000"
+                              required
+                              className="h-12 bg-neutral-50/50 border-neutral-200"
+                           />
+                        </div>
+                        <div className="space-y-2">
+                           <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.label_password', 'Password (for your account)')}</label>
+                           <Input 
+                              type="password"
+                              value={formData.password} 
+                              onChange={(e) => setFormData({...formData, password: e.target.value})}
+                              placeholder="••••••••"
+                              required
+                              className="h-12 bg-neutral-50/50 border-neutral-200"
+                           />
+                        </div>
+                     </div>
+
+                     <div className="space-y-2">
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{t('therapists.label_description', 'Professional Bio / Clinical Approach')}</label>
+                        <textarea 
+                           value={formData.bio} 
+                           onChange={(e) => setFormData({...formData, bio: e.target.value})}
+                           placeholder={t('therapists.bio_placeholder', 'Detail your clinical experience and therapeutic approach...')}
+                           required
+                           className="w-full min-h-[100px] p-4 rounded-xl bg-neutral-50/50 border border-neutral-200 text-sm focus:ring-2 focus:ring-primary/20 outline-none transition-all shadow-sm focus:bg-white"
+                        />
+                     </div>
 
                     <div className="pt-4 flex items-center gap-4">
                        <div className="p-3 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0">
