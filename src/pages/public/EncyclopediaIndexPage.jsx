@@ -1,13 +1,22 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Link, useSearchParams } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
+import { useInfiniteQuery } from "@tanstack/react-query"
 import { useTranslation } from "react-i18next"
-import { getPlants } from "../../services/plant.service"
+import { getPlantsPaginated } from "../../services/plant.service"
 import { Badge } from "../../components/ui/Badge"
 import { Loader2, Search, Leaf, FlaskConical, MapPin, BookOpen, X, Microscope, Filter } from "lucide-react"
 
 const EVIDENCE_GRADES = ["A", "B", "C", "D"]
 const CONTINENTS = ["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]
+
+const CONTINENT_VARIATIONS = {
+  "africa": ["africa", "afrika", "африка"],
+  "asia": ["asia", "asiya", "asya", "азия"],
+  "europe": ["europe", "avropa", "avrupa", "европа"],
+  "north america": ["north america", "şimali amerika", "kuzey amerika", "северная америка"],
+  "south america": ["south america", "cənubi amerika", "güney amerika", "южная америка"],
+  "oceania": ["oceania", "okeaniya", "okyanusya", "океания"]
+}
 
 export default function EncyclopediaIndexPage() {
   const { t, i18n } = useTranslation()
@@ -30,20 +39,94 @@ export default function EncyclopediaIndexPage() {
     setSearchParams(params, { replace: true })
   }, [debouncedSearch])
 
-  const queryParams = {
-    ...(debouncedSearch && { search: debouncedSearch }),
-  }
+  const currentLang = i18n.language || 'az'
 
-  const { data: plants, isLoading } = useQuery({
-    queryKey: ["plants", queryParams],
-    queryFn: () => getPlants(queryParams),
+  const {
+    data: plantsData,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading
+  } = useInfiniteQuery({
+    queryKey: ["plants", debouncedSearch, currentLang],
+    queryFn: ({ pageParam = 1 }) => getPlantsPaginated({
+      search: debouncedSearch,
+      language: currentLang,
+      page: pageParam
+    }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage) return undefined
+
+      // 1. Root pagination object format (from our updated API interceptor wrapper)
+      const pagination = lastPage.pagination || lastPage.Pagination
+      if (pagination) {
+        const page = pagination.page ?? pagination.Page ?? allPages.length
+        const pages = pagination.pages ?? pagination.Pages ?? 1
+        return page < pages ? page + 1 : undefined
+      }
+
+      // 2. Envelope format: { data: [...], pageNumber: X, totalPages: Y }
+      if (typeof lastPage === "object" && !Array.isArray(lastPage)) {
+        const pageNumber = lastPage.pageNumber ?? lastPage.PageNumber ?? lastPage.page ?? lastPage.Page ?? allPages.length
+        const totalPages = lastPage.totalPages ?? lastPage.TotalPages ?? lastPage.pages ?? lastPage.Pages ?? 1
+        return pageNumber < totalPages ? pageNumber + 1 : undefined
+      }
+      // 3. Direct array format
+      if (Array.isArray(lastPage)) {
+        if (lastPage.length === 0) return undefined
+        return allPages.length + 1
+      }
+      return undefined
+    }
   })
 
-  const currentLang = i18n.language || 'az'
+  const loadMoreRef = useRef(null)
+
+  useEffect(() => {
+    let observer;
+    if (hasNextPage && !isFetchingNextPage) {
+      observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage()
+        }
+      }, { threshold: 0.1 })
+
+      if (loadMoreRef.current) {
+        observer.observe(loadMoreRef.current)
+      }
+    }
+
+    const handleScroll = () => {
+      if (!hasNextPage || isFetchingNextPage) return
+
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+      const scrollTop = window.scrollY || window.pageYOffset
+
+      if (documentHeight - windowHeight - scrollTop < 300) {
+        fetchNextPage()
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    return () => {
+      if (observer) observer.disconnect()
+      window.removeEventListener("scroll", handleScroll)
+    }
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   // The interceptor unwraps {statusCode, message, data} → returns raw backend payload
   const herbList = React.useMemo(() => {
-    const raw = Array.isArray(plants) ? plants : (plants?.data || []);
+    if (!plantsData?.pages) return []
+    const raw = plantsData.pages.flatMap(page => {
+      if (Array.isArray(page)) return page
+      if (page && typeof page === "object") {
+        const list = page.data ?? page.Data ?? page.items ?? page.Items
+        if (Array.isArray(list)) return list
+      }
+      return []
+    })
     return raw.map(plant => {
       if (!plant.translations || !Array.isArray(plant.translations)) return plant
       const translation = plant.translations.find(t => t.language === currentLang)
@@ -59,13 +142,44 @@ export default function EncyclopediaIndexPage() {
       })
       return merged
     })
-  }, [plants, currentLang])
+  }, [plantsData, currentLang])
+
+  const totalCount = React.useMemo(() => {
+    if (!plantsData?.pages || plantsData.pages.length === 0) return 0
+    const firstPage = plantsData.pages[0]
+    if (!firstPage) return 0
+    const pagination = firstPage.pagination || firstPage.Pagination
+    if (pagination) {
+      return pagination.total ?? pagination.Total ?? 0
+    }
+    if (typeof firstPage === "object" && !Array.isArray(firstPage)) {
+      return firstPage.total ?? firstPage.Total ?? 0
+    }
+    return 0
+  }, [plantsData])
 
   const filtered = herbList.filter(p => {
-    if (activeGrade && p.evidenceGrade !== activeGrade) return false
-    if (activeContinent && p.continent !== activeContinent) return false
+    if (activeGrade && !p.evidenceGrade?.trim().toUpperCase().startsWith(activeGrade.trim().toUpperCase())) return false
+    if (activeContinent) {
+      const selectedLower = activeContinent.toLowerCase().trim()
+      const variations = CONTINENT_VARIATIONS[selectedLower] || [selectedLower]
+      
+      const plantContinents = (p.continent || "")
+        .split(",")
+        .map(c => c.toLowerCase().trim())
+        .filter(Boolean)
+        
+      const matches = plantContinents.some(pc => variations.includes(pc))
+      if (!matches) return false
+    }
     return true
   })
+
+  useEffect(() => {
+    if (filtered && filtered.length === 0 && hasNextPage && !isFetchingNextPage && !isLoading) {
+      fetchNextPage()
+    }
+  }, [filtered, hasNextPage, isFetchingNextPage, isLoading, fetchNextPage])
 
   function updateParam(key, value) {
     const params = new URLSearchParams(searchParams)
@@ -78,7 +192,7 @@ export default function EncyclopediaIndexPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
-      
+
       {/* Hero */}
       <div className="bg-[#1a1c1e] text-white py-20 px-4">
         <div className="max-w-4xl mx-auto text-center space-y-6">
@@ -113,7 +227,7 @@ export default function EncyclopediaIndexPage() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-4 max-w-lg mx-auto">
             {[
-              { label: t('encyclopedia.stats.herbs', 'Herbs Catalogued'), value: herbList.length || "..." },
+              { label: t('encyclopedia.stats.herbs', 'Herbs Catalogued'), value: totalCount || herbList.length || "..." },
               { label: t('encyclopedia.stats.research', 'Research Articles'), value: "1,240+" },
               { label: t('encyclopedia.stats.compounds', 'Compounds Tracked'), value: "850+" },
             ].map((s) => (
@@ -138,11 +252,10 @@ export default function EncyclopediaIndexPage() {
                 <button
                   key={g}
                   onClick={() => updateParam("grade", activeGrade === g ? "" : g)}
-                  className={`w-10 h-10 rounded-xl font-bold text-sm border transition-colors ${
-                    activeGrade === g
+                  className={`w-10 h-10 rounded-xl font-bold text-sm border transition-colors ${activeGrade === g
                       ? "bg-emerald-500 text-white border-emerald-500"
                       : "border-neutral-200 text-muted-foreground hover:border-emerald-300"
-                  }`}
+                    }`}
                 >
                   {g}
                 </button>
@@ -157,11 +270,10 @@ export default function EncyclopediaIndexPage() {
                 <button
                   key={c}
                   onClick={() => updateParam("continent", activeContinent === c ? "" : c)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors ${
-                    activeContinent === c
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors ${activeContinent === c
                       ? "bg-[#1a1c1e] text-white border-[#1a1c1e]"
                       : "border-neutral-200 text-muted-foreground hover:border-neutral-400"
-                  }`}
+                    }`}
                 >
                   {t(`encyclopedia.continents.${c.toLowerCase().replace(/\s+/g, '_')}`, c)}
                 </button>
@@ -205,26 +317,26 @@ export default function EncyclopediaIndexPage() {
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((herb) => (
-                <Link key={herb.id} to={`/herb/${herb.id}`} className="group block">
-                  <div className="rounded-3xl overflow-hidden border border-neutral-100 bg-white hover:shadow-2xl hover:shadow-black/8 hover:border-emerald-200 transition-all duration-500">
-                    
+                <Link key={herb.id} to={`/herb/${herb.id}`} className="group block h-full">
+                  <div className="h-full flex flex-col rounded-3xl overflow-hidden border border-neutral-100 bg-white hover:shadow-2xl hover:shadow-black/8 hover:border-emerald-200 transition-all duration-500">
+
                     {/* Image / Visual */}
-                    <div className="relative aspect-square bg-[#f5f5f7] overflow-hidden">
+                    <div className="relative aspect-square bg-[#f5f5f7] overflow-hidden flex-shrink-0">
                       {herb.evidenceGrade && (
                         <div className="absolute top-3 left-3 z-10">
                           <Badge className={`font-bold text-[10px] shadow-sm ${
-                            herb.evidenceGrade === "A" ? "bg-emerald-500 text-white border-none" :
-                            herb.evidenceGrade === "B" ? "bg-blue-500 text-white border-none" :
+                            herb.evidenceGrade.startsWith("A") ? "bg-emerald-500 text-white border-none" :
+                            herb.evidenceGrade.startsWith("B") ? "bg-blue-500 text-white border-none" :
                             "bg-amber-500 text-white border-none"
                           }`}>
-                            {t('encyclopedia.grade', 'Grade')} {herb.evidenceGrade}
+                            {t('encyclopedia.grade', 'Grade')} {herb.evidenceGrade.trim().charAt(0)}
                           </Badge>
                         </div>
                       )}
                       {herb.image || herb.images?.[0] ? (
                         <img
                           src={herb.image || herb.images[0]}
-                          alt={herb.name}
+                          alt={herb.localName || herb.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                         />
                       ) : (
@@ -235,35 +347,38 @@ export default function EncyclopediaIndexPage() {
                     </div>
 
                     {/* Info */}
-                    <div className="p-5 space-y-3">
-                      <div>
-                        <div className="flex flex-wrap items-center gap-2 mb-1">
-                          {herb.continent && (
-                            <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/50 flex items-center gap-1 flex-wrap">
-                              <MapPin className="w-2.5 h-2.5 shrink-0" /> {t(`encyclopedia.continents.${herb.continent.toLowerCase().replace(/\s+/g, '_')}`, herb.continent)}
-                            </span>
+                    <div className="p-5 flex flex-col flex-grow justify-between">
+                      <div className="space-y-3">
+                        <div>
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            {herb.continent && (
+                              <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/50 flex items-center gap-1 min-w-0 max-w-full">
+                                <MapPin className="w-2.5 h-2.5 shrink-0" />
+                                <span className="truncate">{t(`encyclopedia.continents.${herb.continent.toLowerCase().replace(/\s+/g, '_')}`, herb.continent)}</span>
+                              </span>
+                            )}
+                          </div>
+                          <h3 className="font-display font-bold text-lg text-[#1a1c1e] leading-tight group-hover:text-emerald-700 transition-colors">
+                            {herb.localName || herb.name}
+                          </h3>
+                          {herb.localName && (herb.scientificName || herb.name) && (
+                            <p className="text-xs italic text-muted-foreground mt-0.5">{herb.scientificName || herb.name}</p>
                           )}
                         </div>
-                        <h3 className="font-display font-bold text-lg text-[#1a1c1e] leading-tight group-hover:text-emerald-700 transition-colors">
-                          {herb.name}
-                        </h3>
-                        {herb.scientificName && (
-                          <p className="text-xs italic text-muted-foreground mt-0.5">{herb.scientificName}</p>
+
+                        <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                          {herb.shortSummary || herb.description}
+                        </p>
+
+                        {herb.activeCompounds && (
+                          <div className="flex items-start gap-1.5 text-[10px] font-bold text-emerald-600 uppercase tracking-widest">
+                            <FlaskConical className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+                            <span className="break-words flex-1 min-w-0 line-clamp-2">{herb.activeCompounds}</span>
+                          </div>
                         )}
                       </div>
 
-                      <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-                        {herb.shortSummary || herb.description}
-                      </p>
-
-                      {herb.activeCompounds && (
-                        <div className="flex items-start gap-1.5 text-[10px] font-bold text-emerald-600 uppercase tracking-widest flex-wrap">
-                          <FlaskConical className="w-3.5 h-3.5 mt-0.5 shrink-0" />
-                          <span className="break-words flex-1 min-w-0">{herb.activeCompounds}</span>
-                        </div>
-                      )}
-
-                      <div className="flex items-center justify-between pt-2 border-t border-neutral-50">
+                      <div className="flex items-center justify-between pt-2 border-t border-neutral-50 mt-4">
                         <div className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">
                           <BookOpen className="w-3 h-3" /> {t('encyclopedia.monograph', 'Full Monograph')}
                         </div>
@@ -273,6 +388,13 @@ export default function EncyclopediaIndexPage() {
                   </div>
                 </Link>
               ))}
+            </div>
+
+            {/* Infinite Scroll Trigger */}
+            <div ref={loadMoreRef} className="h-16 flex items-center justify-center mt-6">
+              {(isFetchingNextPage || (filtered.length === 0 && hasNextPage)) && (
+                <Loader2 className="w-6 h-6 text-emerald-500 animate-spin opacity-55" />
+              )}
             </div>
           </>
         )}

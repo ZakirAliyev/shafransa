@@ -42,7 +42,8 @@
     "delete": "Sil",
     "back": "Geri",
     "botanical": "BOTANİKA",
-    "remove": "Sil"
+    "remove": "Sil",
+    "view_source": "Mənbəyə Bax"
   },
   "landing": {
     "version": "Shafransa: Dəqiq Botanika İntellekti",
@@ -238,13 +239,20 @@
       "pregnancy_clinical": "Hamiləlik və Süd vermə",
       "allergy_warnings": "Potensial Allergen Xəbərdarlıqları",
       "clinical_conditions": "Həssas Tibbi Vəziyyətlər",
-      "dosage_caution": "Doza Ehtiyatı"
+      "dosage_caution": "Doza Ehtiyatı",
+      "usage_forms": "Mövcud Formalar",
+      "used_in": "Ənənəvi Tibb və İstifadəsi",
+      "expert_notes": "Ekspert Qeydləri",
+      "references": "Elmi İstinadlar"
     },
     "products_found": "{{count}} Məhsul tapıldı",
     "no_products": "Kommersiya məhsulu yoxdur",
     "no_products_sub": "Hazırda bu botanika qeydinə əsaslanan heç bir məhsul tapılmadı.",
     "climate_default": "Qlobal adaptivlik. Adətən mülayim və subtropik zonalarda rast gəlinir.",
-    "compounds_pending": "Dəqiq spektrofotometriya analizi gözlənilir."
+    "compounds_pending": "Dəqiq spektrofotometriya analizi gözlənilir.",
+    "alerts": {
+      "pregnancy_warning": "Xəbərdarlıq"
+    }
   },
   "marketplace": {
     "badge": "Təsdiqlənmiş İnventar",

@@ -234,6 +234,8 @@ export default function AdminPanel({ tab = "overview" }) {
   const [plantGallery, setPlantGallery] = useState([])
   const [plantPreviews, setPlantPreviews] = useState({ main: null, gallery: [] })
   const [plantDeletedGalleryUrls, setPlantDeletedGalleryUrls] = useState([])
+  const [plantDeletedReferenceIds, setPlantDeletedReferenceIds] = useState([])
+  const [plantDeletedUsageFormIds, setPlantDeletedUsageFormIds] = useState([])
   const [editingPlantId, setEditingPlantId] = useState(null)
 
   const handleEditPlant = (plant) => {
@@ -244,6 +246,8 @@ export default function AdminPanel({ tab = "overview" }) {
     })
     setPlantPreviews({ main: plant.image, gallery: plant.gallery || [] })
     setPlantDeletedGalleryUrls([])
+    setPlantDeletedReferenceIds([])
+    setPlantDeletedUsageFormIds([])
     
     // Create new translations object from existing data
     const newTrans = { ...initialPlantTranslations }
@@ -288,6 +292,8 @@ export default function AdminPanel({ tab = "overview" }) {
       setPlantImage(null)
       setPlantGallery([])
       setPlantPreviews({ main: null, gallery: [] })
+      setPlantDeletedReferenceIds([])
+      setPlantDeletedUsageFormIds([])
       toast.success(t('admin.plants.created', 'Plant entry created!'))
     },
   })
@@ -306,6 +312,14 @@ export default function AdminPanel({ tab = "overview" }) {
 
       plantDeletedGalleryUrls.forEach(url => {
         form.append("DeleteGalleryUrls", url)
+      })
+
+      plantDeletedReferenceIds.forEach(id => {
+        form.append("DeleteReferenceIds", id)
+      })
+
+      plantDeletedUsageFormIds.forEach(id => {
+        form.append("DeleteUsageFormIds", id)
       })
 
       const transArray = Object.entries(plantTranslations).map(([lang, fields]) => ({
@@ -327,6 +341,8 @@ export default function AdminPanel({ tab = "overview" }) {
       setPlantGallery([])
       setPlantPreviews({ main: null, gallery: [] })
       setPlantDeletedGalleryUrls([])
+      setPlantDeletedReferenceIds([])
+      setPlantDeletedUsageFormIds([])
       setEditingPlantId(null)
       toast.success(t('admin.plants.updated', 'Plant entry updated!'))
     },
@@ -736,6 +752,10 @@ export default function AdminPanel({ tab = "overview" }) {
                           />
                           <button 
                             onClick={() => {
+                              const formToDelete = plantTranslations[activeLang].usageForms?.[idx]
+                              if (formToDelete?.id) {
+                                setPlantDeletedUsageFormIds(prev => [...prev, formToDelete.id])
+                              }
                               const newForms = plantTranslations[activeLang].usageForms.filter((_, i) => i !== idx)
                               setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], usageForms: newForms } })
                             }}
@@ -786,6 +806,10 @@ export default function AdminPanel({ tab = "overview" }) {
                           />
                           <button 
                             onClick={() => {
+                              const refToDelete = plantTranslations[activeLang].references?.[idx]
+                              if (refToDelete?.id) {
+                                setPlantDeletedReferenceIds(prev => [...prev, refToDelete.id])
+                              }
                               const newRefs = plantTranslations[activeLang].references.filter((_, i) => i !== idx)
                               setPlantTranslations({ ...plantTranslations, [activeLang]: { ...plantTranslations[activeLang], references: newRefs } })
                             }}

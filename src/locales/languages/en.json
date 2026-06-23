@@ -41,7 +41,8 @@
     "delete": "Delete",
     "back": "Back",
     "botanical": "BOTANICAL",
-    "remove": "Remove"
+    "remove": "Remove",
+    "view_source": "View Source"
   },
   "blog": {
     "badge": "Knowledge Hub",
@@ -280,13 +281,20 @@
       "pregnancy_clinical": "Pregnancy & Nursing",
       "allergy_warnings": "Potential Allergen Alerts",
       "clinical_conditions": "Sensitive Medical Conditions",
-      "dosage_caution": "Dosage Caution"
+      "dosage_caution": "Dosage Caution",
+      "usage_forms": "Available Forms",
+      "used_in": "Traditional Medicine & Used In",
+      "expert_notes": "Expert Notes",
+      "references": "Scientific References"
     },
     "products_found": "{{count}} Products Found",
     "no_products": "No Commercial Products",
     "no_products_sub": "There are currently no seller-listed products sourced precisely from this botanical record.",
     "climate_default": "Global adaptivity. Often found in temperate to subtropical zones.",
-    "compounds_pending": "Pending precise spectrophotometry analytics."
+    "compounds_pending": "Pending precise spectrophotometry analytics.",
+    "alerts": {
+      "pregnancy_warning": "Warning"
+    }
   },
   "marketplace": {
     "badge": "Verified Inventory",

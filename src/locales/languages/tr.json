@@ -41,7 +41,8 @@
     "delete": "Sil",
     "back": "Geri",
     "botanical": "BOTANİK",
-    "remove": "Kaldır"
+    "remove": "Kaldır",
+    "view_source": "Kaynağı Görüntüle"
   },
   "landing": {
     "version": "Shafransa: Hassas Botanik Zekası",
@@ -237,13 +238,20 @@
       "pregnancy_clinical": "Hamilelik ve Emzirme",
       "allergy_warnings": "Potansiyel Alerjen Uyarıları",
       "clinical_conditions": "Hassas Tıbbi Durumlar",
-      "dosage_caution": "Dozaj Uyarısı"
+      "dosage_caution": "Dozaj Uyarısı",
+      "usage_forms": "Mevcut Formlar",
+      "used_in": "Geleneksel Tıp ve Kullanımı",
+      "expert_notes": "Uzman Notları",
+      "references": "Bilimsel Referanslar"
     },
     "products_found": "{{count}} Ürün Bulundu",
     "no_products": "Ticari Ürün Yok",
     "no_products_sub": "Şu anda bu botanik kaydına dayalı herhangi bir ürün bulunmamaktadır.",
     "climate_default": "Küresel adaptasyon. Genellikle ılıman ve subtropikal bölgelerde bulunur.",
-    "compounds_pending": "Hassas spektrofotometri analizi bekleniyor."
+    "compounds_pending": "Hassas spektrofotometri analizi bekleniyor.",
+    "alerts": {
+      "pregnancy_warning": "Uyarı"
+    }
   },
   "marketplace": {
     "badge": "Onaylı Envanter",

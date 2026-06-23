@@ -21,6 +21,7 @@ import {
 import { Badge } from "../../components/ui/Badge";
 import { useQuery } from "@tanstack/react-query";
 import { MOCK_BLOGS } from "../../data/mockBlogs";
+import { getPlants } from "../../services/plant.service";
 
 import heroVideo from "../../assets/heroVideo.mp4"
 
@@ -29,6 +30,44 @@ export default function LandingPage() {
   const currentLang = i18n.language || 'az';
 
   const isLoading = false;
+
+  const [isLargeScreen, setIsLargeScreen] = React.useState(
+    typeof window !== "undefined" ? window.innerWidth >= 992 : false
+  );
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 992);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const { data: rawPlants } = useQuery({
+    queryKey: ["allPlantsLanding"],
+    queryFn: () => getPlants(),
+    enabled: isLargeScreen,
+  });
+
+  const randomPlants = React.useMemo(() => {
+    if (!rawPlants || rawPlants.length === 0) return [];
+    const shuffled = [...rawPlants].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 4);
+    return selected.map(plant => {
+      const translation = plant.translations?.find(t => t.language === currentLang) || plant.translations?.[0];
+      if (!translation) return plant;
+
+      const merged = { ...plant };
+      Object.keys(translation).forEach(key => {
+        const val = translation[key];
+        const isValid = Array.isArray(val) ? val.length > 0 : (val !== null && val !== undefined && val !== "");
+        if (isValid) {
+          merged[key] = val;
+        }
+      });
+      return merged;
+    });
+  }, [rawPlants, currentLang]);
 
   const blogs = React.useMemo(() => {
     const allBlogs = MOCK_BLOGS.slice(0, 3);
@@ -141,6 +180,81 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* 2.2 FEATURED BOTANICAL SPECIMENS (Hidden on viewport < 992px) */}
+      {isLargeScreen && randomPlants && randomPlants.length > 0 && (
+        <section className="hidden min-[992px]:block w-full py-32 px-4 bg-white border-b border-neutral-100">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex justify-between items-end mb-16">
+              <div className="space-y-4">
+                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-bold uppercase tracking-widest text-[10px] px-3">
+                  {t('landing.plants.badge', 'Botanical Database')}
+                </Badge>
+                <h2 className="text-4xl md:text-5xl font-display font-bold tracking-tight text-[#1a1c1e]">
+                  {t('landing.plants.title', 'Specimens of the Day')}
+                </h2>
+                <p className="text-muted-foreground text-sm font-medium">
+                  {t('landing.plants.subtitle', 'A rotating selection of clinical-grade plants, validated for efficacy and safety.')}
+                </p>
+              </div>
+              <Link to="/herbs" className="flex items-center gap-2 text-emerald-700 font-bold group">
+                {t('landing.plants.view_all', 'Explore Encyclopedia')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-4 gap-8">
+              {randomPlants.slice(0, 4).map((herb) => (
+                <Link key={herb.id} to={`/herb/${herb.id}`} className="group block h-full">
+                  <div className="h-full flex flex-col rounded-3xl overflow-hidden border border-neutral-100 bg-white hover:shadow-2xl hover:shadow-black/8 hover:border-emerald-200 transition-all duration-500">
+                    {/* Image */}
+                    <div className="relative aspect-square bg-[#f5f5f7] overflow-hidden flex-shrink-0">
+                      {herb.evidenceGrade && (
+                        <div className="absolute top-3 left-3 z-10">
+                          <Badge className={`font-bold text-[10px] shadow-sm ${
+                            herb.evidenceGrade.startsWith("A") ? "bg-emerald-500 text-white border-none" :
+                            herb.evidenceGrade.startsWith("B") ? "bg-blue-500 text-white border-none" :
+                            "bg-amber-500 text-white border-none"
+                          }`}>
+                            {t('encyclopedia.grade', 'Grade')} {herb.evidenceGrade.trim().charAt(0)}
+                          </Badge>
+                        </div>
+                      )}
+                      {herb.image || herb.images?.[0] ? (
+                        <img
+                          src={herb.image || herb.images[0]}
+                          alt={herb.localName || herb.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Leaf className="w-14 h-14 text-emerald-200 stroke-1 group-hover:text-emerald-300 transition-colors" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Info */}
+                    <div className="p-5 flex flex-col flex-grow justify-between">
+                      <div className="space-y-3">
+                        <div>
+                          <h3 className="font-display font-bold text-lg text-[#1a1c1e] leading-tight group-hover:text-emerald-700 transition-colors">
+                            {herb.localName || herb.name}
+                          </h3>
+                          {herb.localName && (herb.scientificName || herb.name) && (
+                            <p className="text-xs italic text-muted-foreground mt-0.5">{herb.scientificName || herb.name}</p>
+                          )}
+                        </div>
+                        <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                          {herb.shortSummary || herb.description}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* 2.5 LATEST BLOGS */}
       <section className="w-full py-32 px-4 bg-white overflow-hidden">

@@ -48,6 +48,13 @@ api.interceptors.response.use(
     // ✅ Backend wraps response in { statusCode, message, data }
     // Extract the actual data from the nested structure
     if (response.data?.data !== undefined) {
+      // If there is pagination metadata at the root level, return both
+      if (response.data.pagination !== undefined || response.data.Pagination !== undefined) {
+        return {
+          data: response.data.data,
+          pagination: response.data.pagination || response.data.Pagination
+        };
+      }
       return response.data.data; // Return the actual data object
     }
     return response.data || response;

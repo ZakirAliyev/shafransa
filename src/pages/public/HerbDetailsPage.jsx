@@ -6,7 +6,7 @@ import { getPlant } from "../../services/plant.service"
 import { safeGet } from "../../lib/safeData"
 import { Badge } from "../../components/ui/Badge"
 import {
-  Leaf, ChevronLeft, Loader2, Microscope, ArrowRight, ShieldCheck,
+  Leaf, ChevronLeft, ChevronRight, Maximize2, X, Loader2, Microscope, ArrowRight, ShieldCheck,
   MapPin, FlaskConical, AlertTriangle, BookOpen, Search, Package,
   Heart, Baby, UserMinus, Info
 } from "lucide-react"
@@ -105,6 +105,65 @@ export default function HerbDetailsPage() {
     return merged
   }, [rawHerb, currentLang])
 
+  const allImages = React.useMemo(() => {
+    const list = []
+    if (herbData.image) list.push(herbData.image)
+    if (herbData.gallery && Array.isArray(herbData.gallery)) {
+      herbData.gallery.forEach(img => {
+        if (img && !list.includes(img)) {
+          list.push(img)
+        }
+      })
+    }
+    return list
+  }, [herbData.image, herbData.gallery])
+
+  const [activeImgIndex, setActiveImgIndex] = useState(0)
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false)
+
+  const touchStartX = useRef(0)
+  const touchEndX = useRef(0)
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.targetTouches[0].clientX
+  }
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.targetTouches[0].clientX
+  }
+
+  const handleTouchEnd = () => {
+    const diffX = touchStartX.current - touchEndX.current
+    if (diffX > 50) {
+      // Swipe Left -> Next Image
+      setActiveImgIndex(prev => (prev === allImages.length - 1 ? 0 : prev + 1))
+    } else if (diffX < -50) {
+      // Swipe Right -> Prev Image
+      setActiveImgIndex(prev => (prev === 0 ? allImages.length - 1 : prev - 1))
+    }
+  }
+
+  React.useEffect(() => {
+    setActiveImgIndex(0)
+  }, [allImages])
+
+  React.useEffect(() => {
+    if (!isLightboxOpen) return
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsLightboxOpen(false)
+      } else if (e.key === "ArrowLeft") {
+        setActiveImgIndex(prev => (prev === 0 ? allImages.length - 1 : prev - 1))
+      } else if (e.key === "ArrowRight") {
+        setActiveImgIndex(prev => (prev === allImages.length - 1 ? 0 : prev + 1))
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [isLightboxOpen, allImages])
+
   if (isLoading) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
       <Loader2 className="h-10 w-10 animate-spin text-primary opacity-30" />
@@ -136,8 +195,8 @@ export default function HerbDetailsPage() {
         <div className="space-y-6">
           <div>
             <div className="flex flex-col items-start gap-2 mb-3">
-              <Badge className="bg-primary/10 text-primary border-primary/20 font-semibold uppercase tracking-widest text-[10px] px-3">
-                {herbData.evidenceGrade ? `${t('encyclopedia.grade', 'Grade')}: ${herbData.evidenceGrade}` : t('herb.badge.default', "Clinical Monograph")}
+              <Badge className="bg-primary/10 text-primary border-primary/20 font-semibold uppercase tracking-widest text-[10px] px-3 whitespace-normal break-words">
+                {herbData.evidenceGrade ? `${t('encyclopedia.grade', 'Grade')} ${herbData.evidenceGrade.trim().charAt(0)}` : t('herb.badge.default', "Clinical Monograph")}
               </Badge>
               {herbData.region && (
                 <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 border border-neutral-200 rounded-full px-3 py-1 flex items-center gap-1">
@@ -190,14 +249,64 @@ export default function HerbDetailsPage() {
               <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('herb.meta.chemotype', 'Chemotype')}</div>
               <div className="font-semibold text-[#1a1c1e] text-sm md:text-base leading-relaxed">{herbData.chemotype || "Standard"}</div>
             </div>
+            {herbData.evidenceGrade && (
+              <div>
+                <div className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/60 mb-1">{t('encyclopedia.filters.grade', 'Evidence Grade')}</div>
+                <div className="font-semibold text-[#1a1c1e] text-sm md:text-base leading-relaxed">{herbData.evidenceGrade}</div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Media / Gallery Column */}
         <div className="space-y-4">
-          <div className="relative aspect-square bg-[#f5f5f7] rounded-3xl overflow-hidden border border-neutral-100 flex items-center justify-center group">
-            {herbData.image ? (
-              <img src={herbData.image} alt={herbData.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          <div 
+            className="relative aspect-square bg-[#f5f5f7] rounded-3xl overflow-hidden border border-neutral-100 flex items-center justify-center group cursor-zoom-in"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            {allImages.length > 0 ? (
+              <>
+                <img 
+                  src={allImages[activeImgIndex]} 
+                  alt={herbData.name} 
+                  className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-700 select-none"
+                  onClick={() => setIsLightboxOpen(true)}
+                />
+                
+                {/* Left/Right Navigation Arrows */}
+                {allImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveImgIndex(prev => (prev === 0 ? allImages.length - 1 : prev - 1));
+                      }}
+                      className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 backdrop-blur-md shadow-lg border border-neutral-200/50 flex items-center justify-center text-[#1a1c1e] hover:bg-white hover:scale-105 active:scale-95 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveImgIndex(prev => (prev === allImages.length - 1 ? 0 : prev + 1));
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 backdrop-blur-md shadow-lg border border-neutral-200/50 flex items-center justify-center text-[#1a1c1e] hover:bg-white hover:scale-105 active:scale-95 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )}
+
+                {/* Fullscreen Trigger Overlay */}
+                <button
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="absolute bottom-4 right-4 w-9 h-9 rounded-full bg-[#1a1c1e]/60 backdrop-blur-md flex items-center justify-center text-white hover:bg-[#1a1c1e]/80 transition-all opacity-0 group-hover:opacity-100"
+                >
+                  <Maximize2 className="w-4 h-4" />
+                </button>
+              </>
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center gap-4">
                 <Leaf className="w-24 h-24 text-primary/10 stroke-1" />
@@ -206,12 +315,21 @@ export default function HerbDetailsPage() {
             )}
           </div>
           
-          {herbData.gallery && herbData.gallery.length > 0 && (
-            <div className="grid grid-cols-4 gap-3">
-              {herbData.gallery.map((img, i) => (
-                <div key={i} className="aspect-square rounded-2xl bg-[#f5f5f7] border border-neutral-100 overflow-hidden hover:border-primary/40 transition-colors cursor-zoom-in group">
-                  <img src={img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" alt="" />
-                </div>
+          {/* Gallery Thumbnails */}
+          {allImages.length > 1 && (
+            <div className="grid grid-cols-5 gap-2">
+              {allImages.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImgIndex(i)}
+                  className={`aspect-square rounded-2xl bg-[#f5f5f7] border overflow-hidden transition-all duration-300 relative ${
+                    activeImgIndex === i 
+                      ? "border-primary ring-2 ring-primary/20 scale-95" 
+                      : "border-neutral-200 hover:border-neutral-400"
+                  }`}
+                >
+                  <img src={img} className="w-full h-full object-cover" alt="" />
+                </button>
               ))}
             </div>
           )}
@@ -486,6 +604,64 @@ export default function HerbDetailsPage() {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* ── LIGHTBOX MODAL ── */}
+      {isLightboxOpen && allImages.length > 0 && (
+        <div 
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#1a1c1e]/95 backdrop-blur-md select-none"
+          onClick={() => setIsLightboxOpen(false)}
+        >
+          {/* Close Button */}
+          <button 
+            onClick={() => setIsLightboxOpen(false)}
+            className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center text-white transition-colors z-[10000] shadow-lg"
+          >
+            <X className="w-5 h-5 md:w-6 md:h-6" />
+          </button>
+
+          {/* Navigation Arrows */}
+          {allImages.length > 1 && (
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImgIndex(prev => (prev === 0 ? allImages.length - 1 : prev - 1));
+                }}
+                className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all active:scale-95"
+              >
+                <ChevronLeft className="w-8 h-8" />
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveImgIndex(prev => (prev === allImages.length - 1 ? 0 : prev + 1));
+                }}
+                className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all active:scale-95"
+              >
+                <ChevronRight className="w-8 h-8" />
+              </button>
+            </>
+          )}
+
+          {/* Image & Caption Container */}
+          <div 
+            className="max-w-[95vw] flex flex-col items-center gap-4"
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            <img 
+              src={allImages[activeImgIndex]} 
+              alt={herbData.name} 
+              className="w-auto h-[70vh] md:h-[80vh] max-w-full object-contain rounded-2xl shadow-2xl"
+            />
+            <div className="text-white/60 text-xs font-semibold uppercase tracking-widest mt-2">
+              {herbData.localName || herbData.name} &bull; {activeImgIndex + 1} / {allImages.length}
+            </div>
+          </div>
         </div>
       )}
 
