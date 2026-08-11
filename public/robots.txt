@@ -17,7 +17,9 @@ Allow: /ai-consultant
 
 # Disallow private user & administrative panels
 Disallow: /admin/
-Disallow: /seller/
+Disallow: /seller/products
+Disallow: /seller/orders
+Disallow: /seller/settings
 Disallow: /user/
 Disallow: /expert/
 Disallow: /cp/
@@ -29,4 +31,4 @@ Disallow: /otp
 Disallow: /api/
 
 # Specify Sitemap location
-Sitemap: https://shafransa.az/sitemap.xml
+Sitemap: https://shafransa.com/sitemap.xml

@@ -3,7 +3,7 @@
  * az (Azerbaijani), en (English), ru (Russian), tr (Turkish).
  */
 
-export const BASE_URL = "https://shafransa.az";
+export const BASE_URL = import.meta.env.VITE_SITE_URL || "https://shafransa.com";
 
 export const DEFAULT_SEO_CONFIG = {
   siteName: "Shafransa",

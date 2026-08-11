@@ -5,8 +5,22 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const BASE_URL = 'https://shafransa.az';
+const BASE_URL = process.env.SITE_URL || process.env.VITE_SITE_URL || 'https://shafransa.com';
 const LANGUAGES = ['az', 'en', 'ru', 'tr'];
+
+// Helper to escape special XML characters
+function escapeXml(unsafe) {
+  return unsafe.replace(/[<>&'"]/g, c => {
+    switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case '\'': return '&apos;';
+      case '"': return '&quot;';
+      default: return c;
+    }
+  });
+}
 
 // Mock items definitions for sitemap generation
 const STATIC_ROUTES = [
@@ -56,11 +70,11 @@ const SELLERS = [
 function generateSitemap() {
   const currentDate = new Date().toISOString().split('T')[0];
 
-  const urls = [];
+  const routes = [];
 
   // 1. Add static routes
   STATIC_ROUTES.forEach(route => {
-    urls.push({
+    routes.push({
       loc: `${BASE_URL}${route.url}`,
       lastmod: currentDate,
       changefreq: route.changefreq,
@@ -70,7 +84,7 @@ function generateSitemap() {
 
   // 2. Add products
   PRODUCTS.forEach(id => {
-    urls.push({
+    routes.push({
       loc: `${BASE_URL}/product/${id}`,
       lastmod: currentDate,
       changefreq: 'weekly',
@@ -80,7 +94,7 @@ function generateSitemap() {
 
   // 3. Add herbs
   HERBS.forEach(id => {
-    urls.push({
+    routes.push({
       loc: `${BASE_URL}/herb/${id}`,
       lastmod: currentDate,
       changefreq: 'weekly',
@@ -90,7 +104,7 @@ function generateSitemap() {
 
   // 4. Add therapists
   THERAPISTS.forEach(id => {
-    urls.push({
+    routes.push({
       loc: `${BASE_URL}/therapist/${id}`,
       lastmod: currentDate,
       changefreq: 'weekly',
@@ -100,7 +114,7 @@ function generateSitemap() {
 
   // 5. Add blogs
   BLOGS.forEach(id => {
-    urls.push({
+    routes.push({
       loc: `${BASE_URL}/blog/${id}`,
       lastmod: currentDate,
       changefreq: 'weekly',
@@ -110,7 +124,7 @@ function generateSitemap() {
 
   // 6. Add sellers
   SELLERS.forEach(id => {
-    urls.push({
+    routes.push({
       loc: `${BASE_URL}/seller/${id}`,
       lastmod: currentDate,
       changefreq: 'weekly',
@@ -122,27 +136,40 @@ function generateSitemap() {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
   xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
 
-  urls.forEach(item => {
-    xml += `  <url>\n`;
-    xml += `    <loc>${item.loc}</loc>\n`;
-    xml += `    <lastmod>${item.lastmod}</lastmod>\n`;
-    xml += `    <changefreq>${item.changefreq}</changefreq>\n`;
-    xml += `    <priority>${item.priority}</priority>\n`;
+  let totalUrlEntries = 0;
 
-    // Multi-language hreflang entries
-    LANGUAGES.forEach(lang => {
-      xml += `    <xhtml:link rel="alternate" hreflang="${lang}" href="${item.loc}?lng=${lang}" />\n`;
+  routes.forEach(item => {
+    // Generate primary URL entry as well as specific language variant entries for full Google Search Console hreflang reciprocal link compliance
+    const urlVariants = [
+      { loc: item.loc },
+      ...LANGUAGES.map(lang => ({ loc: `${item.loc}${item.loc.includes('?') ? '&' : '?'}lng=${lang}` }))
+    ];
+
+    urlVariants.forEach(variant => {
+      totalUrlEntries++;
+      xml += `  <url>\n`;
+      xml += `    <loc>${escapeXml(variant.loc)}</loc>\n`;
+      xml += `    <lastmod>${item.lastmod}</lastmod>\n`;
+      xml += `    <changefreq>${item.changefreq}</changefreq>\n`;
+      xml += `    <priority>${item.priority}</priority>\n`;
+
+      // Multi-language hreflang entries
+      LANGUAGES.forEach(lang => {
+        const langUrl = `${item.loc}${item.loc.includes('?') ? '&' : '?'}lng=${lang}`;
+        xml += `    <xhtml:link rel="alternate" hreflang="${lang}" href="${escapeXml(langUrl)}" />\n`;
+      });
+      xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(item.loc)}" />\n`;
+
+      xml += `  </url>\n`;
     });
-    xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${item.loc}" />\n`;
-
-    xml += `  </url>\n`;
   });
 
   xml += `</urlset>\n`;
 
   const outputPath = path.join(__dirname, '../public/sitemap.xml');
   fs.writeFileSync(outputPath, xml, 'utf8');
-  console.log(`✅ Sitemap successfully generated at: ${outputPath} (${urls.length} URLs indexed with 4 language variants each)`);
+  console.log(`✅ Sitemap successfully generated at: ${outputPath} (${routes.length} base routes, ${totalUrlEntries} total indexed URLs with reciprocal hreflang links)`);
 }
 
 generateSitemap();
+
