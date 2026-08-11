@@ -1,1433 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://shafransa.com/</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/" />
   </url>
   <url>
     <loc>https://shafransa.com/marketplace</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/marketplace?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/marketplace?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/marketplace?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/marketplace?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/marketplace" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/marketplace?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/marketplace?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/marketplace?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/marketplace?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/marketplace?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/marketplace" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/marketplace?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/marketplace?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/marketplace?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/marketplace?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/marketplace?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/marketplace" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/marketplace?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/marketplace?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/marketplace?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/marketplace?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/marketplace?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/marketplace" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/marketplace?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/marketplace?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/marketplace?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/marketplace?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/marketplace?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/marketplace" />
   </url>
   <url>
     <loc>https://shafransa.com/herbs</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herbs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herbs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herbs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herbs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herbs" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herbs?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herbs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herbs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herbs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herbs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herbs" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herbs?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herbs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herbs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herbs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herbs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herbs" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herbs?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herbs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herbs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herbs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herbs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herbs" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herbs?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.9</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herbs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herbs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herbs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herbs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herbs" />
   </url>
   <url>
     <loc>https://shafransa.com/therapists</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapists?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapists?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapists?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapists?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapists" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapists?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapists?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapists?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapists?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapists?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapists" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapists?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapists?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapists?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapists?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapists?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapists" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapists?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapists?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapists?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapists?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapists?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapists" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapists?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapists?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapists?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapists?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapists?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapists" />
   </url>
   <url>
     <loc>https://shafransa.com/blogs</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blogs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blogs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blogs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blogs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blogs" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blogs?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blogs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blogs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blogs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blogs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blogs" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blogs?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blogs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blogs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blogs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blogs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blogs" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blogs?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blogs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blogs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blogs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blogs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blogs" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blogs?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blogs?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blogs?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blogs?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blogs?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blogs" />
   </url>
   <url>
     <loc>https://shafransa.com/about</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/about?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/about?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/about?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/about?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/about" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/about?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/about?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/about?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/about?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/about?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/about" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/about?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/about?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/about?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/about?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/about?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/about" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/about?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/about?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/about?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/about?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/about?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/about" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/about?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/about?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/about?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/about?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/about?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/about" />
   </url>
   <url>
     <loc>https://shafransa.com/contact</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/contact?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/contact?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/contact?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/contact?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/contact" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/contact?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/contact?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/contact?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/contact?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/contact?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/contact" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/contact?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/contact?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/contact?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/contact?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/contact?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/contact" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/contact?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/contact?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/contact?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/contact?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/contact?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/contact" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/contact?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/contact?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/contact?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/contact?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/contact?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/contact" />
   </url>
   <url>
     <loc>https://shafransa.com/how-it-works</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/how-it-works?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/how-it-works?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/how-it-works?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/how-it-works?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/how-it-works" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/how-it-works?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/how-it-works?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/how-it-works?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/how-it-works?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/how-it-works?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/how-it-works" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/how-it-works?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/how-it-works?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/how-it-works?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/how-it-works?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/how-it-works?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/how-it-works" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/how-it-works?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/how-it-works?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/how-it-works?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/how-it-works?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/how-it-works?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/how-it-works" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/how-it-works?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/how-it-works?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/how-it-works?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/how-it-works?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/how-it-works?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/how-it-works" />
   </url>
   <url>
     <loc>https://shafransa.com/ai-consultant</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/ai-consultant?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/ai-consultant?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/ai-consultant?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/ai-consultant?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/ai-consultant" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/ai-consultant?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/ai-consultant?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/ai-consultant?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/ai-consultant?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/ai-consultant?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/ai-consultant" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/ai-consultant?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/ai-consultant?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/ai-consultant?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/ai-consultant?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/ai-consultant?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/ai-consultant" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/ai-consultant?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/ai-consultant?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/ai-consultant?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/ai-consultant?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/ai-consultant?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/ai-consultant" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/ai-consultant?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/ai-consultant?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/ai-consultant?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/ai-consultant?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/ai-consultant?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/ai-consultant" />
   </url>
   <url>
     <loc>https://shafransa.com/product/seed-product-saffron-tea</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-saffron-tea?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-saffron-tea?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-saffron-tea?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-saffron-tea?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-saffron-tea" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-saffron-tea?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-saffron-tea?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-saffron-tea?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-saffron-tea?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-saffron-tea?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-saffron-tea" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-saffron-tea?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-saffron-tea?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-saffron-tea?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-saffron-tea?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-saffron-tea?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-saffron-tea" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-saffron-tea?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-saffron-tea?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-saffron-tea?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-saffron-tea?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-saffron-tea?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-saffron-tea" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-saffron-tea?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-saffron-tea?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-saffron-tea?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-saffron-tea?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-saffron-tea?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-saffron-tea" />
   </url>
   <url>
     <loc>https://shafransa.com/product/seed-product-lavender-oil</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-lavender-oil?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-lavender-oil?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-lavender-oil?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-lavender-oil?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-lavender-oil" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-lavender-oil?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-lavender-oil?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-lavender-oil?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-lavender-oil?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-lavender-oil?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-lavender-oil" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-lavender-oil?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-lavender-oil?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-lavender-oil?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-lavender-oil?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-lavender-oil?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-lavender-oil" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-lavender-oil?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-lavender-oil?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-lavender-oil?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-lavender-oil?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-lavender-oil?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-lavender-oil" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-lavender-oil?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-lavender-oil?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-lavender-oil?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-lavender-oil?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-lavender-oil?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-lavender-oil" />
   </url>
   <url>
     <loc>https://shafransa.com/product/seed-product-turmeric-capsules</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-turmeric-capsules" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-turmeric-capsules?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-turmeric-capsules" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-turmeric-capsules?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-turmeric-capsules" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-turmeric-capsules?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-turmeric-capsules" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-turmeric-capsules?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-turmeric-capsules?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-turmeric-capsules" />
   </url>
   <url>
     <loc>https://shafransa.com/product/seed-product-ginger-extract</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-ginger-extract?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-ginger-extract?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-ginger-extract?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-ginger-extract?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-ginger-extract" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-ginger-extract?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-ginger-extract?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-ginger-extract?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-ginger-extract?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-ginger-extract?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-ginger-extract" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-ginger-extract?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-ginger-extract?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-ginger-extract?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-ginger-extract?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-ginger-extract?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-ginger-extract" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-ginger-extract?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-ginger-extract?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-ginger-extract?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-ginger-extract?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-ginger-extract?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-ginger-extract" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/product/seed-product-ginger-extract?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/product/seed-product-ginger-extract?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/product/seed-product-ginger-extract?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/product/seed-product-ginger-extract?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/product/seed-product-ginger-extract?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/product/seed-product-ginger-extract" />
   </url>
   <url>
     <loc>https://shafransa.com/herb/seed-herb-saffron</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-saffron?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-saffron?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-saffron?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-saffron?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-saffron" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-saffron?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-saffron?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-saffron?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-saffron?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-saffron?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-saffron" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-saffron?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-saffron?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-saffron?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-saffron?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-saffron?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-saffron" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-saffron?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-saffron?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-saffron?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-saffron?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-saffron?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-saffron" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-saffron?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-saffron?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-saffron?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-saffron?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-saffron?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-saffron" />
   </url>
   <url>
     <loc>https://shafransa.com/herb/seed-herb-lavender</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-lavender?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-lavender?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-lavender?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-lavender?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-lavender" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-lavender?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-lavender?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-lavender?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-lavender?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-lavender?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-lavender" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-lavender?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-lavender?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-lavender?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-lavender?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-lavender?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-lavender" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-lavender?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-lavender?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-lavender?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-lavender?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-lavender?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-lavender" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-lavender?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-lavender?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-lavender?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-lavender?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-lavender?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-lavender" />
   </url>
   <url>
     <loc>https://shafransa.com/herb/seed-herb-turmeric</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-turmeric?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-turmeric?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-turmeric?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-turmeric?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-turmeric" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-turmeric?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-turmeric?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-turmeric?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-turmeric?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-turmeric?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-turmeric" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-turmeric?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-turmeric?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-turmeric?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-turmeric?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-turmeric?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-turmeric" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-turmeric?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-turmeric?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-turmeric?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-turmeric?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-turmeric?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-turmeric" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-turmeric?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-turmeric?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-turmeric?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-turmeric?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-turmeric?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-turmeric" />
   </url>
   <url>
     <loc>https://shafransa.com/herb/seed-herb-ginger</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-ginger?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-ginger?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-ginger?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-ginger?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-ginger" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-ginger?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-ginger?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-ginger?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-ginger?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-ginger?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-ginger" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-ginger?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-ginger?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-ginger?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-ginger?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-ginger?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-ginger" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-ginger?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-ginger?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-ginger?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-ginger?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-ginger?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-ginger" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/herb/seed-herb-ginger?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/herb/seed-herb-ginger?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/herb/seed-herb-ginger?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/herb/seed-herb-ginger?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/herb/seed-herb-ginger?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/herb/seed-herb-ginger" />
   </url>
   <url>
     <loc>https://shafransa.com/therapist/therapist-1</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-1" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-1?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-1" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-1?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-1" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-1?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-1" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-1?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-1" />
   </url>
   <url>
     <loc>https://shafransa.com/therapist/therapist-2</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-2" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-2?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-2" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-2?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-2" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-2?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-2" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-2?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-2" />
   </url>
   <url>
     <loc>https://shafransa.com/therapist/therapist-3</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-3" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-3?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-3" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-3?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-3" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-3?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-3" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/therapist/therapist-3?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/therapist/therapist-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/therapist/therapist-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/therapist/therapist-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/therapist/therapist-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/therapist/therapist-3" />
   </url>
   <url>
     <loc>https://shafransa.com/blog/mock-blog-1</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-1" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-1?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-1" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-1?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-1" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-1?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-1" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-1?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-1?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-1?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-1?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-1?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-1" />
   </url>
   <url>
     <loc>https://shafransa.com/blog/mock-blog-2</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-2" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-2?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-2" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-2?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-2" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-2?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-2" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-2?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-2?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-2?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-2?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-2?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-2" />
   </url>
   <url>
     <loc>https://shafransa.com/blog/mock-blog-3</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-3" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-3?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-3" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-3?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-3" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-3?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-3" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-3?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-3?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-3?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-3?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-3?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-3" />
   </url>
   <url>
     <loc>https://shafransa.com/blog/mock-blog-4</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-4?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-4?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-4?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-4?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-4" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-4?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-4?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-4?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-4?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-4?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-4" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-4?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-4?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-4?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-4?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-4?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-4" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-4?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-4?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-4?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-4?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-4?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-4" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-4?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-4?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-4?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-4?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-4?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-4" />
   </url>
   <url>
     <loc>https://shafransa.com/blog/mock-blog-5</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-5?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-5?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-5?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-5?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-5" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-5?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-5?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-5?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-5?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-5?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-5" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-5?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-5?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-5?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-5?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-5?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-5" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-5?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-5?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-5?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-5?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-5?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-5" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/blog/mock-blog-5?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/blog/mock-blog-5?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/blog/mock-blog-5?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/blog/mock-blog-5?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/blog/mock-blog-5?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/blog/mock-blog-5" />
   </url>
   <url>
     <loc>https://shafransa.com/seller/seed-seller-shafransa</loc>
     <lastmod>2026-08-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/seller/seed-seller-shafransa?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/seller/seed-seller-shafransa?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/seller/seed-seller-shafransa?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/seller/seed-seller-shafransa?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/seller/seed-seller-shafransa" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/seller/seed-seller-shafransa?lng=az</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/seller/seed-seller-shafransa?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/seller/seed-seller-shafransa?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/seller/seed-seller-shafransa?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/seller/seed-seller-shafransa?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/seller/seed-seller-shafransa" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/seller/seed-seller-shafransa?lng=en</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/seller/seed-seller-shafransa?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/seller/seed-seller-shafransa?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/seller/seed-seller-shafransa?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/seller/seed-seller-shafransa?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/seller/seed-seller-shafransa" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/seller/seed-seller-shafransa?lng=ru</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/seller/seed-seller-shafransa?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/seller/seed-seller-shafransa?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/seller/seed-seller-shafransa?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/seller/seed-seller-shafransa?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/seller/seed-seller-shafransa" />
-  </url>
-  <url>
-    <loc>https://shafransa.com/seller/seed-seller-shafransa?lng=tr</loc>
-    <lastmod>2026-08-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="az" href="https://shafransa.com/seller/seed-seller-shafransa?lng=az" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://shafransa.com/seller/seed-seller-shafransa?lng=en" />
-    <xhtml:link rel="alternate" hreflang="ru" href="https://shafransa.com/seller/seed-seller-shafransa?lng=ru" />
-    <xhtml:link rel="alternate" hreflang="tr" href="https://shafransa.com/seller/seed-seller-shafransa?lng=tr" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://shafransa.com/seller/seed-seller-shafransa" />
   </url>
 </urlset>

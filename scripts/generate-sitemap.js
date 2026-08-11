@@ -132,43 +132,25 @@ function generateSitemap() {
     });
   });
 
-  // Build XML content with xhtml alternate language links
+  // Build XML content with XSL stylesheet header for browser rendering
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
-  xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n`;
-
-  let totalUrlEntries = 0;
+  xml += `<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>\n`;
+  xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
   routes.forEach(item => {
-    // Generate primary URL entry as well as specific language variant entries for full Google Search Console hreflang reciprocal link compliance
-    const urlVariants = [
-      { loc: item.loc },
-      ...LANGUAGES.map(lang => ({ loc: `${item.loc}${item.loc.includes('?') ? '&' : '?'}lng=${lang}` }))
-    ];
-
-    urlVariants.forEach(variant => {
-      totalUrlEntries++;
-      xml += `  <url>\n`;
-      xml += `    <loc>${escapeXml(variant.loc)}</loc>\n`;
-      xml += `    <lastmod>${item.lastmod}</lastmod>\n`;
-      xml += `    <changefreq>${item.changefreq}</changefreq>\n`;
-      xml += `    <priority>${item.priority}</priority>\n`;
-
-      // Multi-language hreflang entries
-      LANGUAGES.forEach(lang => {
-        const langUrl = `${item.loc}${item.loc.includes('?') ? '&' : '?'}lng=${lang}`;
-        xml += `    <xhtml:link rel="alternate" hreflang="${lang}" href="${escapeXml(langUrl)}" />\n`;
-      });
-      xml += `    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(item.loc)}" />\n`;
-
-      xml += `  </url>\n`;
-    });
+    xml += `  <url>\n`;
+    xml += `    <loc>${escapeXml(item.loc)}</loc>\n`;
+    xml += `    <lastmod>${item.lastmod}</lastmod>\n`;
+    xml += `    <changefreq>${item.changefreq}</changefreq>\n`;
+    xml += `    <priority>${item.priority}</priority>\n`;
+    xml += `  </url>\n`;
   });
 
   xml += `</urlset>\n`;
 
   const outputPath = path.join(__dirname, '../public/sitemap.xml');
   fs.writeFileSync(outputPath, xml, 'utf8');
-  console.log(`✅ Sitemap successfully generated at: ${outputPath} (${routes.length} base routes, ${totalUrlEntries} total indexed URLs with reciprocal hreflang links)`);
+  console.log(`✅ Sitemap successfully generated at: ${outputPath} (${routes.length} canonical routes indexed)`);
 }
 
 generateSitemap();
