@@ -5,6 +5,9 @@ import { useTranslation } from "react-i18next"
 import { getPlant } from "../../services/plant.service"
 import { safeGet } from "../../lib/safeData"
 import { Badge } from "../../components/ui/Badge"
+import SEO from "../../components/common/SEO"
+import { getHerbSchema } from "../../utils/seoSchemas"
+import { BASE_URL } from "../../utils/seoTranslations"
 import {
   Leaf, ChevronLeft, ChevronRight, Maximize2, X, Loader2, Microscope, ArrowRight, ShieldCheck,
   MapPin, FlaskConical, AlertTriangle, BookOpen, Search, Package,
@@ -182,6 +185,20 @@ export default function HerbDetailsPage() {
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-4 lg:px-8">
+      <SEO
+        title={`${herbData.name || 'Botanical Entry'} ${herbData.scientificName ? `(${herbData.scientificName})` : ''}`}
+        description={herbData.shortSummary || herbData.description || herbData.benefits || `${herbData.name} clinical overview and active compounds.`}
+        keywords={`${herbData.name || ''}, ${herbData.localName || ''}, ${herbData.scientificName || ''}, müalicəvi bitki, fitoterapiya, shafransa`}
+        image={herbData.image}
+        canonical={`/herb/${id}`}
+        type="article"
+        schema={getHerbSchema(herbData, `${BASE_URL}/herb/${id}`)}
+        crumbs={[
+          { name: "Home", url: "/" },
+          { name: "Encyclopedia", url: "/herbs" },
+          { name: herbData.name || "Herb Details", url: `/herb/${id}` }
+        ]}
+      />
 
       {/* Back */}
       <button onClick={() => navigate("/herbs")} className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-[#1a1c1e] mb-8 transition-colors">

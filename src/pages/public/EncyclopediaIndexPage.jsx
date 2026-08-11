@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next"
 import { getPlantsPaginated } from "../../services/plant.service"
 import { Badge } from "../../components/ui/Badge"
 import { Loader2, Search, Leaf, FlaskConical, MapPin, BookOpen, X, Microscope, Filter } from "lucide-react"
+import SEO from "../../components/common/SEO"
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations"
 
 const EVIDENCE_GRADES = ["A", "B", "C", "D"]
 const CONTINENTS = ["Africa", "Asia", "Europe", "North America", "South America", "Oceania"]
@@ -190,8 +192,18 @@ export default function EncyclopediaIndexPage() {
 
   const hasFilters = activeGrade || activeContinent || debouncedSearch
 
+  const currentLangCode = (i18n.language || 'az').toLowerCase().slice(0, 2)
+  const seoData = STATIC_PAGE_SEO.herbs[currentLangCode] || STATIC_PAGE_SEO.herbs.az
+
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/herbs"
+        crumbs={[{ name: "Home", url: "/" }, { name: "Encyclopedia", url: "/herbs" }]}
+      />
 
       {/* Hero */}
       <div className="bg-[#1a1c1e] text-white py-20 px-4">

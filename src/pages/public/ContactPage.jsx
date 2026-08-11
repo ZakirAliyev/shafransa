@@ -7,8 +7,13 @@ import {
 } from "react-icons/fa"
 import { Button } from "../../components/ui/Button"
 
+import SEO from "../../components/common/SEO"
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations"
+
 const ContactPage = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const currentLang = (i18n.language || 'az').toLowerCase().slice(0, 2)
+  const seoData = STATIC_PAGE_SEO.contact[currentLang] || STATIC_PAGE_SEO.contact.az
   const [formState, setFormState] = useState({ name: "", email: "", message: "" })
 
   const handleSubmit = (e) => {
@@ -20,6 +25,13 @@ const ContactPage = () => {
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/contact"
+        crumbs={[{ name: "Home", url: "/" }, { name: "Contact", url: "/contact" }]}
+      />
       {/* ── HERO ── */}
       <section className="pt-4 pb-4 bg-white border-b border-neutral-100">
         <div className="max-w-7xl mx-auto px-4">

@@ -5,11 +5,23 @@ import {
 } from "react-icons/fa"
 import logo from "../../assets/logo.png"
 
+import SEO from "../../components/common/SEO"
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations"
+
 const AboutPage = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const currentLang = (i18n.language || 'az').toLowerCase().slice(0, 2)
+  const seoData = STATIC_PAGE_SEO.about[currentLang] || STATIC_PAGE_SEO.about.az
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/about"
+        crumbs={[{ name: "Home", url: "/" }, { name: "About Us", url: "/about" }]}
+      />
       {/* ── HERO SECTION ── */}
       <section className="relative pt-4 pb-4 overflow-hidden bg-white border-b border-neutral-100">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none opacity-[0.03]">

@@ -6,8 +6,13 @@ import {
 } from "react-icons/fa"
 import logo from "../../assets/logo.png"
 
+import SEO from "../../components/common/SEO"
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations"
+
 const HowItWorksPage = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const currentLang = (i18n.language || 'az').toLowerCase().slice(0, 2)
+  const seoData = STATIC_PAGE_SEO.howItWorks[currentLang] || STATIC_PAGE_SEO.howItWorks.az
 
   const steps = [
     {
@@ -38,6 +43,13 @@ const HowItWorksPage = () => {
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/how-it-works"
+        crumbs={[{ name: "Home", url: "/" }, { name: "How It Works", url: "/how-it-works" }]}
+      />
       {/* ── HERO SECTION ── */}
       <section className="relative pt-12 pb-12 bg-white border-b border-neutral-100 overflow-hidden">
         <div className="absolute top-0 right-0 w-1/2 h-full opacity-[0.02] pointer-events-none">

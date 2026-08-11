@@ -6,6 +6,7 @@ import { useAuthStore } from "../../store/useAuthStore"
 import { useNavigate, Link } from "react-router-dom"
 import { Button } from "../../components/ui/Button"
 import { Trash2, ArrowRight, Loader2, Minus, Plus, ShoppingBag, ChevronLeft } from "lucide-react"
+import SEO from "../../components/common/SEO"
 
 export default function CartPage() {
   const { t } = useTranslation()
@@ -55,6 +56,7 @@ export default function CartPage() {
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 lg:px-8">
+      <SEO title="Shopping Cart" noindex={true} />
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
         <div>

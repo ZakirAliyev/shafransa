@@ -15,6 +15,7 @@ import {
   ChevronRight, BrainCircuit, Activity,
   Camera, Upload, Trash2, X
 } from "lucide-react"
+import SEO from "../../components/common/SEO"
 
 export default function TherapistRegisterPage() {
   const { t } = useTranslation()
@@ -63,6 +64,7 @@ export default function TherapistRegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] py-20 px-4">
+      <SEO title="Therapist Registration" noindex={true} />
       <div className="max-w-4xl mx-auto grid lg:grid-cols-5 gap-12">
         
         {/* Left Column: Info & Trust */}

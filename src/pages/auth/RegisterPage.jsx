@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { ArrowRight, ShieldCheck, User, Store, Eye, EyeOff } from "lucide-react"
 import { useAuthStore } from "../../store/useAuthStore"
 import { toast } from "../../store/useToastStore"
+import SEO from "../../components/common/SEO"
 
 export default function RegisterPage() {
   const { t } = useTranslation()
@@ -35,6 +36,7 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#fafafa] relative overflow-hidden px-4 py-8">
+      <SEO title="Register" noindex={true} />
       {/* Background Ambience */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] -z-10 animate-pulse"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[50%] bg-blue-500/5 rounded-full blur-[100px] -z-10"></div>

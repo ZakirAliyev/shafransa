@@ -16,8 +16,13 @@ import {
   ArrowRight, Leaf, Star, Heart, X, ChevronDown, Filter
 } from "lucide-react"
 
+import SEO from "../../components/common/SEO"
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations"
+
 export default function Marketplace() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const currentLang = (i18n.language || 'az').toLowerCase().slice(0, 2)
+  const seoData = STATIC_PAGE_SEO.marketplace[currentLang] || STATIC_PAGE_SEO.marketplace.az
   const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const { isAuthenticated } = useAuthStore()
@@ -136,6 +141,13 @@ export default function Marketplace() {
 
   return (
     <div className="max-w-screen-2xl mx-auto py-12 px-4 lg:px-8">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/marketplace"
+        crumbs={[{ name: "Home", url: "/" }, { name: "Marketplace", url: "/marketplace" }]}
+      />
       
       {/* Header */}
       <div className="mb-10">

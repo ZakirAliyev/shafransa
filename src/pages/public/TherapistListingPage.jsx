@@ -6,6 +6,8 @@ import i18next from "i18next"
 import { getVerifiedTherapists } from "../../services/therapist.service"
 import { Badge } from "../../components/ui/Badge"
 import { Search, User, MapPin, Star, X, ShieldCheck, Calendar, Clock, DollarSign } from "lucide-react"
+import SEO from "../../components/common/SEO"
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations"
 
 const LOCAL_AVATAR_KEY = "shafransa_local_profile_avatar"
 const LOCAL_PROFILE_KEY = "shafransa_local_profile_data"
@@ -113,8 +115,18 @@ export default function TherapistListingPage() {
 
   const hasFilters = debouncedSearch
 
+  const currentLangCode = (i18next.language || 'az').toLowerCase().slice(0, 2)
+  const seoData = STATIC_PAGE_SEO.therapists[currentLangCode] || STATIC_PAGE_SEO.therapists.az
+
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/therapists"
+        crumbs={[{ name: "Home", url: "/" }, { name: "Therapists", url: "/therapists" }]}
+      />
       
       {/* Hero Section */}
       <div className="bg-[#1a1c1e] text-white py-20 px-4">

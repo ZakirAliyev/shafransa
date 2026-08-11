@@ -11,6 +11,8 @@ import { toast } from "../../store/useToastStore"
 import { MOCK_MARKET_PRODUCTS } from "../../services/mockData"
 import { Badge } from "../../components/ui/Badge"
 import { Store, Loader2, MapPin, Package, ShieldCheck, Star, ChevronLeft, Calendar, ShoppingCart, Heart, Leaf } from "lucide-react"
+import SEO from "../../components/common/SEO"
+import { BASE_URL } from "../../utils/seoTranslations"
 
 export default function SellerStorefrontPage() {
   const { t } = useTranslation()
@@ -119,6 +121,19 @@ export default function SellerStorefrontPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      <SEO
+        title={`${seller.fullName} - Verified Saffron & Botanical Store`}
+        description={seller.description || `${seller.fullName} offers lab-tested saffron, therapeutic herbs, and natural remedies.`}
+        keywords={`${seller.fullName}, zəfəran mağazası, herbal store, shafransa`}
+        image={seller.avatar}
+        canonical={`/seller/${id}`}
+        type="profile"
+        crumbs={[
+          { name: "Home", url: "/" },
+          { name: "Marketplace", url: "/marketplace" },
+          { name: seller.fullName, url: `/seller/${id}` }
+        ]}
+      />
       {/* Cover Header */}
       <div className="min-h-[300px] w-full bg-neutral-900 relative overflow-hidden flex flex-col justify-end">
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent z-10"></div>

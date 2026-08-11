@@ -7,6 +7,10 @@ import { getTherapistById } from "../../services/therapist.service"
 import { getAvailabilitySummary, createSession } from "../../services/therapySession.service"
 import { useAuthStore } from "../../store/useAuthStore"
 import { toast } from "../../store/useToastStore"
+import { safeGet } from "../../lib/safeData"
+import SEO from "../../components/common/SEO"
+import { getTherapistSchema } from "../../utils/seoSchemas"
+import { BASE_URL } from "../../utils/seoTranslations"
 import { Badge } from "../../components/ui/Badge"
 import { Button } from "../../components/ui/Button"
 import {
@@ -351,6 +355,20 @@ export default function TherapistDetailPage() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-stone-900">
+      <SEO
+        title={`${profile.fullName} - ${profile.specialization}`}
+        description={profile.bio || `${profile.fullName} - ${profile.specialization}. Seans təyini və məsləhət.`}
+        keywords={`${profile.fullName}, ${profile.specialization}, fizyoterapist, fizioterapiya, shafransa`}
+        image={profile.avatar}
+        canonical={`/therapist/${id}`}
+        type="profile"
+        schema={getTherapistSchema(profile, `${BASE_URL}/therapist/${id}`)}
+        crumbs={[
+          { name: "Home", url: "/" },
+          { name: "Therapists", url: "/therapists" },
+          { name: profile.fullName, url: `/therapist/${id}` }
+        ]}
+      />
       <section className="border-b border-stone-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 lg:px-8">
           <button

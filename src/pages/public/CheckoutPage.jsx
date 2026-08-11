@@ -11,6 +11,7 @@ import {
   Truck, ShieldCheck, MapPin, Phone, User, 
   Info, ShoppingBag
 } from "lucide-react"
+import SEO from "../../components/common/SEO"
 
 export default function CheckoutPage() {
   const { t } = useTranslation()
@@ -90,6 +91,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-4 lg:px-8">
+      <SEO title="Checkout" noindex={true} />
       {/* Progress / Back */}
       <div className="mb-10">
         <button onClick={() => navigate("/cart")} className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-[#1a1c1e] mb-4 transition-colors">

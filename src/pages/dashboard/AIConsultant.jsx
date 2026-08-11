@@ -10,9 +10,13 @@ import {
   Sparkles, Heart 
 } from "lucide-react"
 import api from "../../services/api"
+import SEO from "../../components/common/SEO"
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations"
 
 export default function AIConsultant() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const currentLang = (i18n.language || 'az').toLowerCase().slice(0, 2)
+  const seoData = STATIC_PAGE_SEO.aiConsultant[currentLang] || STATIC_PAGE_SEO.aiConsultant.az
   const { isAuthenticated } = useAuthStore()
   const navigate = useNavigate()
   const [step, setStep] = useState(0)
@@ -105,6 +109,13 @@ export default function AIConsultant() {
 
   return (
     <div className="min-h-screen bg-[#fafafa] font-sans">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/ai-consultant"
+        crumbs={[{ name: "Home", url: "/" }, { name: "AI Consultant", url: "/ai-consultant" }]}
+      />
       {/* Hero */}
       <div className="relative overflow-hidden bg-[#1a1c1e] text-white py-20 px-4">
         <div className="absolute inset-0 opacity-30">

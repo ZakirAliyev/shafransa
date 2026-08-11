@@ -6,6 +6,9 @@ import { getBlog } from "../../services/blog.service"
 import { Badge } from "../../components/ui/Badge"
 import { Calendar, Clock, User, Share2, ArrowLeft, Loader2, BookOpen, Play } from "lucide-react"
 import { MOCK_BLOGS } from "../../data/mockBlogs"
+import SEO from "../../components/common/SEO"
+import { getBlogSchema, stripHtml } from "../../utils/seoSchemas"
+import { BASE_URL } from "../../utils/seoTranslations"
 
 export default function BlogDetailPage() {
   const { id } = useParams()
@@ -70,6 +73,20 @@ export default function BlogDetailPage() {
 
   return (
     <article className="min-h-screen bg-white pb-24">
+      <SEO
+        title={blog.title}
+        description={stripHtml(blog.description).slice(0, 160) || blog.title}
+        keywords={`${blog.title}, ${blog.category || ''}, zəfəran, fitoterapiya, shafransa`}
+        image={(Array.isArray(blog.images) && blog.images[0]) || blog.image}
+        canonical={`/blog/${id}`}
+        type="article"
+        schema={getBlogSchema(blog, `${BASE_URL}/blog/${id}`)}
+        crumbs={[
+          { name: "Home", url: "/" },
+          { name: "Blogs", url: "/blogs" },
+          { name: blog.title, url: `/blog/${id}` }
+        ]}
+      />
       {/* Header Section */}
       <header className="relative pt-4 pb-4 overflow-hidden">
         <div className="container mx-auto px-6 relative z-10">

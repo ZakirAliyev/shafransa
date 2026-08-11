@@ -1,0 +1,32 @@
+# Shafransa Robots.txt - SEO Search Engine Crawler Directives
+User-agent: *
+Allow: /
+Allow: /marketplace
+Allow: /product/
+Allow: /seller/
+Allow: /herbs
+Allow: /herb/
+Allow: /therapists
+Allow: /therapist/
+Allow: /blogs
+Allow: /blog/
+Allow: /about
+Allow: /contact
+Allow: /how-it-works
+Allow: /ai-consultant
+
+# Disallow private user & administrative panels
+Disallow: /admin/
+Disallow: /seller/
+Disallow: /user/
+Disallow: /expert/
+Disallow: /cp/
+Disallow: /checkout
+Disallow: /cart
+Disallow: /login
+Disallow: /register
+Disallow: /otp
+Disallow: /api/
+
+# Specify Sitemap location
+Sitemap: https://shafransa.az/sitemap.xml

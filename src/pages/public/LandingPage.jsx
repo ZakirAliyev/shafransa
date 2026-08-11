@@ -25,9 +25,13 @@ import { getPlants } from "../../services/plant.service";
 
 import heroVideo from "../../assets/heroVideo.mp4"
 
+import SEO from "../../components/common/SEO";
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations";
+
 export default function LandingPage() {
   const { t, i18n } = useTranslation();
-  const currentLang = i18n.language || 'az';
+  const currentLang = (i18n.language || 'az').toLowerCase().slice(0, 2);
+  const seoData = STATIC_PAGE_SEO.home[currentLang] || STATIC_PAGE_SEO.home.az;
 
   const isLoading = false;
 
@@ -89,6 +93,12 @@ export default function LandingPage() {
 
   return (
     <div className="flex flex-col items-center justify-center w-full selection:bg-primary/20 bg-[#fafafa]">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/"
+      />
 
       {/* 1. HERO SECTION */}
       <section className="w-full relative min-h-screen md:h-screen flex flex-col items-center justify-center text-center px-4 pt-24 pb-16 md:py-0 overflow-hidden z-0">

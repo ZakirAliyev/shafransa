@@ -5,6 +5,8 @@ import { Card, CardContent } from "../../components/ui/Card"
 import { Badge } from "../../components/ui/Badge"
 import { Calendar, Clock, ArrowRight, BookOpen, Loader2 } from "lucide-react"
 import { MOCK_BLOGS } from "../../data/mockBlogs"
+import SEO from "../../components/common/SEO"
+import { STATIC_PAGE_SEO } from "../../utils/seoTranslations"
 
 
 export default function BlogListingPage() {
@@ -32,8 +34,18 @@ export default function BlogListingPage() {
     return html.replace(/<[^>]*>/g, "")
   }
 
+  const currentLangCode = (i18n.language || 'az').toLowerCase().slice(0, 2)
+  const seoData = STATIC_PAGE_SEO.blogs[currentLangCode] || STATIC_PAGE_SEO.blogs.az
+
   return (
     <div className="min-h-screen bg-[#fafafa]">
+      <SEO 
+        title={seoData.title}
+        description={seoData.description}
+        keywords={seoData.keywords}
+        canonical="/blogs"
+        crumbs={[{ name: "Home", url: "/" }, { name: "Blogs", url: "/blogs" }]}
+      />
       {/* Hero Header */}
       <header className="pt-4 pb-4 bg-white border-b border-neutral-100">
         <div className="container mx-auto px-6">

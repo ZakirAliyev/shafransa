@@ -9,6 +9,9 @@ import { createReview } from "../../services/review.service"
 import { useAuthStore } from "../../store/useAuthStore"
 import { useWishlistStore } from "../../store/useWishlistStore"
 import { toast } from "../../store/useToastStore"
+import SEO from "../../components/common/SEO"
+import { getProductSchema } from "../../utils/seoSchemas"
+import { BASE_URL } from "../../utils/seoTranslations"
 import { Badge } from "../../components/ui/Badge"
 import {
   ShoppingCart, ShieldCheck, Star, ChevronLeft, Loader2, Truck,
@@ -130,6 +133,20 @@ export default function ProductDetailsPage() {
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-4 lg:px-8">
+      <SEO
+        title={productData.title}
+        description={productData.description || `${productData.title} - ${productData.scientificName || 'Botanical Product'}`}
+        keywords={`${productData.title}, ${productData.scientificName || ''}, ${productData.category?.name || ''}, zəfəran, shafransa`}
+        image={productData.image}
+        canonical={`/product/${id}`}
+        type="product"
+        schema={getProductSchema(productData, `${BASE_URL}/product/${id}`)}
+        crumbs={[
+          { name: "Home", url: "/" },
+          { name: "Marketplace", url: "/marketplace" },
+          { name: productData.title, url: `/product/${id}` }
+        ]}
+      />
 
       {/* Back */}
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-[#1a1c1e] mb-8 transition-colors">
