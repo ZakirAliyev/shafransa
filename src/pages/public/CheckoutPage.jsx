@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next"
 import { checkout } from "../../services/order.service"
 import { getCart } from "../../services/cart.service"
 import { useNavigate, Link } from "react-router-dom"
+import { useAuthStore } from "../../store/useAuthStore"
 import { Button } from "../../components/ui/Button"
 import { Input } from "../../components/ui/Input"
 import { 
@@ -17,6 +18,7 @@ export default function CheckoutPage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { isAuthenticated } = useAuthStore()
   const [success, setSuccess] = useState(false)
   const [orderId, setOrderId] = useState("")
   
@@ -31,7 +33,8 @@ export default function CheckoutPage() {
 
   const { data: cart, isLoading: isCartLoading } = useQuery({
     queryKey: ["cart"],
-    queryFn: getCart
+    queryFn: getCart,
+    enabled: isAuthenticated
   })
 
   const { mutate, isPending } = useMutation({

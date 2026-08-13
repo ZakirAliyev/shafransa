@@ -69,8 +69,8 @@ export const ROUTES = [
       { path: "marketplace", element: <Marketplace /> },
       { path: "product/:id", element: <ProductDetailsPage /> },
       { path: "seller/:id", element: <SellerStorefrontPage /> },
-      { path: "cart", element: <CartPage /> },
-      { path: "checkout", element: <CheckoutPage /> },
+      { path: "cart", element: <AuthGuard><CartPage /></AuthGuard> },
+      { path: "checkout", element: <AuthGuard><CheckoutPage /></AuthGuard> },
 
       // ── ENCYCLOPEDIA (knowledge-first — distinct from marketplace) ──
       { path: "herbs", element: <EncyclopediaIndexPage /> },

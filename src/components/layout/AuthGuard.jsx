@@ -1,13 +1,14 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import { getRoleName } from "../../constants/roles";
 
 export default function AuthGuard({ children, allowedRoles }) {
   const { isAuthenticated, user } = useAuthStore();
+  const location = useLocation();
 
   if (!isAuthenticated || !user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   if (allowedRoles) {

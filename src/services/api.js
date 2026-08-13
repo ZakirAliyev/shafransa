@@ -71,7 +71,7 @@ api.interceptors.response.use(
     if (status === 401) {
       console.warn("🔐 Unauthorized - Logging out user");
       useAuthStore.getState().logout();
-      window.location.href = "/auth/login";
+      window.location.href = "/login";
       return Promise.reject({
         status: 401,
         message: "Your session has expired. Please log in again.",
