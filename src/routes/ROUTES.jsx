@@ -10,6 +10,7 @@ import LandingPage from "../pages/public/LandingPage"
 import LoginPage from "../pages/auth/LoginPage"
 import RegisterPage from "../pages/auth/RegisterPage"
 import OTPPage from "../pages/auth/OTPPage"
+import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage"
 
 import TherapistListingPage from "../pages/public/TherapistListingPage"
 import TherapistDetailPage from "../pages/public/TherapistDetailPage"
@@ -64,6 +65,7 @@ export const ROUTES = [
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "otp", element: <OTPPage /> },
+      { path: "forgot-password", element: <ForgotPasswordPage /> },
 
       // ── MARKETPLACE (commerce-first) ──
       { path: "marketplace", element: <Marketplace /> },
@@ -151,5 +153,7 @@ export const ROUTES = [
   { path: "/cp/*", element: <Navigate to="/" replace /> },
   { path: "/user/me", element: <Navigate to="/user" replace /> },
   { path: "/me", element: <Navigate to="/user" replace /> },
-  { path: "/auth/login", element: <Navigate to="/login" replace /> }
+  { path: "/auth/login", element: <Navigate to="/login" replace /> },
+  { path: "/auth/forgot-password", element: <Navigate to="/forgot-password" replace /> },
+  { path: "/reset-password", element: <Navigate to="/forgot-password" replace /> }
 ]

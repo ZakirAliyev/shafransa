@@ -59,6 +59,36 @@ export const useAuthStore = create(
         }
       },
 
+      forgotPassword: async (email) => {
+        set({ isLoading: true });
+        try {
+          const data = await api.post("/auth/forgot-password", { email });
+          set({ isLoading: false });
+          return data;
+        } catch (error) {
+          set({ isLoading: false });
+          throw error;
+        }
+      },
+
+      resetPassword: async ({ email, otp, newPassword, password }) => {
+        set({ isLoading: true });
+        try {
+          const finalPassword = newPassword || password;
+          const data = await api.post("/auth/reset-password", { 
+            email, 
+            otp: String(otp).trim(), 
+            newPassword: finalPassword,
+            password: finalPassword
+          });
+          set({ isLoading: false });
+          return data;
+        } catch (error) {
+          set({ isLoading: false });
+          throw error;
+        }
+      },
+
       // ✅ Fixed endpoint path from /users/me to /user/me (singular)
       fetchMe: async () => {
         const token = get().token;

@@ -50,11 +50,13 @@ export default function EncyclopediaIndexPage() {
     isFetchingNextPage,
     isLoading
   } = useInfiniteQuery({
-    queryKey: ["plants", debouncedSearch, currentLang],
+    queryKey: ["plants", debouncedSearch, currentLang, activeGrade, activeContinent],
     queryFn: ({ pageParam = 1 }) => getPlantsPaginated({
       search: debouncedSearch,
       language: currentLang,
-      page: pageParam
+      page: pageParam,
+      ...(activeGrade ? { grade: activeGrade } : {}),
+      ...(activeContinent ? { continent: activeContinent } : {}),
     }),
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
@@ -147,17 +149,19 @@ export default function EncyclopediaIndexPage() {
   }, [plantsData, currentLang])
 
   const totalCount = React.useMemo(() => {
-    if (!plantsData?.pages || plantsData.pages.length === 0) return 0
+    if (!plantsData?.pages || plantsData.pages.length === 0) return null
     const firstPage = plantsData.pages[0]
-    if (!firstPage) return 0
+    if (!firstPage) return null
     const pagination = firstPage.pagination || firstPage.Pagination
     if (pagination) {
-      return pagination.total ?? pagination.Total ?? 0
+      const t = pagination.total ?? pagination.Total
+      if (t != null) return t
     }
     if (typeof firstPage === "object" && !Array.isArray(firstPage)) {
-      return firstPage.total ?? firstPage.Total ?? 0
+      const t = firstPage.total ?? firstPage.Total ?? firstPage.totalCount ?? firstPage.TotalCount
+      if (t != null) return t
     }
-    return 0
+    return null
   }, [plantsData])
 
   const filtered = herbList.filter(p => {
@@ -239,7 +243,7 @@ export default function EncyclopediaIndexPage() {
           {/* Stats */}
           <div className="grid grid-cols-3 gap-2 sm:gap-6 pt-4 max-w-lg mx-auto">
             {[
-              { label: t('encyclopedia.stats.herbs', 'Herbs Catalogued'), value: totalCount || herbList.length || "..." },
+              { label: t('encyclopedia.stats.herbs', 'Herbs Catalogued'), value: totalCount != null ? totalCount : (herbList.length || "...") },
               { label: t('encyclopedia.stats.research', 'Research Articles'), value: "1,240+" },
               { label: t('encyclopedia.stats.compounds', 'Compounds Tracked'), value: "850+" },
             ].map((s) => (
@@ -325,7 +329,7 @@ export default function EncyclopediaIndexPage() {
         ) : (
           <>
             <div className="text-xs font-bold uppercase tracking-widest text-muted-foreground/50 mb-6">
-              {filtered.length} {filtered.length === 1 ? t('encyclopedia.entry_count_single', 'entry') : t('encyclopedia.entry_count_plural', 'entries')} {t('encyclopedia.found', 'found')}
+              {totalCount != null ? totalCount : filtered.length} {(totalCount != null ? totalCount : filtered.length) === 1 ? t('encyclopedia.entry_count_single', 'entry') : t('encyclopedia.entry_count_plural', 'entries')} {t('encyclopedia.found', 'found')}
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filtered.map((herb) => (
